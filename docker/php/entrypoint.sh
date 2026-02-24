@@ -7,6 +7,9 @@ if [ ! -f .env ]; then
   cp .env.example .env
 fi
 
+# Ensure stale cached config/routes/services from previous builds can't force wrong DB driver.
+rm -f bootstrap/cache/*.php || true
+
 if [ ! -d vendor ]; then
   composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
 fi
