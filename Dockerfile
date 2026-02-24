@@ -17,28 +17,30 @@ RUN apk add --no-cache \
     bash \
     curl \
     git \
+    unzip \
+    zip \
+    icu-libs \
+    libjpeg-turbo \
+    libpng \
+    libwebp \
+    libzip \
+    freetype \
+    oniguruma \
+    && apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
     icu-dev \
     libjpeg-turbo-dev \
     libpng-dev \
     libwebp-dev \
     libzip-dev \
-    oniguruma-dev \
-    unzip \
-    zip \
-    freetype-dev
+    freetype-dev \
+    linux-headers
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install -j"$(nproc)" \
-        bcmath \
-        exif \
-        gd \
-        intl \
-        pdo_mysql \
-        zip \
-        opcache \
-        pcntl \
+    && docker-php-ext-install -j"$(nproc)" gd intl pdo_mysql zip bcmath exif pcntl opcache \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apk del .build-deps
 
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
