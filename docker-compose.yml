@@ -16,9 +16,12 @@ services:
       DB_DATABASE: ${DB_DATABASE:-healingtouch}
       DB_USERNAME: ${DB_USERNAME:-healingtouch}
       DB_PASSWORD: ${DB_PASSWORD:-secret}
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-false}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
     depends_on:
       mysql:
         condition: service_healthy
@@ -45,6 +48,9 @@ services:
       DB_DATABASE: ${DB_DATABASE:-healingtouch}
       DB_USERNAME: ${DB_USERNAME:-healingtouch}
       DB_PASSWORD: ${DB_PASSWORD:-secret}
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
       REDIS_HOST: redis
       REDIS_PORT: 6379
     command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=120"]

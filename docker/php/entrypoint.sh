@@ -17,19 +17,18 @@ if ! grep -q '^APP_KEY=base64:' .env; then
   php artisan key:generate --force --no-interaction
 fi
 
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
 
 if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
-  php artisan migrate --force --no-interaction
+  php artisan migrate --force --no-interaction || true
 fi
 
 if [ "${APP_ENV:-production}" = "production" ]; then
-  php artisan config:cache
-  php artisan route:cache
-  php artisan view:cache
+  php artisan config:cache || true
+  php artisan route:cache || true
+  php artisan view:cache || true
 fi
 
 exec "$@"
