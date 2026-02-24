@@ -64,3 +64,62 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Docker Deployment (Composer + Env)
+
+### 1) Prepare env file
+
+```bash
+cp .env.docker.example .env
+```
+
+Set at least:
+
+- `APP_URL` and `APP_PORT`
+- `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`, `DB_ROOT_PASSWORD`
+- mail credentials if using SMTP
+
+### 2) Build and run
+
+```bash
+docker compose up -d --build
+```
+
+### 3) Verify app
+
+Open:
+
+- `http://localhost:8080` (or your `APP_PORT`)
+
+### 4) Useful commands
+
+Run artisan command:
+
+```bash
+docker compose exec app php artisan <command>
+```
+
+Watch logs:
+
+```bash
+docker compose logs -f app queue mysql redis
+```
+
+Stop services:
+
+```bash
+docker compose down
+```
+
+Reset DB volumes:
+
+```bash
+docker compose down -v
+```
+
+### Notes
+
+- Composer dependencies are installed during image build.
+- Frontend assets are built during image build (`npm run build`).
+- Entrypoint auto-runs cache clears, ensures `APP_KEY`, and can run migrations when `RUN_MIGRATIONS=true`.
+- Queue worker runs in a separate `queue` service.
