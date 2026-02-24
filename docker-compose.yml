@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: healingtouchpurnea/app:latest
     restart: unless-stopped
     env_file:
       - .env
@@ -31,7 +30,9 @@ services:
       - appnet
 
   queue:
-    image: healingtouchpurnea/app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     env_file:
       - .env

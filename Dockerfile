@@ -1,16 +1,5 @@
 # syntax=docker/dockerfile:1.7
 
-FROM composer:2.8 AS composer_deps
-WORKDIR /var/www/html
-COPY composer.json composer.lock ./
-RUN composer install \
-    --no-dev \
-    --prefer-dist \
-    --no-interaction \
-    --no-progress \
-    --optimize-autoloader \
-    --no-scripts
-
 FROM node:22-alpine AS node_assets
 WORKDIR /var/www/html
 COPY package*.json ./
@@ -53,8 +42,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
 
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
+COPY composer.json composer.lock ./
+RUN composer install \
+    --no-dev \
+    --prefer-dist \
+    --no-interaction \
+    --no-progress \
+    --optimize-autoloader \
+    --no-scripts
+
 COPY . .
-COPY --from=composer_deps /var/www/html/vendor ./vendor
 COPY --from=node_assets /var/www/html/public/build ./public/build
 
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/99-app.ini
