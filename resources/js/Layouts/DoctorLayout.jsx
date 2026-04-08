@@ -12,78 +12,91 @@ export default function DoctorLayout({ children }) {
     ];
 
     return (
-        <div className="flex bg-slate-50 min-h-screen font-['Inter']">
+        <div className="flex bg-[#f8f9ff] min-h-screen font-inter select-none">
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 bg-[#0d9488] shadow-2xl transition-all duration-300 z-50 overflow-hidden ${isSidebarOpen ? 'w-72' : 'w-20'}`}>
+            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-500 ease-in-out z-50 ${isSidebarOpen ? 'w-72' : 'w-24'}`}>
                 <div className="flex flex-col h-full">
-                    <div className="p-6 mb-8 mt-2">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-teal-600 font-black shrink-0 shadow-lg shadow-black/10">HT</div>
+                    <div className="p-8 mb-4">
+                        <div className="flex items-center space-x-4">
+                            <div className="w-12 h-12 bg-[#00685f] rounded-2xl flex items-center justify-center text-white font-black shrink-0 shadow-2xl shadow-[#00685f]/20 rotate-3">H</div>
                             {isSidebarOpen && (
-                                <span className="text-lg font-black text-white tracking-tight whitespace-nowrap uppercase">Clinician Portal</span>
+                                <div className="flex flex-col">
+                                    <span className="text-xl font-black text-[#0d1c2e] leading-none font-manrope">Healing</span>
+                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Doctor Panel</span>
+                                </div>
                             )}
                         </div>
                     </div>
 
-                    <nav className="flex-1 px-4 space-y-2">
-                        {navigation.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`flex items-center space-x-4 p-4 rounded-2xl transition-all duration-200 group ${
-                                    usePage().url === item.href 
-                                    ? 'bg-white/10 text-white' 
-                                    : 'text-teal-100 hover:bg-white/5 hover:text-white'
-                                }`}
-                            >
-                                <svg className="w-6 h-6 shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d={item.icon} />
-                                </svg>
-                                {isSidebarOpen && <span className="font-bold text-sm tracking-wide">{item.name}</span>}
-                            </Link>
-                        ))}
+                    <nav className="flex-1 px-4 space-y-1">
+                        {navigation.map((item) => {
+                            const isActive = usePage().url === item.href;
+                            return (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className={`flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 group relative ${
+                                        isActive 
+                                        ? 'bg-[#00685f]/10 text-[#00685f]' 
+                                        : 'text-[#0d1c2e]/50 hover:bg-[#00685f]/5 hover:text-[#0d1c2e]'
+                                    }`}
+                                >
+                                    {isActive && (
+                                        <div className="absolute left-0 w-1.5 h-8 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-500" />
+                                    )}
+                                    <svg className={`w-6 h-6 shrink-0 transition-transform duration-300 ${
+                                        isActive ? 'text-[#00685f] scale-110' : 'text-[#0d1c2e]/40 group-hover:scale-110'
+                                    }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                                    </svg>
+                                    {isSidebarOpen && <span className="font-bold text-sm tracking-tight">{item.name}</span>}
+                                </Link>
+                            );
+                        })}
                     </nav>
 
-                    <div className="p-6 mt-auto">
+                    <div className="p-8 mt-auto">
                         <Link
                             method="post"
                             href={route('doctor.logout')}
                             as="button"
-                            className="w-full flex items-center space-x-4 p-4 rounded-2xl bg-white/5 text-teal-50 hover:bg-red-500/20 hover:text-white transition-all group"
+                            className="w-full flex items-center space-x-4 p-4 rounded-2xl bg-white/50 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
                         >
-                            <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                            <svg className="w-6 h-6 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            {isSidebarOpen && <span className="font-bold text-sm tracking-wide uppercase">Sign Out</span>}
+                            {isSidebarOpen && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
                         </Link>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-72' : 'ml-20'}`}>
+            <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'ml-72' : 'ml-24'}`}>
                 {/* Header */}
-                <header className="sticky top-0 z-40 bg-white shadow-sm px-8 py-5">
-                    <div className="flex justify-between items-center">
-                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-slate-50 rounded-lg text-slate-400 hover:text-teal-600 transition-colors">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                        </button>
-                        <div className="flex items-center space-x-4">
-                            <div className="text-right hidden sm:block">
-                                <p className="text-sm font-black text-slate-800">DR. {doctor.name}</p>
-                                <p className="text-[10px] font-bold text-teal-600 uppercase tracking-widest leading-none">Consulting Physician</p>
-                            </div>
-                            <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-slate-50 shadow-inner">
-                                <img src={doctor.image || `https://ui-avatars.com/api/?name=${doctor.name}&background=0d9488&color=fff`} className="w-full h-full object-cover" alt="" />
+                <header className="sticky top-0 z-40 bg-[#f8f9ff]/80 backdrop-blur-2xl px-12 py-8 flex justify-between items-center transition-all duration-300">
+                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-white rounded-2xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
+                        <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                    </button>
+                    
+                    <div className="flex items-center space-x-8">
+                        <div className="text-right hidden sm:block">
+                            <p className="text-sm font-black text-[#0d1c2e] font-manrope">DR. {doctor.name}</p>
+                            <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">Attending Physician</p>
+                        </div>
+                        <div className="relative group">
+                            <div className="w-12 h-12 bg-white rounded-2xl overflow-hidden border-[3px] border-white shadow-xl group-hover:border-[#00685f]/20 transition-all duration-500 cursor-pointer">
+                                <img src={doctor.image || `https://ui-avatars.com/api/?name=${doctor.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
                             </div>
                         </div>
                     </div>
                 </header>
 
-                <div className="p-10 max-w-7xl mx-auto">
+                <div className="px-12 pb-12 inertia-transition-fade max-w-7xl mx-auto">
                     {children}
                 </div>
             </main>
         </div>
     );
 }
+
