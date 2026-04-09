@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Reception;
 
+use App\Events\AppointmentBooked;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Doctor;
@@ -148,6 +149,9 @@ class ReceptionController extends Controller
             'settlement' => $request->settlement,
             'status' => $request->settlement ? 'paid' : 'due',
         ]);
+
+        $appointment->load(['patient', 'doctor.user', 'doctor.department']);
+        event(new AppointmentBooked($appointment));
 
         return back()->with('success', 'Appointment booked successfully.');
     }

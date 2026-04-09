@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AppointmentBooked;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Setting;
@@ -167,6 +168,9 @@ class PatientBookingController extends Controller
         $appointment->update([
             'appointment_no' => (int)($datePrefix . str_pad($appointment->id, 4, '0', STR_PAD_LEFT))
         ]);
+
+        $appointment->load(['patient', 'doctor.user', 'doctor.department']);
+        event(new AppointmentBooked($appointment));
 
         return response()->json([
             'success' => true,

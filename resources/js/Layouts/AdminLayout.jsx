@@ -1,9 +1,67 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function AdminLayout({ children }) {
-    const { auth } = usePage().props;
+    const page = usePage();
+    const { auth } = page.props;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [appointmentAlerts, setAppointmentAlerts] = useState([]);
+    const notificationAudioRef = useRef(null);
+    const isAudioUnlockedRef = useRef(false);
+
+    useEffect(() => {
+        const audio = new Audio('/sounds/notification.mp3');
+        audio.preload = 'auto';
+        notificationAudioRef.current = audio;
+
+        const unlockAudio = () => {
+            if (!notificationAudioRef.current || isAudioUnlockedRef.current) {
+                return;
+            }
+
+            notificationAudioRef.current.muted = true;
+            notificationAudioRef.current
+                .play()
+                .then(() => {
+                    notificationAudioRef.current.pause();
+                    notificationAudioRef.current.currentTime = 0;
+                    notificationAudioRef.current.muted = false;
+                    isAudioUnlockedRef.current = true;
+                })
+                .catch(() => {});
+        };
+
+        window.addEventListener('click', unlockAudio, { once: true });
+        window.addEventListener('keydown', unlockAudio, { once: true });
+
+        if (!window.Echo) {
+            return;
+        }
+
+        const channel = window.Echo.channel('appointments-channel');
+
+        channel.listen('.appointment-booked', (payload) => {
+            const notificationAudio = notificationAudioRef.current;
+            if (notificationAudio) {
+                notificationAudio.currentTime = 0;
+                notificationAudio.play().catch(() => {});
+            }
+
+            const alertItem = {
+                ...payload,
+                _alertId: `${payload?.id || 'appointment'}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+            };
+
+            setAppointmentAlerts((previousAlerts) => [alertItem, ...previousAlerts]);
+        });
+
+        return () => {
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('keydown', unlockAudio);
+
+            window.Echo.leave('appointments-channel');
+        };
+    }, []);
 
     const navigation = [
         { name: 'Dashboard', href: route('admin.dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -35,7 +93,7 @@ export default function AdminLayout({ children }) {
 
                     <nav className="flex-1 px-4 space-y-1">
                         {navigation.map((item) => {
-                            const isActive = usePage().url === item.href;
+                            const isActive = page.url === item.href;
                             return (
                                 <Link
                                     key={item.name}
@@ -78,6 +136,30 @@ export default function AdminLayout({ children }) {
 
             {/* Main Content */}
             <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'ml-72' : 'ml-24'}`}>
+                {appointmentAlerts.length > 0 && (
+                    <div className="fixed top-6 right-6 z-[60] max-w-sm w-full space-y-3">
+                        {appointmentAlerts.map((alertItem) => (
+                            <div key={alertItem._alertId} className="bg-white rounded-2xl shadow-xl border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p className="text-xs font-black text-[#00685f] uppercase tracking-[0.2em]">New Appointment</p>
+                                        <p className="text-sm font-bold text-[#0d1c2e] mt-1">{alertItem.patient_name || 'Patient'}</p>
+                                        <p className="text-xs text-[#0d1c2e]/70 mt-1">Dr. {alertItem.doctor_name || 'N/A'} • {alertItem.appointment_time || '-'}</p>
+                                        <p className="text-xs text-[#0d1c2e]/70 mt-0.5">ID: {alertItem.appointment_no || '-'}</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setAppointmentAlerts((previousAlerts) => previousAlerts.filter((item) => item._alertId !== alertItem._alertId))}
+                                        className="text-[#0d1c2e]/40 hover:text-[#0d1c2e] transition-colors"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 {/* Header */}
                 <header className="sticky top-0 z-40 bg-[#f8f9ff]/80 backdrop-blur-2xl px-12 py-8 flex justify-between items-center transition-all duration-300">
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-white rounded-2xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
