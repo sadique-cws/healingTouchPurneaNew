@@ -46,6 +46,7 @@
   .status-pending { @apply bg-[#ffb95f]/20 text-[#825100]; }
   .status-accepted { @apply bg-[#89f5e7]/20 text-[#00685f]; }
   .status-queued { @apply bg-[#99efe5]/20 text-[#006a63]; }
+
 }
 
 /* Custom transitions for Inertia fluidity */

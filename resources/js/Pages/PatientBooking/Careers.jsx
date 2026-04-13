@@ -1,15 +1,18 @@
 import { Head, Link } from '@inertiajs/react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function Careers({ careers = [] }) {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="Careers" />
             <Header />
 
-            <div className="max-w-6xl mx-auto px-4 pt-32 pb-12">
-                <h1 className="text-3xl font-bold text-gray-900">Career Opportunities</h1>
-                <p className="text-gray-600 mt-2">Join our healthcare team.</p>
+            <main className="max-w-7xl mx-auto w-full px-4 pt-28 sm:pt-32 pb-10">
+                <div className="text-left">
+                    <h1 className="text-3xl font-bold text-gray-900">Career Opportunities</h1>
+                    <p className="text-gray-600 mt-2">Join our healthcare team.</p>
+                </div>
 
                 <div className="mt-8 grid gap-4">
                     {careers.length ? careers.map((career) => (
@@ -29,7 +32,9 @@ export default function Careers({ careers = [] }) {
                         <div className="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-500">No openings available right now.</div>
                     )}
                 </div>
-            </div>
+            </main>
+
+            <PublicFooter />
         </div>
     );
 }

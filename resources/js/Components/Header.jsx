@@ -1,9 +1,9 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
 export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
     const [scrolled, setScrolled] = useState(false);
-    const [open, setOpen] = useState(false);
+    const { url } = usePage();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 30);
@@ -25,95 +25,121 @@ export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
         { name: 'Contact', href: route('contact.page') },
     ];
 
+    const mobileTabs = [
+        {
+            name: 'Home',
+            href: '/',
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10.5L12 3l9 7.5M5.25 9.75V21h13.5V9.75" />
+                </svg>
+            )
+        },
+        {
+            name: 'Search',
+            href: route('our.doctors'),
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            )
+        },
+        {
+            name: 'Book',
+            href: route('book.appointment'),
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+            )
+        },
+        {
+            name: 'Services',
+            href: route('services.page'),
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            )
+        },
+        {
+            name: 'Profile',
+            href: route('account.page'),
+            icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A9 9 0 1118.88 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            )
+        },
+    ];
+
+    const normalizePath = (href) => {
+        if (!href) return '/';
+        if (href.startsWith('http')) {
+            try {
+                return new URL(href).pathname;
+            } catch {
+                return href;
+            }
+        }
+        return href;
+    };
+
     return (
-        <header className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-4' : 'bg-white/80 backdrop-blur-sm py-5'}`}>
-            <div className="container mx-auto px-4 lg:px-8">
-                <div className="flex justify-between items-center">
-                    {/* Logo Area */}
-                    <div className="flex items-center">
-                        <Link href="/" className="flex items-center space-x-3 group">
-                            <div className="overflow-hidden rounded-xl h-11 w-11 flex items-center justify-center transition-all duration-500 bg-teal-50 border border-teal-100 group-hover:bg-teal-600 shadow-sm">
-                                <span className="font-black text-teal-600 text-xl group-hover:text-white transition-colors">H</span>
-                            </div>
-                            <div>
-                                <h1 className="font-black text-xl text-gray-800 tracking-tight leading-none group-hover:text-teal-600 transition-colors">
-                                    <span className="text-teal-600">{firstWord}</span> {restOfName}
-                                </h1>
-                                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hospital (Purnea)</p>
-                            </div>
-                        </Link>
-                    </div>
-
-                    {/* Desktop Navigation */}
-                    <nav className="hidden lg:flex items-center space-x-2">
-                        {navLinks.map((link) => (
-                            <Link 
-                                key={link.name} 
-                                href={link.href} 
-                                className="px-4 py-2 rounded-xl text-[14px] font-bold text-gray-600 hover:text-teal-600 hover:bg-teal-50/50 transition-all duration-200"
-                            >
-                                {link.name}
+        <>
+            <header className={`fixed w-full top-0 z-50 transition-all duration-200 ${scrolled ? 'bg-white/95 backdrop-blur-md border-b border-gray-200 py-3' : 'bg-white/90 backdrop-blur-sm border-b border-gray-100 py-4'}`}>
+                <div className="container mx-auto px-4 lg:px-8">
+                    <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                            <Link href="/" className="flex items-center space-x-3 group">
+                                <div className="overflow-hidden rounded-lg h-10 w-10 flex items-center justify-center bg-beige-50 border border-beige-200 transition-colors duration-150 group-hover:bg-beige-100">
+                                    <span className="font-black text-beige-700 text-lg">H</span>
+                                </div>
+                                <div>
+                                    <h1 className="font-black text-xl text-gray-800 tracking-tight leading-none group-hover:text-beige-700 transition-colors">
+                                        <span className="text-beige-700">{firstWord}</span> {restOfName}
+                                    </h1>
+                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hospital (Purnea)</p>
+                                </div>
                             </Link>
-                        ))}
-                    </nav>
+                        </div>
 
-                    {/* Desktop Appointment Button */}
-                    <div className="hidden md:block">
-                        <Link 
-                            href={route('book.appointment')} 
-                            className="bg-[#0d9488] hover:bg-[#0f766e] text-white px-7 py-3 rounded-xl transition-all duration-300 shadow-[0_4px_14px_0_rgba(13,148,136,0.39)] hover:shadow-teal-700/40 font-black text-sm tracking-wide uppercase flex items-center gap-2 active:scale-95"
-                        >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
-                            Book Appointment
-                        </Link>
-                    </div>
+                        <nav className="hidden lg:flex items-center space-x-1">
+                            {navLinks.map((link) => (
+                                <Link 
+                                    key={link.name} 
+                                    href={link.href} 
+                                    className="px-3 py-2 rounded-lg text-[13px] font-semibold text-gray-600 hover:text-beige-700 hover:bg-beige-50/60 transition-colors duration-150"
+                                >
+                                    {link.name}
+                                </Link>
+                            ))}
+                        </nav>
 
-                    {/* Mobile Toggle */}
-                    <div className="lg:hidden flex items-center">
-                        <button 
-                            type="button" 
-                            className="p-2 rounded-xl bg-gray-50 text-gray-500 hover:text-teal-600 transition-colors" 
-                            onClick={() => setOpen(!open)}
-                        >
-                            {!open ? (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            )}
-                        </button>
                     </div>
+                </div>
+            </header>
+
+            <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+                <div className="grid grid-cols-5 gap-1 px-3 py-2.5">
+                        {mobileTabs.map((tab) => {
+                            const tabPath = normalizePath(tab.href);
+                            const currentPath = normalizePath(url);
+                            const isActive = currentPath === tabPath || (tabPath !== '/' && currentPath.startsWith(tabPath));
+
+                            return (
+                                <Link
+                                    key={tab.name}
+                                    href={tab.href}
+                                    className={`flex flex-col items-center justify-center rounded-lg py-1.5 transition-colors duration-150 ${isActive ? 'text-beige-700' : 'text-gray-500 hover:text-beige-700'}`}
+                                >
+                                    <span className="leading-none">{tab.icon}</span>
+                                    <span className="text-[10px] font-bold mt-1 truncate">{tab.name}</span>
+                                </Link>
+                            );
+                        })}
                 </div>
             </div>
-
-            {/* Mobile Menu */}
-            {open && (
-                <div className="lg:hidden bg-white/95 backdrop-blur-md shadow-2xl border-t border-gray-100 absolute left-0 right-0 overflow-hidden animate-slideDown">
-                    <nav className="container mx-auto px-6 py-6 flex flex-col gap-2">
-                        {navLinks.map((link) => (
-                            <Link 
-                                key={link.name} 
-                                href={link.href} 
-                                className="py-4 px-5 rounded-2xl text-gray-700 font-black tracking-wide hover:bg-teal-50 hover:text-teal-600 transition-all flex items-center justify-between group" 
-                                onClick={() => setOpen(false)}
-                            >
-                                {link.name}
-                                <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M9 5l7 7-7 7" /></svg>
-                            </Link>
-                        ))}
-                        <Link 
-                            href={route('book.appointment')} 
-                            className="mt-4 bg-teal-600 text-white p-5 rounded-2xl font-black text-center shadow-lg active:scale-95 transition-transform uppercase tracking-widest" 
-                            onClick={() => setOpen(false)}
-                        >
-                            Book Appointment
-                        </Link>
-                    </nav>
-                </div>
-            )}
-        </header>
+        </>
     );
 }

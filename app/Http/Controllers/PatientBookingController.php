@@ -123,6 +123,11 @@ class PatientBookingController extends Controller
         return Inertia::render('PatientBooking/PrivacyPolicy', $this->getGlobalSettings());
     }
 
+    public function account(): \Inertia\Response
+    {
+        return Inertia::render('PatientBooking/Account', $this->getGlobalSettings());
+    }
+
     public function manageAppointments(Request $request): \Inertia\Response
     {
         $searchMethod = $request->input('method', 'phone');
@@ -237,10 +242,20 @@ class PatientBookingController extends Controller
      */
     public function book_appointment(Request $request): \Inertia\Response
     {
-        $departments = \App\Models\Department::where('status', 1)->orderBy('name', 'desc')->get();
+        $hasActiveDepartments = \App\Models\Department::query()->where('status', 1)->exists();
+
+        $departments = \App\Models\Department::query()
+            ->when($hasActiveDepartments, fn($query) => $query->where('status', 1))
+            ->orderBy('name', 'desc')
+            ->get();
+
         $doctors = \App\Models\Doctor::with(['user', 'department'])
             ->whereIn('status', [1, 2, '1', '2'])
-            ->whereHas('department', fn($query) => $query->where('status', 1))
+            ->whereHas('department', function ($query) use ($hasActiveDepartments) {
+                if ($hasActiveDepartments) {
+                    $query->where('status', 1);
+                }
+            })
             ->get();
 
         return Inertia::render('PatientBooking/BookAppointment', array_merge($this->getGlobalSettings(), [
@@ -255,6 +270,8 @@ class PatientBookingController extends Controller
      */
     public function get_slots(Request $request): JsonResponse
     {
+        $hasActiveDepartments = \App\Models\Department::query()->where('status', 1)->exists();
+
         $doctor = Doctor::query()
             ->with('department')
             ->where('slug', $request->doctor_slug)
@@ -264,7 +281,11 @@ class PatientBookingController extends Controller
             return response()->json(['slots' => []]);
         }
 
-        if ((int) $doctor->status !== 1 || !$doctor->department || (int) $doctor->department->status !== 1) {
+        if (!$doctor->department) {
+            return response()->json(['error' => 'Doctor not available', 'slots' => []]);
+        }
+
+        if ($hasActiveDepartments && ((int) $doctor->status !== 1 || (int) $doctor->department->status !== 1)) {
             return response()->json(['error' => 'Doctor not available', 'slots' => []]);
         }
 
@@ -288,7 +309,7 @@ class PatientBookingController extends Controller
         }
 
         $timeSlots = [];
-        for ($hour = 10; $hour < 18; $hour++) {
+        for ($hour = 10; $hour < 20; $hour++) {
             $formattedHour = $hour <= 12 ? $hour : $hour - 12;
             $ampm = $hour < 12 ? 'AM' : 'PM';
             $timeSlots[] = "$formattedHour:00 $ampm";
@@ -337,6 +358,8 @@ class PatientBookingController extends Controller
      */
     public function store_appointment(Request $request): JsonResponse
     {
+        $hasActiveDepartments = \App\Models\Department::query()->where('status', 1)->exists();
+
         $validated = $request->validate([
             'doctor_slug' => 'required|exists:doctors,slug',
             'date' => 'required|date',
@@ -358,7 +381,14 @@ class PatientBookingController extends Controller
             ->where('slug', $validated['doctor_slug'])
             ->firstOrFail();
 
-        if ((int) $doctor->status !== 1 || !$doctor->department || (int) $doctor->department->status !== 1) {
+        if (!$doctor->department) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected doctor is currently unavailable.',
+            ], 422);
+        }
+
+        if ($hasActiveDepartments && ((int) $doctor->status !== 1 || (int) $doctor->department->status !== 1)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Selected doctor is currently unavailable.',

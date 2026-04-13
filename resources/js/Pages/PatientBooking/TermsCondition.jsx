@@ -1,9 +1,10 @@
 import { Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function TermsCondition() {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="Terms & Conditions" />
             <Header />
 
@@ -17,6 +18,8 @@ export default function TermsCondition() {
                     </p>
                 </div>
             </div>
+
+            <PublicFooter />
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function ManageAppointments({ filters, appointments = [] }) {
     const [searchMethod, setSearchMethod] = useState(filters?.method || 'phone');
@@ -39,15 +40,15 @@ export default function ManageAppointments({ filters, appointments = [] }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="Manage Appointments" />
             <Header />
 
-            <div className="max-w-6xl mx-auto px-4 pt-32 pb-12">
+            <div className="max-w-7xl mx-auto w-full px-4 pt-28 sm:pt-32 pb-10">
                 <h1 className="text-3xl font-bold text-gray-900">Manage Appointments</h1>
                 <p className="text-gray-600 mt-2">Find your booking and cancel with OTP if needed.</p>
 
-                <form onSubmit={submitSearch} className="mt-6 bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+                <form onSubmit={submitSearch} className="mt-6 bg-white rounded-xl border border-gray-200 p-4 sm:p-5">
                     <div className="flex flex-wrap gap-2 mb-4">
                         <button type="button" onClick={() => setSearchMethod('phone')} className={`px-4 py-2 rounded-full text-sm font-semibold ${searchMethod === 'phone' ? 'bg-beige-600 text-white' : 'bg-gray-100 text-gray-700'}`}>
                             Search by Phone
@@ -67,10 +68,11 @@ export default function ManageAppointments({ filters, appointments = [] }) {
                     </div>
                 </form>
 
-                <div className="mt-6 bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                <div className="mt-6 bg-white rounded-xl border border-gray-200 overflow-hidden">
                     {hasResults ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
+                        <>
+                            <div className="hidden md:block overflow-x-auto">
+                                <table className="w-full min-w-[760px]">
                                 <thead className="bg-gray-50 text-left text-xs uppercase text-gray-500">
                                     <tr>
                                         <th className="px-4 py-3">Reference</th>
@@ -100,15 +102,37 @@ export default function ManageAppointments({ filters, appointments = [] }) {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                        </div>
+                                </table>
+                            </div>
+
+                            <div className="md:hidden divide-y divide-gray-200">
+                                {appointments.map((appointment) => (
+                                    <div key={appointment.id} className="p-4 space-y-2">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <p className="font-semibold text-gray-900 text-sm break-all">{appointment.reference_id}</p>
+                                            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${appointment.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                {appointment.status}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm text-gray-700">Dr. {appointment.doctor_name}</p>
+                                        <p className="text-sm text-gray-600">{appointment.appointment_date} • {appointment.appointment_time}</p>
+                                        <div className="flex items-center gap-4 pt-1">
+                                            <Link href={route('appointment.receipt', appointment.id)} className="text-sm font-semibold text-beige-700">Receipt</Link>
+                                            {appointment.status !== 'cancelled' && (
+                                                <button onClick={() => sendOtp(appointment.id)} className="text-sm font-semibold text-red-600">Cancel (OTP)</button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     ) : (
                         <div className="p-8 text-center text-gray-500">No appointments found.</div>
                     )}
                 </div>
 
                 {selectedId && (
-                    <form onSubmit={verifyOtp} className="mt-6 bg-white rounded-xl border border-gray-100 p-5 shadow-sm max-w-md">
+                    <form onSubmit={verifyOtp} className="mt-6 bg-white rounded-xl border border-gray-200 p-5 max-w-md">
                         <h3 className="font-semibold text-gray-900">Enter OTP to Cancel</h3>
                         <input value={otpForm.data.otp} onChange={(e) => otpForm.setData('otp', e.target.value)} className="mt-3 w-full rounded-lg border-gray-200" placeholder="4-digit OTP" />
                         {errors?.otp && <p className="text-xs text-red-600 mt-1">{errors.otp}</p>}
@@ -118,6 +142,8 @@ export default function ManageAppointments({ filters, appointments = [] }) {
                     </form>
                 )}
             </div>
+
+            <PublicFooter />
         </div>
     );
 }

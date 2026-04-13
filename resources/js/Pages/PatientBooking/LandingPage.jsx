@@ -1,19 +1,19 @@
 import { Link, Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function LandingPage({ hotelName, address, contact_phone, whatsapp_number, contact_email, doctors }) {
     return (
-        <div className="min-h-screen bg-gradient-to-r from-beige-50 to-beige-100 font-sans text-gray-900 antialiased overflow-x-hidden">
+        <div className="public-page min-h-screen bg-[#f8f9ff] font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="Healing Touch Hospital | Online Appointment Booking" />
 
             {/* Use the new full Header component */}
             <Header hospitalName={hotelName} />
 
             {/* Hero Section */}
-            <section className="relative pt-28 pb-20 md:pt-36 md:pb-32 bg-gradient-to-r from-beige-50 to-beige-100 overflow-hidden">
-                <div className="absolute inset-0 bg-pattern opacity-5"></div>
+            <section className="relative pt-24 pb-14 md:pt-28 md:pb-16 bg-beige-50 overflow-hidden border-b border-gray-200">
                 <div className="container mx-auto px-4 flex flex-col md:flex-row items-center relative z-10 w-full max-w-7xl">
-                    <div className="md:w-1/2 mb-10 md:mb-0 px-6 animate-fadeIn">
+                    <div className="md:w-1/2 mb-8 md:mb-0 px-2 md:px-4">
                         <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 leading-tight mb-4">
                             Compassionate Healthcare <span className="text-beige-700 block mt-1">For Your Family</span>
                         </h1>
@@ -21,17 +21,12 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             Experience world-class medical care with our team of dedicated specialists and
                             patient-centered approach. Your health is our priority.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <Link href={route('book.appointment')} className="group relative bg-beige-600 hover:bg-beige-700 text-white px-8 py-3.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-lg font-medium flex items-center justify-center">
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <Link href={route('book.appointment')} className="bg-beige-600 hover:bg-beige-700 text-white px-6 py-3 rounded-lg transition-colors duration-150 border border-beige-600 text-base font-semibold flex items-center justify-center">
                                 <span>Book Appointment</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                 </svg>
-                                {/* Ping Animation */}
-                                <span className="absolute top-0 right-0 -mt-1 -mr-1 flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-beige-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-beige-500"></span>
-                                </span>
                             </Link>
                         </div>
                         {/* Quick Stats */}
@@ -60,72 +55,143 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             </div>
                         </div>
                     </div>
-                    <div className="md:w-1/2 relative animate-slideInRight px-6 pt-10">
+                    <div className="md:w-1/2 relative px-2 md:px-4 pt-8 md:pt-0">
                         <div className="relative">
-                            <div className="absolute -inset-4 bg-gradient-to-r from-beige-200 to-beige-300 rounded-full blur-lg opacity-70"></div>
-                            <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/heroImageHt.jpg?updatedAt=1746616206447" alt="Doctor with patient" className="w-full h-auto rounded-2xl shadow-2xl relative" />
+                            <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/heroImageHt.jpg?updatedAt=1746616206447" alt="Doctor with patient" className="w-full h-auto rounded-xl border border-gray-200 relative" />
                         </div>
-                        {/* Floating Elements */}
-                        <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3 animate-float">
+                        <div className="absolute -bottom-4 -left-2 md:-left-4 bg-white p-3 rounded-lg border border-gray-200 flex items-center space-x-2">
                             <div className="bg-beige-100 p-2 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                             <div>
-                                <p className="font-bold text-gray-800">Safe & Quality Care</p>
+                                <p className="font-bold text-gray-800 text-sm">Safe & Quality Care</p>
                                 <p className="text-xs text-gray-500">Advanced protocols</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            
-            {/* Facilities Section */}
-            <section className="py-12 bg-white">
+
+            {/* Doctors Section */}
+            <section className="py-12 bg-gray-50">
                 <div className="container mx-auto px-4 max-w-7xl">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-10">
+                        <span className="text-beige-600 font-semibold text-sm uppercase tracking-wider">Our Trusted Specialists</span>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mt-2 mb-4">Meet Our <span className="text-beige-600">Experts</span></h2>
+                        <div className="w-24 h-1 bg-beige-600 mx-auto"></div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {doctors && doctors.length > 0 ? doctors.map((user) => (
+                            <div key={user.id} className="bg-white rounded-lg overflow-hidden h-full flex flex-col border border-gray-200">
+                                <div className="p-4 flex-grow">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex-shrink-0">
+                                            <img
+                                                className="w-20 h-20 rounded-lg object-cover border border-beige-200"
+                                                src={user.doctor?.image || '/images/default.jpg'}
+                                                alt={`Dr. ${user.name}`}
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-lg font-bold text-gray-800 truncate">Dr. {user.name}</h3>
+                                            <p className="text-sm font-medium text-beige-600 truncate">{user.doctor?.department?.name}</p>
+                                            <p className="text-sm font-medium text-gray-600 line-clamp-1">
+                                                {Array.isArray(user.doctor?.qualification) ? user.doctor.qualification.join(', ') : user.doctor?.qualification || '-'}
+                                            </p>
+                                            <p className="font-medium text-xs line-clamp-1 text-gray-500 mt-1">
+                                                {Array.isArray(user.doctor?.available_days) ? user.doctor.available_days.join(', ') : '-'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-5 flex items-center text-amber-500">
+                                        {[...Array(5)].map((_, i) => (
+                                            <svg key={i} className="w-4 h-4" fill="#906A39" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                            </svg>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 mt-auto flex gap-2">
+                                    <Link
+                                        href={route('doctors.detail', user.doctor?.slug)}
+                                        className="flex-1 text-center py-2 rounded-md border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-white"
+                                    >
+                                        View Details
+                                    </Link>
+                                    <Link
+                                        href={route('book.appointment', { slug: user.doctor?.slug })}
+                                        className="flex-1 text-center py-2 rounded-md bg-beige-600 text-white text-sm font-semibold hover:bg-beige-700 border border-beige-600"
+                                    >
+                                        Book Now
+                                    </Link>
+                                </div>
+                            </div>
+                        )) : (
+                            <div className="col-span-full text-center text-gray-500 py-10">
+                                No doctors available at the moment.
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <Link href={route('our.doctors')} className="text-beige-600 font-bold hover:text-beige-800 flex items-center justify-center gap-2">
+                            View All Doctors <span>→</span>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+
+            {/* Facilities Section */}
+            <section className="py-10 bg-white">
+                <div className="container mx-auto px-4 max-w-7xl">
+                    <div className="text-center mb-12">
                         <span className="text-beige-600 font-semibold text-sm uppercase tracking-wider">World-Class Medical Care</span>
                         <h2 className="text-3xl md:text-4xl font-bold text-beige-900 mt-2 mb-4">Our <span className="text-beige-600">Facilities</span></h2>
                         <div className="w-24 h-1 bg-beige-400 mx-auto mb-6"></div>
                         <p className="max-w-2xl mx-auto text-gray-600">Experience healthcare excellence with our state-of-the-art facilities and compassionate medical professionals.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 group hover:-translate-y-1">
-                            <div className="bg-beige-100 p-4 rounded-full inline-block mb-6 group-hover:bg-beige-200 transition-colors duration-300">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div className="bg-white p-6 rounded-lg border border-gray-200 group">
+                            <div className="bg-beige-100 p-3 rounded-lg inline-block mb-4 group-hover:bg-beige-200 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 mb-3">Expert Doctors</h3>
                             <p className="text-gray-600 leading-relaxed">Board-certified specialists with years of experience dedicated to providing compassionate patient care.</p>
-                            <div className="mt-6 flex items-center text-beige-600 font-medium">
-                                <Link href={route('our.doctors')}><span>Learn more</span></Link>  
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                            <div className="mt-4 flex items-center text-beige-600 font-medium">
+                                <Link href={route('our.doctors')}><span>Learn more</span></Link>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                 </svg>
                             </div>
                         </div>
 
-                        <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 group hover:-translate-y-1">
-                            <div className="bg-beige-100 p-4 rounded-full inline-block mb-6 group-hover:bg-beige-200 transition-colors duration-300">
+                        <div className="bg-white p-6 rounded-lg border border-gray-200 group">
+                            <div className="bg-beige-100 p-3 rounded-lg inline-block mb-4 group-hover:bg-beige-200 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                             </div>
                             <h3 className="text-xl font-bold text-gray-800 mb-3">Advanced Facilities</h3>
                             <p className="text-gray-600 leading-relaxed">State-of-the-art medical equipment and modern healing environments designed for optimal patient recovery.</p>
-                            <div className="mt-6 flex items-center text-beige-600 font-medium">
+                            <div className="mt-4 flex items-center text-beige-600 font-medium">
                                 <Link href={route('services.page')}><span>Learn more</span></Link>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                 </svg>
                             </div>
                         </div>
 
-                        <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100 group hover:-translate-y-1">
-                            <div className="bg-beige-100 p-4 rounded-full inline-block mb-6 group-hover:bg-beige-200 transition-colors duration-300">
+                        <div className="bg-white p-6 rounded-lg border border-gray-200 group">
+                            <div className="bg-beige-100 p-3 rounded-lg inline-block mb-4 group-hover:bg-beige-200 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
@@ -136,7 +202,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                     </div>
                 </div>
             </section>
-            <section id="about" className="py-12 bg-gradient-to-r from-beige-50 to-beige-100">
+            <section id="about" className="py-10 bg-beige-50 border-y border-gray-200">
                 <div className="container mx-auto px-4 max-w-7xl">
                     <div className="text-center mb-12">
                         <span className="text-beige-600 font-semibold text-sm uppercase tracking-wider">Our Story</span>
@@ -147,13 +213,12 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                         </p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-center gap-12">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
                         <div className="md:w-1/2">
                             <div className="relative">
-                                <div className="absolute -inset-4 bg-gradient-to-r from-beige-200 to-beige-300 rounded-xl blur-lg opacity-70 -z-10"></div>
-                                <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877" alt="Healing Touch Hospital Building" className="w-full h-auto rounded-xl shadow-lg" />
-                                <div className="absolute -bottom-6 -right-6 bg-white py-3 px-6 rounded-full shadow-lg">
-                                    <p className="text-gray-800 font-bold text-xl">25+ Years of Excellence</p>
+                                <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877" alt="Healing Touch Hospital Building" className="w-full h-auto rounded-lg border border-gray-200" />
+                                <div className="absolute -bottom-4 -right-2 md:-right-4 bg-white py-2 px-4 rounded-lg border border-gray-200">
+                                    <p className="text-gray-800 font-bold text-base">25+ Years of Excellence</p>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +231,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             <h3 className="text-2xl font-bold text-gray-800 mb-6">Our Values</h3>
                             <ul className="space-y-3 text-beige-700">
                                 {['Excellence', 'Compassion', 'Innovation', 'Integrity'].map((value) => (
-                                    <li key={value} className="flex items-start bg-white p-4 rounded-lg shadow-sm">
+                                    <li key={value} className="flex items-start bg-white p-3 rounded-lg border border-gray-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beige-600 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                         </svg>
@@ -179,60 +244,15 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                 </div>
             </section>
 
-            {/* Doctors Section */}
-            <section className="py-20 bg-gray-50">
-                <div className="container mx-auto px-4 max-w-7xl">
-                    <div className="text-center mb-16">
-                        <span className="text-beige-600 font-semibold text-sm uppercase tracking-wider">Our Trusted Specialists</span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mt-2 mb-4">Meet Our <span className="text-beige-600">Experts</span></h2>
-                        <div className="w-24 h-1 bg-beige-600 mx-auto"></div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {doctors && doctors.length > 0 ? doctors.map((user) => (
-                            <div key={user.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                                <div className="p-6 text-center">
-                                    <div className="relative inline-block mb-4">
-                                        <div className="absolute inset-0 bg-beige-600 rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                                        <img 
-                                            src={user.doctor?.image || '/images/default.jpg'} 
-                                            className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md relative z-10 mx-auto"
-                                            alt={user.name}
-                                        />
-                                    </div>
-                                    <h3 className="text-lg font-bold text-gray-900">Dr. {user.name}</h3>
-                                    <p className="text-beige-600 text-sm font-medium mb-4">{user.doctor?.department?.name}</p>
-                                    <Link 
-                                        href={route('book.appointment', { slug: user.doctor?.slug })}
-                                        className="inline-block w-full py-2 bg-beige-50 text-beige-700 font-bold rounded-lg border border-beige-100 hover:bg-beige-600 hover:text-white transition-colors"
-                                    >
-                                        Book Now
-                                    </Link>
-                                </div>
-                            </div>
-                        )) : (
-                            <div className="col-span-full text-center text-gray-500 py-10">
-                                No doctors available at the moment.
-                            </div>
-                        )}
-                    </div>
-                    
-                    <div className="mt-12 text-center">
-                        <Link href={route('our.doctors')} className="text-beige-600 font-bold hover:text-beige-800 flex items-center justify-center gap-2">
-                            View All Doctors <span>→</span>
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <PublicFooter
+                hospitalName={hotelName}
+                address={address}
+                contact_phone={contact_phone}
+                contact_email={contact_email}
+            />
 
-            <div id="mobile-book-btn" className="fixed bottom-8 right-4 md:hidden z-50 transition-all duration-300">
-                <Link href={route('book.appointment')} className="bg-beige-600 hover:bg-beige-700 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-2xl flex items-center gap-2 transition-all duration-300 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span className="text-sm font-medium whitespace-nowrap">Book Now</span>
-                </Link>
-            </div>
+           
         </div>
     );
 }

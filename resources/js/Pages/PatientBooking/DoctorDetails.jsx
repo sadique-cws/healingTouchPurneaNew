@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function DoctorDetails({ doctor }) {
     const qualification = Array.isArray(doctor?.qualification)
@@ -11,7 +12,7 @@ export default function DoctorDetails({ doctor }) {
         : [];
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title={`Dr. ${doctor?.user?.name || 'Doctor'}`} />
             <Header />
 
@@ -116,6 +117,8 @@ export default function DoctorDetails({ doctor }) {
                     </div>
                 </div>
             </div>
+
+            <PublicFooter />
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import { Link, Head } from '@inertiajs/react';
 import { useState } from 'react';
 import Header from '@/Components/Header';
+import PublicFooter from '@/Components/PublicFooter';
 
 export default function Doctors({ doctors }) {
     const [search, setSearch] = useState('');
@@ -20,17 +21,17 @@ export default function Doctors({ doctors }) {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="Our Doctors | Healing Touch Hospital" />
             <Header />
             
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-20 to-white pt-32">
+            <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-20 to-white pt-28 w-full">
                 {/* Heading with enhanced styling */}
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Meet Our Expert</h1>
-                    <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">Browse and schedule consultations with our highly qualified medical professionals</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Meet Our Expert</h1>
+                    <p className="mt-3 text-base md:text-lg text-gray-600 max-w-2xl mx-auto">Browse and schedule consultations with our highly qualified medical professionals</p>
                     <div className="mt-2 flex justify-center">
-                        <div className="h-1 w-24 bg-beige-600 rounded-full"></div>
+                        <div className="h-1 w-20 bg-beige-600 rounded-full"></div>
                     </div>
                 </div>
 
@@ -47,7 +48,7 @@ export default function Doctors({ doctors }) {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by name, specialty, or expertise..."
-                            className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:ring-beige-500 focus:border-beige-500 focus:outline-none"
+                            className="pl-10 w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-beige-500 focus:border-beige-500 focus:outline-none"
                         />
                     </div>
                 </div>
@@ -56,19 +57,19 @@ export default function Doctors({ doctors }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     {filteredDoctors.length > 0 ? (
                         filteredDoctors.map((user) => (
-                            <div key={user.id} className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
+                            <div key={user.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden h-full flex flex-col">
                                 <Link href={route('doctors.detail', user.doctor.slug)} className="block h-full">
-                                    <div className="p-6 flex-grow">
-                                        <div className="flex items-start gap-5">
+                                    <div className="p-4 flex-grow">
+                                        <div className="flex items-start gap-4">
                                             <div className="flex-shrink-0">
                                                 <img
-                                                    className="w-20 h-20 rounded-full object-cover border-2 border-beige-100 shadow"
+                                                    className="w-20 h-20 rounded-lg object-cover border border-beige-200"
                                                     src={user.doctor.image || '/images/default.jpg'}
                                                     alt={`Dr. ${user.name}`}
                                                 />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="text-xl font-bold text-gray-800 truncate">Dr. {user.name}</h3>
+                                                <h3 className="text-lg font-bold text-gray-800 truncate">Dr. {user.name}</h3>
                                                 <p className="text-sm font-medium text-beige-600 truncate">{user.doctor.department?.name}</p>
                                                 <p className="text-sm font-medium text-gray-600 line-clamp-1">{Array.isArray(user.doctor.qualification) ? user.doctor.qualification.join(', ') : user.doctor.qualification}</p>
                                                 <p className="font-medium text-xs line-clamp-1">
@@ -79,7 +80,7 @@ export default function Doctors({ doctors }) {
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 flex justify-between items-center">
+                                        <div className="mt-4 flex justify-between items-center">
                                             <div className="flex items-center text-amber-500">
                                                 {[...Array(5)].map((_, i) => (
                                                     <svg key={i} className="w-4 h-4" fill="#906A39" viewBox="0 0 20 20">
@@ -89,7 +90,7 @@ export default function Doctors({ doctors }) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="bg-gray-50 px-6 py-3 border-t border-gray-100 mt-auto">
+                                    <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 mt-auto">
                                         <div className="flex justify-between text-sm text-gray-500">
                                             <span className="flex items-center">
                                                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +113,9 @@ export default function Doctors({ doctors }) {
                         </div>
                     )}
                 </div>
-            </div>
+            </main>
+
+            <PublicFooter />
         </div>
     );
 }

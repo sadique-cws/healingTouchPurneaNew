@@ -17,6 +17,7 @@ Route::get('/career/{id}', [PatientBookingController::class, 'careerDetail'])->n
 Route::get('/gallery', [PatientBookingController::class, 'gallery'])->name('gallery.page');
 Route::get('/terms-conditions', [PatientBookingController::class, 'terms'])->name('terms.conditions');
 Route::get('/privacy-policy', [PatientBookingController::class, 'privacy'])->name('privacy.policy');
+Route::get('/account', [PatientBookingController::class, 'account'])->name('account.page');
 Route::get('/book-appointment/{slug?}', [PatientBookingController::class, 'book_appointment'])->name('book.appointment');
 Route::post('/api/appointment/slots', [PatientBookingController::class, 'get_slots'])->name('api.appointment.slots');
 Route::post('/api/appointment/book', [PatientBookingController::class, 'store_appointment'])->name('api.appointment.book');
