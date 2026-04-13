@@ -24,14 +24,14 @@ export default function Login() {
 
             <div className="w-full max-w-md px-6 relative z-10">
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-3xl shadow-xl border border-slate-100 mb-6 group transition-all duration-500 hover:scale-110">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg border border-slate-100 mb-6 group transition-all duration-300 hover:scale-105">
                         <span className="text-3xl font-black text-teal-600">H</span>
                     </div>
                     <h1 className="text-3xl font-black text-slate-800 tracking-tight">Admin Portal</h1>
                     <p className="text-slate-500 mt-2 font-medium">Please sign in to your dashboard</p>
                 </div>
 
-                <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100">
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100">
                     <form onSubmit={submit} className="space-y-6">
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-widest">Email Address</label>
@@ -43,7 +43,7 @@ export default function Login() {
                                     type="email"
                                     value={data.email}
                                     onChange={e => setData('email', e.target.value)}
-                                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="admin@healingtouch.com"
                                     required
                                 />
@@ -61,7 +61,7 @@ export default function Login() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
-                                    className={`w-full pl-12 pr-12 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="••••••••"
                                     required
                                 />
@@ -83,7 +83,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-5 rounded-2xl font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
+                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-4 rounded-xl font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
                         >
                             {processing ? (
                                 <>

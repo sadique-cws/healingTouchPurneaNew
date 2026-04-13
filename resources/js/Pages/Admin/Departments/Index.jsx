@@ -59,7 +59,7 @@ export default function Index({ departments, filters }) {
         <AdminLayout>
             <Head title="Manage Departments" />
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
                 <div className="flex justify-between items-end">
                     <div>
                         <h2 className="text-3xl font-black text-slate-800 tracking-tight">Medical Departments</h2>
@@ -75,7 +75,7 @@ export default function Index({ departments, filters }) {
                 </div>
 
                 {/* Table Section */}
-                <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-100">
                             <tr>
@@ -133,22 +133,22 @@ export default function Index({ departments, filters }) {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white w-full max-w-lg rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-8 border-b border-slate-100 flex justify-between items-center">
+                    <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                             <h3 className="text-2xl font-black text-slate-800 tracking-tight">{editingDepartment ? 'Edit Department' : 'New Department'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                                 <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         
-                        <form onSubmit={submit} className="p-10 space-y-6">
+                        <form onSubmit={submit} className="p-6 md:p-8 space-y-5">
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Department Name</label>
                                 <input 
                                     type="text" 
                                     value={data.name}
                                     onChange={e => setData('name', e.target.value)}
-                                    className={`w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-700 ${errors.name ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-700 ${errors.name ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="e.g., Cardiology"
                                     required
                                 />
@@ -161,7 +161,7 @@ export default function Index({ departments, filters }) {
                                     rows="4"
                                     value={data.description}
                                     onChange={e => setData('description', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-700 resize-none"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 transition-all font-bold text-slate-700 resize-none"
                                     placeholder="Brief description of the department..."
                                 />
                             </div>
@@ -172,14 +172,14 @@ export default function Index({ departments, filters }) {
                                     <button 
                                         type="button" 
                                         onClick={() => setData('status', '1')}
-                                        className={`flex-1 py-4 rounded-2xl font-black text-sm uppercase transition-all ${data.status == '1' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-50 text-slate-400'}`}
+                                        className={`flex-1 py-3.5 rounded-xl font-black text-sm uppercase transition-all ${data.status == '1' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-50 text-slate-400'}`}
                                     >
                                         Active
                                     </button>
                                     <button 
                                         type="button" 
                                         onClick={() => setData('status', '0')}
-                                        className={`flex-1 py-4 rounded-2xl font-black text-sm uppercase transition-all ${data.status == '0' ? 'bg-red-500 text-white shadow-lg' : 'bg-slate-50 text-slate-400'}`}
+                                        className={`flex-1 py-3.5 rounded-xl font-black text-sm uppercase transition-all ${data.status == '0' ? 'bg-red-500 text-white shadow-lg' : 'bg-slate-50 text-slate-400'}`}
                                     >
                                         Inactive
                                     </button>
@@ -190,7 +190,7 @@ export default function Index({ departments, filters }) {
                                 <button 
                                     type="submit" 
                                     disabled={processing}
-                                    className="w-full py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-500/30 active:scale-[0.98] disabled:opacity-50"
+                                    className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-500/30 active:scale-[0.98] disabled:opacity-50"
                                 >
                                     {processing ? 'Saving...' : editingDepartment ? 'Update Department' : 'Create Department'}
                                 </button>

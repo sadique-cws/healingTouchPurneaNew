@@ -63,7 +63,7 @@ export default function Index({ users, filters }) {
         <AdminLayout>
             <Head title="Staff Users" />
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
                 <div className="flex justify-between items-end">
                     <div>
                         <h2 className="text-3xl font-black text-slate-800 tracking-tight">Staff Management</h2>
@@ -78,7 +78,7 @@ export default function Index({ users, filters }) {
                     </button>
                 </div>
 
-                <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-100">
                             <tr>
@@ -140,15 +140,15 @@ export default function Index({ users, filters }) {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white w-full max-w-lg rounded-[3.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                             <h3 className="text-2xl font-black text-slate-800 tracking-tight">{editingUser ? 'Update Staff Member' : 'New Staff Account'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
                                 <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         
-                        <form onSubmit={submit} className="p-10 space-y-6">
+                        <form onSubmit={submit} className="p-6 md:p-8 space-y-5">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="col-span-2">
                                     <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Full Name</label>
@@ -156,7 +156,7 @@ export default function Index({ users, filters }) {
                                         type="text" 
                                         value={data.name}
                                         onChange={e => setData('name', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
                                         required
                                     />
                                     {errors.name && <p className="mt-1 text-xs text-red-500 font-bold">{errors.name}</p>}
@@ -167,7 +167,7 @@ export default function Index({ users, filters }) {
                                         type="email" 
                                         value={data.email}
                                         onChange={e => setData('email', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
                                         required
                                     />
                                     {errors.email && <p className="mt-1 text-xs text-red-500 font-bold">{errors.email}</p>}
@@ -177,7 +177,7 @@ export default function Index({ users, filters }) {
                                     <select 
                                         value={data.role}
                                         onChange={e => setData('role', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
                                     >
                                         <option value="admin">Admin</option>
                                         <option value="reception">Reception</option>
@@ -190,7 +190,7 @@ export default function Index({ users, filters }) {
                                         type="text" 
                                         value={data.phone}
                                         onChange={e => setData('phone', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
                                     />
                                 </div>
                                 <div className="col-span-2">
@@ -199,7 +199,7 @@ export default function Index({ users, filters }) {
                                         type="password" 
                                         value={data.password}
                                         onChange={e => setData('password', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900 transition-all font-bold text-slate-700"
                                         placeholder={editingUser ? 'Leave blank to keep current' : ''}
                                         required={!editingUser}
                                     />
@@ -210,7 +210,7 @@ export default function Index({ users, filters }) {
                                 <button 
                                     type="submit" 
                                     disabled={processing}
-                                    className="w-full py-5 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-[0.98] disabled:opacity-50"
+                                    className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-[0.98] disabled:opacity-50"
                                 >
                                     {processing ? 'Processing...' : editingUser ? 'Update Staff Member' : 'Create Staff Account'}
                                 </button>

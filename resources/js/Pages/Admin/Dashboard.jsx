@@ -14,7 +14,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
         <AdminLayout>
             <Head title="Clinical Dashboard" />
             
-            <div className="space-y-12">
+            <div className="space-y-8 md:space-y-10">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                     <div>
@@ -28,10 +28,10 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
                     {statCards.map((stat) => (
-                        <div key={stat.name} className="card-ethereal p-8 flex items-center space-x-6 hover:translate-y-[-4px]">
-                            <div className={`w-16 h-16 ${stat.color} rounded-3xl flex items-center justify-center text-white shadow-2xl shadow-teal-900/10 rotate-3`}>
+                        <div key={stat.name} className="card-ethereal p-6 flex items-center space-x-4 hover:translate-y-[-2px]">
+                            <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
                                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
                             </div>
                             <div>
@@ -42,14 +42,14 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                     ))}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-10">
                     {/* Today's Appointments Table */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="flex justify-between items-end">
+                        <div className="flex justify-between items-end gap-4">
                             <h2 className="text-2xl font-black text-[#0d1c2e] tracking-tight font-manrope">Today's Patient Queue</h2>
                             <button className="text-[10px] font-black text-[#00685f] hover:text-[#008378] uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-[#00685f] transition-all pb-1">Historical Logs</button>
                         </div>
-                        <div className="card-ethereal overflow-hidden rounded-[2.5rem]">
+                        <div className="card-ethereal overflow-hidden rounded-2xl">
                             <table className="w-full text-left">
                                 <thead className="bg-[#eff4ff]">
                                     <tr>
@@ -110,7 +110,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                     {/* Sidebar widgets */}
                     <div className="space-y-12">
                         {/* Demographics */}
-                        <div className="card-ethereal p-10 bg-[#0d1c2e] text-white overflow-hidden relative group">
+                        <div className="card-ethereal p-7 bg-[#0d1c2e] text-white overflow-hidden relative group rounded-2xl">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <svg className="w-32 h-32 rotate-12 translate-x-8 -translate-y-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             </div>
@@ -134,7 +134,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                         </div>
 
                         {/* Available Doctors List */}
-                        <div className="card-ethereal p-10">
+                        <div className="card-ethereal p-7 rounded-2xl">
                             <h4 className="text-sm font-black text-[#0d1c2e] font-manrope mb-8 inline-flex items-center gap-3">
                                 <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/50"></span>
                                 Clinical Staff Online

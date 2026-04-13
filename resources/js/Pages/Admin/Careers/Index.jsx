@@ -53,7 +53,7 @@ export default function Index({ careers }) {
         <AdminLayout>
             <Head title="Career Management" />
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
                 <div className="flex justify-between items-end">
                     <div>
                         <h2 className="text-3xl font-black text-slate-800 tracking-tight">Talent Acquisition</h2>
@@ -61,7 +61,7 @@ export default function Index({ careers }) {
                     </div>
                     <button 
                         onClick={openAddModal}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20"
                     >
                         Create Job Post
                     </button>
@@ -69,7 +69,7 @@ export default function Index({ careers }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {careers.data.map((job) => (
-                        <div key={job.id} className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex flex-col group hover:shadow-xl transition-all duration-500">
+                        <div key={job.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col group hover:shadow-lg transition-all duration-300">
                             <div className="flex justify-between items-start mb-6">
                                 <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${job.status ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                                     {job.status ? 'Hiring' : 'Closed'}
@@ -105,22 +105,22 @@ export default function Index({ careers }) {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-8 border-b border-slate-100 flex justify-between items-center">
+                    <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
                             <h3 className="text-2xl font-black text-slate-800 tracking-tight">{editingCareer ? 'Edit Opportunity' : 'New Career Post'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                                 <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         
-                        <form onSubmit={submit} className="p-10 space-y-6">
+                        <form onSubmit={submit} className="p-6 md:p-8 space-y-5">
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Job Title</label>
                                 <input 
                                     type="text" 
                                     value={data.title}
                                     onChange={e => setData('title', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                     placeholder="e.g., Staff Nurse, Resident Doctor"
                                     required
                                 />
@@ -133,7 +133,7 @@ export default function Index({ careers }) {
                                         type="text" 
                                         value={data.salary}
                                         onChange={e => setData('salary', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                         placeholder="₹ 20,000 - 30,000"
                                     />
                                 </div>
@@ -143,7 +143,7 @@ export default function Index({ careers }) {
                                         type="text" 
                                         value={data.location}
                                         onChange={e => setData('location', e.target.value)}
-                                        className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                     />
                                 </div>
                             </div>
@@ -154,7 +154,7 @@ export default function Index({ careers }) {
                                     rows="5"
                                     value={data.description}
                                     onChange={e => setData('description', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700 resize-none"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700 resize-none"
                                     placeholder="Describe roles, responsibilities, and qualifications..."
                                     required
                                 />
@@ -176,7 +176,7 @@ export default function Index({ careers }) {
                                 <button 
                                     type="submit" 
                                     disabled={processing}
-                                    className="px-12 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-indigo-500/30 active:scale-95 disabled:opacity-50"
+                                    className="px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-indigo-500/30 active:scale-95 disabled:opacity-50"
                                 >
                                     {processing ? 'Posting...' : editingCareer ? 'Update Opportunity' : 'Post Opportunity'}
                                 </button>

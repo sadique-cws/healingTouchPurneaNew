@@ -23,15 +23,15 @@ export default function Index({ settings }) {
         <AdminLayout>
             <Head title="Hospital Settings" />
 
-            <div className="max-w-4xl space-y-8">
+            <div className="max-w-4xl space-y-6 md:space-y-8">
                 <div>
                     <h2 className="text-3xl font-black text-slate-800 tracking-tight">Configuration Hub</h2>
                     <p className="text-slate-500 font-medium">Control global hospital identity, contacts, and notifications</p>
                 </div>
 
-                <form onSubmit={submit} className="space-y-8">
+                <form onSubmit={submit} className="space-y-6 md:space-y-7">
                     {/* General Section */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">General Identity</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -40,14 +40,14 @@ export default function Index({ settings }) {
                                     type="text" 
                                     value={data.hospital_name}
                                     onChange={e => setData('hospital_name', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                 />
                                 {errors.hospital_name && <p className="mt-1 text-xs text-red-500 font-bold">{errors.hospital_name}</p>}
                             </div>
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Hospital Logo</label>
-                                <div className="flex items-center gap-4 p-2 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                                <div className="flex items-center gap-4 p-2 bg-slate-50 rounded-xl border border-slate-100">
+                                    <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center shadow-sm">
                                         <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
                                     <button type="button" className="text-xs font-black text-teal-600 uppercase tracking-widest px-4">Change Logo</button>
@@ -57,7 +57,7 @@ export default function Index({ settings }) {
                     </div>
 
                     {/* Contact Section */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Contact & Location</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -66,7 +66,7 @@ export default function Index({ settings }) {
                                     type="email" 
                                     value={data.contact_email}
                                     onChange={e => setData('contact_email', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                 />
                             </div>
                             <div>
@@ -75,7 +75,7 @@ export default function Index({ settings }) {
                                     type="text" 
                                     value={data.contact_phone}
                                     onChange={e => setData('contact_phone', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                 />
                             </div>
                             <div className="md:col-span-2">
@@ -84,14 +84,14 @@ export default function Index({ settings }) {
                                     rows="2"
                                     value={data.address}
                                     onChange={e => setData('address', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700 resize-none"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700 resize-none"
                                 />
                             </div>
                         </div>
                     </div>
 
                     {/* Social Section */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Social Networks</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -100,7 +100,7 @@ export default function Index({ settings }) {
                                     type="url" 
                                     value={data.instagram_link}
                                     onChange={e => setData('instagram_link', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                     placeholder="https://"
                                 />
                             </div>
@@ -110,7 +110,7 @@ export default function Index({ settings }) {
                                     type="url" 
                                     value={data.facebook_link}
                                     onChange={e => setData('facebook_link', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                     placeholder="https://"
                                 />
                             </div>
@@ -120,7 +120,7 @@ export default function Index({ settings }) {
                                     type="url" 
                                     value={data.twitter_link}
                                     onChange={e => setData('twitter_link', e.target.value)}
-                                    className="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                     placeholder="https://"
                                 />
                             </div>
@@ -128,7 +128,7 @@ export default function Index({ settings }) {
                     </div>
 
                     {/* Notifications Section */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
+                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h3 className="text-[14px] font-black text-slate-800 tracking-tight">SMS Notifications</h3>
@@ -148,7 +148,7 @@ export default function Index({ settings }) {
                         <button 
                             type="submit" 
                             disabled={processing}
-                            className="bg-slate-900 hover:bg-black text-white px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50"
+                            className="bg-slate-900 hover:bg-black text-white px-10 py-4 rounded-xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                         >
                             {processing ? 'Saving...' : 'Securely Save Changes'}
                         </button>

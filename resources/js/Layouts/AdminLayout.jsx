@@ -75,57 +75,57 @@ export default function AdminLayout({ children }) {
     ];
 
     return (
-        <div className="flex bg-[#f8f9ff] min-h-screen font-inter select-none">
+        <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none">
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-500 ease-in-out z-50 ${isSidebarOpen ? 'w-72' : 'w-24'}`}>
+            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
                 <div className="flex flex-col h-full">
-                    <div className="p-8 mb-4">
-                        <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-[#00685f] rounded-2xl flex items-center justify-center text-white font-black shrink-0 shadow-2xl shadow-[#00685f]/20 rotate-3">H</div>
+                    <div className="p-5 mb-2">
+                        <div className="flex items-center gap-3">
+                            <div className="w-11 h-11 bg-[#00685f] rounded-xl flex items-center justify-center text-white font-black shrink-0 shadow-lg shadow-[#00685f]/15 rotate-2">H</div>
                             {isSidebarOpen && (
                                 <div className="flex flex-col">
-                                    <span className="text-xl font-black text-[#0d1c2e] leading-none font-manrope">Healing</span>
+                                    <span className="text-lg font-black text-[#0d1c2e] leading-none font-manrope">Healing</span>
                                     <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Touch Portal</span>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <nav className="flex-1 px-4 space-y-1">
+                    <nav className="flex-1 px-3 space-y-1">
                         {navigation.map((item) => {
                             const isActive = page.url === item.href;
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={`flex items-center space-x-4 p-4 rounded-2xl transition-all duration-300 group relative ${
+                                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group relative ${
                                         isActive 
                                         ? 'bg-[#00685f]/10 text-[#00685f]' 
                                         : 'text-[#0d1c2e]/50 hover:bg-[#00685f]/5 hover:text-[#0d1c2e]'
                                     }`}
                                 >
                                     {isActive && (
-                                        <div className="absolute left-0 w-1.5 h-8 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-500" />
+                                        <div className="absolute left-0 w-1 h-7 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-300" />
                                     )}
-                                    <svg className={`w-6 h-6 shrink-0 transition-transform duration-300 ${
+                                    <svg className={`w-[22px] h-[22px] shrink-0 transition-transform duration-300 ${
                                         isActive ? 'text-[#00685f] scale-110' : 'text-[#0d1c2e]/40 group-hover:scale-110'
                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                                     </svg>
-                                    {isSidebarOpen && <span className="font-bold text-sm tracking-tight">{item.name}</span>}
+                                    {isSidebarOpen && <span className="font-bold text-sm tracking-tight leading-none">{item.name}</span>}
                                 </Link>
                             );
                         })}
                     </nav>
 
-                    <div className="p-8 mt-auto">
+                    <div className="p-4 mt-auto">
                         <Link
                             method="post"
                             href={route('admin.logout')}
                             as="button"
-                            className="w-full flex items-center space-x-4 p-4 rounded-2xl bg-white/50 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
+                            className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/60 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
                         >
-                            <svg className="w-6 h-6 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-[22px] h-[22px] shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
                             {isSidebarOpen && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
@@ -135,11 +135,11 @@ export default function AdminLayout({ children }) {
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'ml-72' : 'ml-24'}`}>
+            <main className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
                 {appointmentAlerts.length > 0 && (
-                    <div className="fixed top-6 right-6 z-[60] max-w-sm w-full space-y-3">
+                    <div className="fixed top-4 right-4 z-[60] max-w-sm w-full space-y-3">
                         {appointmentAlerts.map((alertItem) => (
-                            <div key={alertItem._alertId} className="bg-white rounded-2xl shadow-xl border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
+                            <div key={alertItem._alertId} className="bg-white rounded-xl shadow-lg border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
                                         <p className="text-xs font-black text-[#00685f] uppercase tracking-[0.2em]">New Appointment</p>
@@ -161,25 +161,25 @@ export default function AdminLayout({ children }) {
                 )}
 
                 {/* Header */}
-                <header className="sticky top-0 z-40 bg-[#f8f9ff]/80 backdrop-blur-2xl px-12 py-8 flex justify-between items-center transition-all duration-300">
-                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-3 bg-white rounded-2xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
+                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-6 md:px-8 py-4 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
+                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-white rounded-xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
                         <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
-                    <div className="flex items-center space-x-8">
+                    <div className="flex items-center gap-4 md:gap-6">
                         <div className="text-right hidden sm:block">
                             <p className="text-sm font-black text-[#0d1c2e] font-manrope">{auth.user.name}</p>
                             <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">System Admin</p>
                         </div>
                         <div className="relative group">
-                            <div className="w-12 h-12 bg-white rounded-2xl overflow-hidden border-[3px] border-white shadow-xl group-hover:border-[#00685f]/20 transition-all duration-500 cursor-pointer">
+                            <div className="w-11 h-11 bg-white rounded-xl overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
                                 <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
                             </div>
                         </div>
                     </div>
                 </header>
 
-                <div className="px-12 pb-12 inertia-transition-fade">
+                <div className="px-6 md:px-8 pb-8 md:pb-10 pt-5 inertia-transition-fade">
                     {children}
                 </div>
             </main>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GalleryImage;
 use App\Helpers\ImageKitHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class GalleryController extends Controller
@@ -27,9 +28,18 @@ class GalleryController extends Controller
 
         if ($request->hasFile('image')) {
             $upload = ImageKitHelper::uploadImage($request->file('image'), '/healingtouch/gallery');
+
+            if (!$upload) {
+                return back()->withErrors([
+                    'image' => 'Image upload failed. Please try again.',
+                ]);
+            }
+
+            $originalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
             
             GalleryImage::create([
-                'title' => $request->title,
+                'filename' => $upload['fileName'] ?? $request->file('image')->getClientOriginalName(),
+                'title' => $request->title ?: Str::headline($originalName),
                 'url' => $upload['url'],
                 'file_id' => $upload['fileId'],
             ]);

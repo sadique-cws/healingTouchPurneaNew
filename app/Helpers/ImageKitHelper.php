@@ -28,6 +28,7 @@ class ImageKitHelper
             return [
                 'url' => $upload->result->url,
                 'fileId' => $upload->result->fileId,
+                'fileName' => $fileData['fileName'],
             ];
         }
 

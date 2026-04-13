@@ -26,7 +26,7 @@ export default function Index({ appointments, filters, stats }) {
         <AdminLayout>
             <Head title="Appointments" />
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
                         <h2 className="text-3xl font-black text-slate-800 tracking-tight">Appointments Ledger</h2>
@@ -35,10 +35,10 @@ export default function Index({ appointments, filters, stats }) {
                 </div>
 
                 {/* Stats & Filters Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 xl:gap-5">
                     {/* Quick Stats */}
                     <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                             <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
@@ -47,7 +47,7 @@ export default function Index({ appointments, filters, stats }) {
                                 <p className="text-xl font-black text-slate-800">{stats.today}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
@@ -56,7 +56,7 @@ export default function Index({ appointments, filters, stats }) {
                                 <p className="text-xl font-black text-slate-800">{stats.pending}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
                             <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
@@ -68,7 +68,7 @@ export default function Index({ appointments, filters, stats }) {
                     </div>
 
                     {/* Date Filters */}
-                    <div className="flex bg-white p-2 rounded-3xl border border-slate-100 shadow-sm gap-1">
+                    <div className="flex bg-white p-2 rounded-2xl border border-slate-100 shadow-sm gap-1">
                         <button 
                             onClick={() => filterByDate('today')}
                             className={`flex-1 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${filters.date === 'today' ? 'bg-slate-800 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
@@ -108,7 +108,7 @@ export default function Index({ appointments, filters, stats }) {
                         <button type="submit" className="px-8 py-4 bg-slate-800 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg active:scale-95 transition-all">Search</button>
                     </form>
 
-                    <div className="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                         <table className="w-full text-left">
                             <thead className="bg-slate-50 border-b border-slate-100">
                                 <tr>
