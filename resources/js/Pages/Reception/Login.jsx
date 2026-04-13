@@ -13,30 +13,30 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f172a] flex flex-col justify-center items-center p-6 font-['Inter']">
+        <div className="min-h-screen bg-[#0f172a] flex flex-col justify-center items-center p-4 md:p-6 font-['Inter']">
             <Head title="Reception Login" />
             
-            <div className="w-full max-w-md bg-white rounded-[4rem] shadow-2xl p-14 space-y-10 relative overflow-hidden">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 md:p-8 space-y-8 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
                     <svg className="w-48 h-48 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" /></svg>
                 </div>
 
                 <div className="text-center relative z-10">
-                    <div className="w-20 h-20 bg-amber-500 rounded-[2rem] mx-auto flex items-center justify-center text-white text-3xl font-black shadow-2xl shadow-amber-500/40 mb-10">
+                    <div className="w-14 h-14 bg-amber-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-amber-500/40 mb-6">
                          R
                     </div>
-                    <h1 className="text-3xl font-black text-slate-800 tracking-tight">Front Desk Access</h1>
-                    <p className="text-slate-500 font-medium mt-3">Authorized personnel only. Please verify your identity.</p>
+                    <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Front Desk Access</h1>
+                    <p className="text-slate-500 font-medium mt-2 text-sm">Authorized personnel only. Please verify your identity.</p>
                 </div>
 
-                <form onSubmit={submit} className="space-y-6 relative z-10">
+                <form onSubmit={submit} className="space-y-5 relative z-10">
                     <div>
                         <label className="block text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 px-1">Institutional Email</label>
                         <input 
                             type="email" 
                             value={data.email}
                             onChange={e => setData('email', e.target.value)}
-                            className="w-full px-7 py-5 bg-slate-50 border-none rounded-3xl focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
+                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
                             placeholder="staff@healingtouch.com"
                             required 
                         />
@@ -49,7 +49,7 @@ export default function Login() {
                             type="password" 
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
-                            className="w-full px-7 py-5 bg-slate-50 border-none rounded-3xl focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
+                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
                             placeholder="••••••••"
                             required 
                         />
@@ -72,10 +72,20 @@ export default function Login() {
                     <button 
                         type="submit" 
                         disabled={processing}
-                        className="w-full bg-slate-900 border-b-4 border-slate-950 hover:bg-black text-white py-6 rounded-3xl font-black text-sm uppercase tracking-[0.3em] transition-all active:translate-y-1 active:border-b-0 disabled:opacity-50"
+                        className="w-full bg-slate-900 border-b-4 border-slate-950 hover:bg-black text-white py-3.5 rounded-xl font-black text-sm uppercase tracking-[0.3em] transition-all active:translate-y-1 active:border-b-0 disabled:opacity-50"
                     >
                         {processing ? 'Authenticating...' : 'Establish Connection'}
                     </button>
+
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Panel Links</p>
+                        <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
+                            <Link href={route('userlandingpage')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Public Site</Link>
+                            <Link href={route('admin.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Admin</Link>
+                            <Link href={route('doctor.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Doctor</Link>
+                            <Link href={route('login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Patient</Link>
+                        </div>
+                    </div>
                 </form>
             </div>
             

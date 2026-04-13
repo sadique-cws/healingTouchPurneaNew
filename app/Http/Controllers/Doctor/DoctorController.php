@@ -83,7 +83,7 @@ class DoctorController extends Controller
             abort(403);
         }
 
-        $appointment->load(['patient', 'payment', 'doctor.department']);
+        $appointment->load(['patient', 'payment', 'doctor.department', 'doctor.user']);
 
         return Inertia::render('Doctor/PatientDetails', [
             'appointment' => $appointment,

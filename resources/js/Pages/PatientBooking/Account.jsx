@@ -154,6 +154,20 @@ export default function Account({ hospital_name, address, contact_phone, contact
                         <p className="mt-1 text-xs leading-relaxed text-beige-700/90">Quick access to your account, hospital services, and important links in one place.</p>
                     </div>
                 </div>
+                <section className="lg:hidden px-4 pt-4">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 space-y-3">
+                        <div>
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.22em] text-gray-400">Login Panels</h3>
+                            <p className="text-xs text-gray-500 mt-1">Open the panel you need from mobile.</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                            <Link href={route('login')} className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center font-semibold text-gray-700">Patient Login</Link>
+                            <Link href={route('admin.login')} className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center font-semibold text-gray-700">Admin Login</Link>
+                            <Link href={route('doctor.login')} className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center font-semibold text-gray-700">Doctor Login</Link>
+                            <Link href={route('reception.login')} className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center font-semibold text-gray-700">Reception Login</Link>
+                        </div>
+                    </div>
+                </section>
             </main>
 
             <PublicFooter

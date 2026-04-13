@@ -128,6 +128,75 @@ class PatientBookingController extends Controller
         return Inertia::render('PatientBooking/Account', $this->getGlobalSettings());
     }
 
+    public function dashboard(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user?->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user?->role === 'doctor') {
+            return redirect()->route('doctor.dashboard');
+        }
+
+        if ($user?->role === 'reception') {
+            return redirect()->route('reception.dashboard');
+        }
+
+        $lookupEmail = strtolower(trim((string) ($user?->email ?? '')));
+        $lookupPhone = preg_replace('/\D+/', '', (string) ($user?->phone ?? ''));
+
+        $patientIds = Patient::query()
+            ->when($lookupEmail !== '', fn ($query) => $query->whereRaw('LOWER(email) = ?', [$lookupEmail]))
+            ->when($lookupPhone !== '', fn ($query) => $query->orWhere('phone', 'like', '%' . $lookupPhone . '%'))
+            ->pluck('id');
+
+        $bookings = Appointment::query()
+            ->whereIn('patient_id', $patientIds)
+            ->with(['doctor.user', 'doctor.department', 'payment'])
+            ->latest('appointment_date')
+            ->latest('id')
+            ->get()
+            ->map(function (Appointment $appointment) {
+                return [
+                    'id' => $appointment->id,
+                    'reference_id' => 'HTH-' . str_pad((string) $appointment->id, 5, '0', STR_PAD_LEFT),
+                    'appointment_no' => $appointment->appointment_no,
+                    'appointment_date' => $appointment->appointment_date,
+                    'appointment_time' => $appointment->appointment_time,
+                    'status' => $appointment->status,
+                    'queue_number' => $appointment->queue_number,
+                    'doctor_name' => $appointment->doctor?->user?->name,
+                    'department' => $appointment->doctor?->department?->name,
+                    'payment_status' => $appointment->payment?->status,
+                ];
+            })
+            ->values();
+
+        $today = now()->toDateString();
+
+        return Inertia::render('PatientBooking/Dashboard', array_merge($this->getGlobalSettings(), [
+            'profile' => [
+                'name' => $user?->name,
+                'email' => $user?->email,
+                'phone' => $user?->phone,
+                'initials' => collect(explode(' ', (string) $user?->name))
+                    ->map(fn ($part) => mb_substr($part, 0, 1))
+                    ->take(2)
+                    ->implode(''),
+            ],
+            'stats' => [
+                'total_bookings' => $bookings->count(),
+                'upcoming' => $bookings->filter(fn ($booking) => $booking['appointment_date'] >= $today && $booking['status'] !== 'cancelled')->count(),
+                'completed' => $bookings->where('status', 'completed')->count(),
+                'cancelled' => $bookings->where('status', 'cancelled')->count(),
+            ],
+            'latestBooking' => $bookings->first(),
+            'bookings' => $bookings,
+        ]));
+    }
+
     public function bookingHelp(): \Inertia\Response
     {
         return Inertia::render('PatientBooking/BookingHelp', $this->getGlobalSettings());
@@ -281,6 +350,7 @@ class PatientBookingController extends Controller
             ->with('department')
             ->where('slug', $request->doctor_slug)
             ->first();
+        $isReception = auth()->check() && auth()->user()?->role === 'reception';
 
         if (!$doctor) {
             return response()->json(['slots' => []]);
@@ -299,7 +369,14 @@ class PatientBookingController extends Controller
         $dayOfWeek = $selectedDate->format('l');
         $availableDays = (array)$doctor->available_days;
 
-        if (!$selectedDate->isSameDay(Carbon::now()->addDay())) {
+        if ($selectedDate->copy()->startOfDay()->lt(Carbon::today())) {
+            return response()->json([
+                'error' => 'Appointments cannot be booked for past dates.',
+                'slots' => [],
+            ]);
+        }
+
+        if (!$isReception && !$selectedDate->isSameDay(Carbon::now()->addDay())) {
             return response()->json([
                 'error' => 'Appointments are only available for tomorrow.',
                 'slots' => [],
@@ -328,9 +405,20 @@ class PatientBookingController extends Controller
             ->groupBy(fn($apt) => Carbon::parse($apt->appointment_time)->format('g:i A'))
             ->map->count();
 
-        $availableSlots = array_map(function ($slot) use ($bookedCounts) {
+        $availableSlots = array_map(function ($slot) use ($bookedCounts, $selectedDate, $isReception) {
             $booked = (int) ($bookedCounts[$slot] ?? 0);
             $remaining = max(0, 4 - $booked);
+            $isElapsedForToday = false;
+
+            if ($isReception && $selectedDate->isSameDay(Carbon::now())) {
+                $slotStart = Carbon::createFromFormat('g:i A', $slot)->setDate(
+                    $selectedDate->year,
+                    $selectedDate->month,
+                    $selectedDate->day
+                );
+                $slotEnd = (clone $slotStart)->addMinutes(30);
+                $isElapsedForToday = Carbon::now()->gte($slotEnd);
+            }
 
             if ($remaining >= 3) {
                 $status = 'available';
@@ -342,12 +430,16 @@ class PatientBookingController extends Controller
                 $status = 'full';
             }
 
+            if ($isElapsedForToday) {
+                $status = 'elapsed';
+            }
+
             return [
                 'slot' => $slot,
                 'booked' => $booked,
                 'remaining' => $remaining,
                 'status' => $status,
-                'bookable' => $remaining > 0,
+                'bookable' => $remaining > 0 && !$isElapsedForToday,
             ];
         }, $timeSlots);
 

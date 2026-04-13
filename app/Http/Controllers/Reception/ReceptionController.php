@@ -79,7 +79,7 @@ class ReceptionController extends Controller
                 'date' => $selectedDate,
                 'search' => $search,
             ],
-            'doctors' => Doctor::with('user')->get(),
+            'doctors' => Doctor::with(['user', 'department'])->get(),
             'stats' => [
                 'total' => $appointments->count(),
                 'checked_in' => $appointments->where('status', 'checked_in')->count(),
@@ -94,7 +94,7 @@ class ReceptionController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:10',
             'age' => 'required|numeric|between:0,150',
-            'gender' => 'required|in:Male,Female,Other',
+            'gender' => 'required|in:male,female,other,Male,Female,Other',
             'address' => 'required|string',
             'city' => 'required|string',
             'doctor_id' => 'required|exists:doctors,id',
@@ -103,6 +103,42 @@ class ReceptionController extends Controller
             'amount' => 'required|numeric|min:0',
             'settlement' => 'boolean',
         ]);
+
+        $gender = strtolower((string) $request->gender);
+        $appointmentTimeInput = trim((string) $request->appointment_time);
+
+        try {
+            if (preg_match('/\b(am|pm)\b/i', $appointmentTimeInput)) {
+                $appointmentTime = Carbon::createFromFormat('h:i A', strtoupper($appointmentTimeInput))->format('H:i:00');
+            } elseif (preg_match('/^\d{1,2}:\d{2}$/', $appointmentTimeInput)) {
+                $appointmentTime = Carbon::createFromFormat('H:i', $appointmentTimeInput)->format('H:i:00');
+            } elseif (preg_match('/^\d{1,2}:\d{2}:\d{2}$/', $appointmentTimeInput)) {
+                $appointmentTime = Carbon::createFromFormat('H:i:s', $appointmentTimeInput)->format('H:i:00');
+            } else {
+                $appointmentTime = Carbon::parse($appointmentTimeInput)->format('H:i:00');
+            }
+        } catch (\Throwable $e) {
+            $appointmentTime = $appointmentTimeInput;
+        }
+
+        $appointmentDate = Carbon::parse($request->appointment_date);
+
+        if ($appointmentDate->copy()->startOfDay()->lt(Carbon::today())) {
+            return back()->withErrors([
+                'appointment_date' => 'Past dates are not allowed for reception booking.',
+            ]);
+        }
+
+        if ($appointmentDate->isSameDay(Carbon::now())) {
+            $slotStart = Carbon::parse($request->appointment_date . ' ' . $appointmentTime);
+            $slotEnd = (clone $slotStart)->addMinutes(30);
+
+            if (Carbon::now()->gte($slotEnd)) {
+                return back()->withErrors([
+                    'appointment_time' => 'Past time slots are not allowed. Please choose a current or upcoming slot.',
+                ]);
+            }
+        }
 
         $patient = Patient::where('name', $request->name)
             ->where('phone', $request->phone)
@@ -114,11 +150,23 @@ class ReceptionController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'age' => $request->age,
-                'gender' => $request->gender,
+                'gender' => $gender,
                 'address' => $request->address,
                 'city' => $request->city,
                 'state' => $request->state ?? 'Bihar',
                 'country' => $request->country ?? 'India',
+            ]);
+        }
+
+        $slotCount = Appointment::query()
+            ->where('doctor_id', $request->doctor_id)
+            ->whereDate('appointment_date', $request->appointment_date)
+            ->where('appointment_time', $appointmentTime)
+            ->count();
+
+        if ($slotCount >= 4) {
+            return back()->withErrors([
+                'appointment_time' => 'This time slot is fully booked. Please choose another slot.',
             ]);
         }
 
@@ -130,9 +178,9 @@ class ReceptionController extends Controller
             'patient_id' => $patient->id,
             'doctor_id' => $request->doctor_id,
             'appointment_date' => $request->appointment_date,
-            'appointment_time' => $request->appointment_time,
+            'appointment_time' => $appointmentTime,
             'queue_number' => ($lastQueueNumber ?? 0) + 1,
-            'status' => 'checked_in',
+            'status' => 'confirmed',
             'notes' => $request->notes,
             'created_by' => auth()->id(),
         ]);
@@ -150,7 +198,7 @@ class ReceptionController extends Controller
             'status' => $request->settlement ? 'paid' : 'due',
         ]);
 
-        $appointment->load(['patient', 'doctor.user', 'doctor.department']);
+        $appointment->load(['patient', 'doctor.user', 'doctor.department', 'payment']);
         event(new AppointmentBooked($appointment));
 
         return back()->with('success', 'Appointment booked successfully.');
@@ -158,17 +206,29 @@ class ReceptionController extends Controller
 
     public function updateStatus(Request $request, Appointment $appointment)
     {
-        $request->validate(['status' => 'required|string']);
-        $appointment->update(['status' => $request->status]);
+        $statusInput = (string) $request->input('status');
+        $status = $statusInput;
+
+        if (in_array($statusInput, ['completed', 'success'], true)) {
+            $status = 'confirmed';
+        }
+
+        if (!in_array($status, ['pending', 'confirmed', 'checked_in', 'cancelled'], true)) {
+            return back()->withErrors([
+                'status' => 'Invalid status selected.'
+            ]);
+        }
+
+        $appointment->update(['status' => $status]);
         return back()->with('success', 'Status updated successfully.');
     }
 
     public function edit(Appointment $appointment)
     {
-        $appointment->load(['patient', 'doctor.user']);
+        $appointment->load(['patient', 'doctor.user', 'doctor.department', 'payment']);
         return Inertia::render('Reception/EditAppointment', [
             'appointment' => $appointment,
-            'doctors' => Doctor::with('user')->get(),
+            'doctors' => Doctor::with(['user', 'department'])->get(),
         ]);
     }
 

@@ -31,7 +31,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
                     {statCards.map((stat) => (
                         <div key={stat.name} className="card-ethereal p-6 flex items-center space-x-4 hover:translate-y-[-2px]">
-                            <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
+                            <div className={`w-14 h-14 ${stat.color} rounded-lg flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
                                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
                             </div>
                             <div>
@@ -49,7 +49,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                             <h2 className="text-2xl font-black text-[#0d1c2e] tracking-tight font-manrope">Today's Patient Queue</h2>
                             <button className="text-[10px] font-black text-[#00685f] hover:text-[#008378] uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-[#00685f] transition-all pb-1">Historical Logs</button>
                         </div>
-                        <div className="card-ethereal overflow-hidden rounded-2xl">
+                        <div className="card-ethereal overflow-hidden rounded-lg">
                             <table className="w-full text-left">
                                 <thead className="bg-[#eff4ff]">
                                     <tr>
@@ -64,7 +64,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                                         <tr key={apt.id} className="group hover:bg-[#eff4ff]/50 transition-colors">
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center space-x-4">
-                                                    <div className="w-10 h-10 rounded-2xl bg-[#eff4ff] flex items-center justify-center text-xs font-black text-[#00685f]">
+                                                    <div className="w-10 h-10 rounded-lg bg-[#eff4ff] flex items-center justify-center text-xs font-black text-[#00685f]">
                                                         {apt.patient?.name?.charAt(0)}
                                                     </div>
                                                     <div>
@@ -87,7 +87,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                                                 </span>
                                             </td>
                                             <td className="px-8 py-6 text-right">
-                                                <button className="p-3 bg-[#eff4ff] rounded-xl text-[#00685f]/40 group-hover:text-[#00685f] group-hover:bg-white transition-all shadow-sm group-hover:shadow-md">
+                                                <button className="p-3 bg-[#eff4ff] rounded-lg text-[#00685f]/40 group-hover:text-[#00685f] group-hover:bg-white transition-all shadow-sm group-hover:shadow-md">
                                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                                 </button>
                                             </td>
@@ -110,7 +110,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                     {/* Sidebar widgets */}
                     <div className="space-y-12">
                         {/* Demographics */}
-                        <div className="card-ethereal p-7 bg-[#0d1c2e] text-white overflow-hidden relative group rounded-2xl">
+                        <div className="card-ethereal p-7 bg-[#0d1c2e] text-white overflow-hidden relative group rounded-lg">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <svg className="w-32 h-32 rotate-12 translate-x-8 -translate-y-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             </div>
@@ -122,9 +122,9 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                                             <span className="text-xs font-bold text-white/60 tracking-wider">{gender}</span>
                                             <span className="text-sm font-black text-white">{count}</span>
                                         </div>
-                                        <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                                        <div className="w-full bg-white/10 h-1.5 rounded-lg overflow-hidden">
                                             <div 
-                                                className={`h-full rounded-full transition-all duration-1000 ${gender === 'Male' ? 'bg-teal-500' : gender === 'Female' ? 'bg-teal-300' : 'bg-white/40'}`} 
+                                                className={`h-full rounded-lg transition-all duration-1000 ${gender === 'Male' ? 'bg-teal-500' : gender === 'Female' ? 'bg-teal-300' : 'bg-white/40'}`} 
                                                 style={{ width: `${(count / (stats.patients || 1)) * 100}%` }}
                                             />
                                         </div>
@@ -134,7 +134,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                         </div>
 
                         {/* Available Doctors List */}
-                        <div className="card-ethereal p-7 rounded-2xl">
+                        <div className="card-ethereal p-7 rounded-lg">
                             <h4 className="text-sm font-black text-[#0d1c2e] font-manrope mb-8 inline-flex items-center gap-3">
                                 <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/50"></span>
                                 Clinical Staff Online
@@ -142,7 +142,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                             <div className="space-y-6">
                                 {availableDoctors.map((doc) => (
                                     <div key={doc.id} className="flex items-center space-x-5 group cursor-pointer">
-                                        <div className="w-12 h-12 rounded-2xl bg-[#eff4ff] flex items-center justify-center border-none overflow-hidden group-hover:scale-105 transition-transform shadow-sm">
+                                        <div className="w-12 h-12 rounded-lg bg-[#eff4ff] flex items-center justify-center border-none overflow-hidden group-hover:scale-105 transition-transform shadow-sm">
                                             <img src={`https://ui-avatars.com/api/?name=${doc.user?.name}&background=eff4ff&color=00685f&bold=true`} alt="" />
                                         </div>
                                         <div>

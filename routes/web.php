@@ -26,9 +26,9 @@ Route::get('/manage-appointments', [PatientBookingController::class, 'manageAppo
 Route::post('/manage-appointments/{appointment}/send-otp', [PatientBookingController::class, 'sendCancelOtp'])->name('manage.appointments.send-otp');
 Route::post('/manage-appointments/{appointment}/verify-otp', [PatientBookingController::class, 'verifyCancelOtp'])->name('manage.appointments.verify-otp');
 Route::get('/appointment-receipt/{appointment}', [PatientBookingController::class, 'appointmentReceipt'])->name('appointment.receipt');
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [PatientBookingController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // Admin Routes
 use App\Http\Controllers\AdminController;

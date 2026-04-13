@@ -9,7 +9,7 @@ export default function PublicFooter({
     return (
         <footer className="hidden lg:block mt-auto bg-white border-t border-gray-200 text-gray-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <h3 className="text-lg font-bold text-gray-900">{hospitalName}</h3>
                         <p className="text-gray-600 mt-2 text-sm leading-relaxed">
@@ -26,6 +26,16 @@ export default function PublicFooter({
                             <Link href={route('book.appointment')} className="text-gray-600 hover:text-beige-700 transition-colors">Book Appointment</Link>
                             <Link href={route('gallery.page')} className="text-gray-600 hover:text-beige-700 transition-colors">Gallery</Link>
                             <Link href={route('contact.page')} className="text-gray-600 hover:text-beige-700 transition-colors">Contact</Link>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 className="font-semibold text-gray-900 mb-3">Login Panels</h4>
+                        <div className="grid grid-cols-1 gap-2 text-sm">
+                            <Link href={route('login')} className="text-gray-600 hover:text-beige-700 transition-colors">Patient Login</Link>
+                            <Link href={route('admin.login')} className="text-gray-600 hover:text-beige-700 transition-colors">Admin Login</Link>
+                            <Link href={route('doctor.login')} className="text-gray-600 hover:text-beige-700 transition-colors">Doctor Login</Link>
+                            <Link href={route('reception.login')} className="text-gray-600 hover:text-beige-700 transition-colors">Reception Login</Link>
                         </div>
                     </div>
 

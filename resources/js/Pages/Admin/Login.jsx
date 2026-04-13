@@ -1,4 +1,4 @@
-import { useForm, Head } from '@inertiajs/react';
+import { useForm, Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Login() {
@@ -15,14 +15,14 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden px-4 py-6">
             <Head title="Admin Login" />
             
             {/* Background decorative elements */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-teal-50 rounded-full blur-3xl -mr-48 -mt-48 opacity-50" />
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-50 rounded-full blur-3xl -ml-48 -mb-48 opacity-50" />
 
-            <div className="w-full max-w-md px-6 relative z-10">
+            <div className="w-full max-w-md relative z-10">
                 <div className="text-center mb-10">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg border border-slate-100 mb-6 group transition-all duration-300 hover:scale-105">
                         <span className="text-3xl font-black text-teal-600">H</span>
@@ -97,6 +97,16 @@ export default function Login() {
                                 </>
                             )}
                         </button>
+
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Go to Panel</p>
+                            <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
+                                <Link href={route('userlandingpage')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Public Site</Link>
+                                <Link href={route('doctor.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Doctor</Link>
+                                <Link href={route('reception.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Reception</Link>
+                                <Link href={route('login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Patient</Link>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
