@@ -13,6 +13,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     const [appointmentId, setAppointmentId] = useState(null);
     const [receiptUrl, setReceiptUrl] = useState('');
     const [submitError, setSubmitError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
         doctor_slug: preselected_slug || '',
@@ -77,18 +78,41 @@ export default function BookAppointment({ departments = [], doctors = [], presel
         }
     };
 
-    const submitBooking = (e) => {
+    const submitBooking = async (e) => {
         e.preventDefault();
+        if (isSubmitting) return;
+
         setSubmitError('');
-        axios.post(route('api.appointment.book'), data).then(res => {
+        setIsSubmitting(true);
+
+        try {
+            const slotCheckResponse = await axios.post(route('api.appointment.slots'), {
+                doctor_slug: data.doctor_slug,
+                date: data.date,
+            });
+
+            const latestSlots = slotCheckResponse?.data?.slots || [];
+            const currentSlot = latestSlots.find((slot) => slot.slot === data.time);
+
+            if (!currentSlot || !currentSlot.bookable) {
+                setAvailableSlots(latestSlots);
+                setSlotsMessage('This selected slot has just been booked. Please choose another available time.');
+                setData('time', '');
+                setStep(1);
+                return;
+            }
+
+            const res = await axios.post(route('api.appointment.book'), data);
             if (res.data.success) {
                 setAppointmentId(res.data.appointment.appointment_no);
                 setReceiptUrl(res.data.receipt_url || '');
                 setStep(4);
             }
-        }).catch((error) => {
+        } catch (error) {
             setSubmitError(error?.response?.data?.message || 'Unable to book appointment right now.');
-        });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const formatDisplayDate = (dateStr) => {
@@ -179,12 +203,12 @@ export default function BookAppointment({ departments = [], doctors = [], presel
             
             <div className="max-w-6xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-5 sm:py-8 mt-16">
                 <div className="mb-4 md:mb-6 bg-gradient-to-r from-beige-600 to-beige-800 rounded-xl py-3 md:py-4 px-4 md:px-6 text-white border border-beige-700">
-                    <div className="flex flex-wrap items-center justify-between">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                             <h1 className="text-lg md:text-xl font-bold">Book Your Appointment</h1>
                             <p className="text-beige-100 text-xs opacity-90 mt-0.5">Schedule your visit with our specialists</p>
                         </div>
-                        <Link href={route('manage.appointments')} className="inline-flex items-center text-white hover:text-beige-200 text-xs mt-1 md:mt-0">
+                        <Link href={route('manage.appointments')} className="hidden md:inline-flex items-center text-white hover:text-beige-200 text-[11px] sm:text-xs mt-1 md:mt-0 ml-auto text-right">
                             <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             Already have an Appointment? Check existing appointment
                         </Link>
@@ -210,6 +234,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             ))}
                         </div>
                     </div>
+
+                    <div className="md:hidden mt-3 flex justify-end">
+                        <Link href={route('manage.appointments')} className="inline-flex items-center text-white hover:text-beige-200 text-[11px] ml-auto text-right">
+                            <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Already have an Appointment? Check existing appointment
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Step 1: Doctor/Date/Time */}
@@ -224,11 +255,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 Select Department
                             </h2>
                             {departments.length > 0 ? (
-                                <div className="flex flex-wrap gap-2">
-                                    <button onClick={() => setSelectedDepartment(null)} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${selectedDepartment === null ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>All Departments</button>
+                                <div className="overflow-x-auto no-scrollbar pb-1">
+                                <div className="grid grid-rows-2 grid-flow-col auto-cols-max gap-2 w-max min-w-full">
+                                    <button onClick={() => setSelectedDepartment(null)} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${selectedDepartment === null ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>All Departments</button>
                                     {departments.map(d => (
-                                        <button key={d.id} onClick={() => setSelectedDepartment(d.id)} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${selectedDepartment === d.id ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>{d.name}</button>
+                                        <button key={d.id} onClick={() => setSelectedDepartment(d.id)} className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${selectedDepartment === d.id ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>{d.name}</button>
                                     ))}
+                                </div>
                                 </div>
                             ) : (
                                 <div className="p-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
@@ -381,7 +414,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                             <span className="text-lg">{group.key === 'morning' ? '☀' : group.key === 'afternoon' ? '☼' : '☾'}</span>
                                                             <span>{group.label}</span>
                                                         </div>
-                                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
+                                                        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2.5">
                                                             {slots.map((slot) => {
                                                                 const meta = getSlotMeta(slot.booked);
                                                                 const isActive = data.time === slot.slot;
@@ -392,7 +425,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                                         type="button"
                                                                         disabled={!slot.bookable}
                                                                         onClick={() => slot.bookable && setData('time', slot.slot)}
-                                                                        className={`py-3 rounded-lg text-sm font-semibold border transition-colors ${isActive ? 'bg-beige-600 text-white border-beige-600' : `${meta.button}`}`}
+                                                                        className={`py-2.5 rounded-lg text-xs sm:text-sm font-semibold border transition-colors ${isActive ? 'bg-beige-600 text-white border-beige-600' : `${meta.button}`}`}
                                                                     >
                                                                         {slot.slot}
                                                                     </button>
@@ -403,15 +436,15 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                 ) : null;
                                             })}
 
-                                            <div className="pt-4 border-t border-gray-200 flex flex-wrap gap-3 text-xs sm:text-sm">
+                                            <div className="pt-3 border-t border-gray-200 flex flex-wrap items-center gap-3 text-[11px] text-gray-600">
                                                 {[
-                                                    { label: 'Available (3-4 slots)', chip: 'bg-green-100 text-green-700 border-green-200' },
-                                                    { label: 'Filling Up (2 slots)', chip: 'bg-yellow-100 text-yellow-700 border-yellow-200' },
-                                                    { label: 'Almost Full (1 slot)', chip: 'bg-red-100 text-red-700 border-red-200' },
-                                                    { label: 'Full (0 slots)', chip: 'bg-gray-100 text-gray-500 border-gray-200' },
+                                                    { label: 'Available', dot: 'bg-green-500' },
+                                                    { label: 'Filling', dot: 'bg-yellow-500' },
+                                                    { label: 'Last', dot: 'bg-red-500' },
+                                                    { label: 'Full', dot: 'bg-gray-400' },
                                                 ].map((item) => (
-                                                    <div key={item.label} className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border ${item.chip}`}>
-                                                        <span className={`w-3 h-3 rounded-full border ${item.chip.split(' ')[0]}`}></span>
+                                                    <div key={item.label} className="inline-flex items-center gap-1.5">
+                                                        <span className={`w-2.5 h-2.5 rounded-full ${item.dot}`}></span>
                                                         <span>{item.label}</span>
                                                     </div>
                                                 ))}
@@ -427,13 +460,27 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </div>
                         )}
 
-                        <div className="flex flex-col sm:flex-row justify-between gap-3 text-sm items-center mt-5">
+                        <div className="hidden sm:flex flex-col sm:flex-row justify-between gap-3 text-sm items-center mt-5">
                             <Link href={route('manage.appointments')} className="inline-flex items-center text-beige-600 hover:underline text-md mt-1 md:mt-0">
                                 <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 Check your appointment.
                             </Link>
 
                             <button disabled={!data.doctor_slug || !data.time} onClick={() => setStep(2)} className="w-full sm:w-auto px-6 py-3 bg-beige-600 text-white rounded-xl border border-beige-600 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-semibold">
+                                <span>Continue</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="sm:hidden h-20" />
+                        <div className="sm:hidden fixed bottom-[5.5rem] inset-x-0 z-40 px-3">
+                            <button
+                                disabled={!data.doctor_slug || !data.time}
+                                onClick={() => setStep(2)}
+                                className="w-full px-6 py-3 bg-beige-600 text-white rounded-xl border border-beige-600 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center font-semibold"
+                            >
                                 <span>Continue</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -497,16 +544,27 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className="w-full rounded-xl border-gray-200 focus:border-beige-500 focus:ring-beige-500 py-3 px-4 bg-gray-50/70" />
                             </div>
                         </div>
-                        <div className="flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-2xl gap-3">
+                        <div className="hidden sm:flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-2xl gap-3">
                             <button onClick={() => setStep(1)} className="w-full sm:w-auto px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 bg-white rounded-xl border border-gray-200 transition-colors">Back to Step 1</button>
                             <button disabled={!data.name || !data.phone || !data.address} onClick={() => setStep(3)} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-xl border border-beige-600 font-semibold transition-colors disabled:opacity-50">Review Appointment</button>
+                        </div>
+
+                        <div className="sm:hidden h-20" />
+                        <div className="sm:hidden fixed bottom-[5.5rem] inset-x-0 z-40 px-3">
+                            <button
+                                disabled={!data.name || !data.phone || !data.address}
+                                onClick={() => setStep(3)}
+                                className="w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-xl border border-beige-600 font-semibold transition-colors disabled:opacity-50"
+                            >
+                                Review Appointment
+                            </button>
                         </div>
                     </div>
                 )}
 
                 {/* Step 3: Review - MATCHED TO SCREENSHOT */}
                 {step === 3 && (
-                    <div className="bg-white rounded-2xl border border-gray-100 animate-fadeIn overflow-hidden">
+                    <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                         <div className="p-4 sm:p-6 md:p-8 border-b border-beige-50 bg-beige-50/30">
                             <div className="flex items-start gap-3 sm:gap-4">
                                 <div className="p-2.5 sm:p-3 bg-white rounded-xl text-beige-600 border border-beige-100 shrink-0">
@@ -601,14 +659,28 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </div>
                         </div>
 
-                        <div className="p-4 sm:p-6 md:p-8 bg-gray-50/50 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+                        <div className="hidden sm:flex p-4 sm:p-6 md:p-8 bg-gray-50/50 flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
                             <button onClick={() => setStep(2)} className="w-full sm:w-auto px-5 sm:px-8 py-3 font-semibold text-gray-600 bg-white rounded-xl border border-gray-200 flex items-center justify-center gap-2">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                                 Edit Details
                             </button>
-                            <button onClick={submitBooking} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-6 sm:px-10 py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
-                                Confirm Appointment
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                            <button disabled={isSubmitting} onClick={submitBooking} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 disabled:opacity-60 text-white px-6 sm:px-10 py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+                                {isSubmitting ? 'Checking slot...' : 'Confirm Appointment'}
+                                {!isSubmitting && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>}
+                            </button>
+                        </div>
+
+                        <div className="sm:hidden px-4 pb-3 text-left">
+                            <button onClick={() => setStep(2)} className="text-sm font-semibold text-gray-600">← Edit Details</button>
+                        </div>
+                        <div className="sm:hidden h-20" />
+                        <div className="sm:hidden fixed bottom-[5.5rem] inset-x-0 z-40 px-3">
+                            <button
+                                disabled={isSubmitting}
+                                onClick={submitBooking}
+                                className="w-full bg-beige-600 hover:bg-beige-700 disabled:opacity-60 text-white py-3 rounded-xl border border-beige-600 font-semibold"
+                            >
+                                {isSubmitting ? 'Checking slot...' : 'Confirm Appointment'}
                             </button>
                         </div>
                         {submitError && (
@@ -619,7 +691,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                 {/* Step 4: Success */}
                 {step === 4 && (
-                    <div className="bg-white p-5 sm:p-8 md:p-12 rounded-2xl border border-gray-100 text-center max-w-2xl mx-auto overflow-hidden relative">
+                    <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl border border-gray-100 text-center max-w-xl mx-auto overflow-hidden relative">
                         {/* Decorative Background Ring */}
                         <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-beige-50 rounded-full -translate-y-1/2 translate-x-1/2 -z-0 opacity-50"></div>
                         
@@ -627,12 +699,12 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-beige-100 text-beige-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 border border-beige-200">
                                 <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                             </div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 leading-tight">Registration Complete!</h2>
-                            <p className="text-sm sm:text-base text-gray-500 mb-6 sm:mb-10 font-medium">Your appointment has been successfully scheduled.</p>
+                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5 leading-tight">Registration Complete!</h2>
+                            <p className="text-xs sm:text-sm text-gray-500 mb-5 sm:mb-7 font-medium">Your appointment has been successfully scheduled.</p>
                             
-                            <div className="bg-gray-50 border border-dashed border-beige-200 p-5 sm:p-6 rounded-2xl max-w-sm mx-auto mb-6 sm:mb-10">
+                            <div className="bg-gray-50 border border-dashed border-beige-200 p-4 sm:p-5 rounded-xl max-w-sm mx-auto mb-5 sm:mb-7">
                                 <p className="text-[10px] text-beige-600 uppercase font-semibold tracking-[0.18em] mb-2">Your Appointment Number</p>
-                                <p className="text-3xl sm:text-5xl font-mono font-bold text-gray-900 break-words">{appointmentId}</p>
+                                <p className="text-2xl sm:text-4xl font-mono font-bold text-gray-900 whitespace-nowrap">{appointmentId}</p>
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">

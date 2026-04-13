@@ -49,6 +49,17 @@
 
 }
 
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Custom transitions for Inertia fluidity */
 .inertia-transition-fade {
   @apply transition-opacity duration-300 ease-in-out;
