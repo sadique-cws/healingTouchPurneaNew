@@ -13,7 +13,9 @@ export default function Doctors({ doctors }) {
         return (
             user.name.toLowerCase().includes(searchLower) ||
             doc.department?.name?.toLowerCase().includes(searchLower) ||
-            doc.qualification?.toLowerCase().includes(searchLower)
+            (Array.isArray(doc.qualification)
+                ? doc.qualification.join(', ').toLowerCase().includes(searchLower)
+                : String(doc.qualification || '').toLowerCase().includes(searchLower))
         );
     });
 
@@ -55,7 +57,7 @@ export default function Doctors({ doctors }) {
                     {filteredDoctors.length > 0 ? (
                         filteredDoctors.map((user) => (
                             <div key={user.id} className="bg-white rounded-2xl shadow overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
-                                <Link href="#" className="block h-full"> {/* Detail route to be matched later */}
+                                <Link href={route('doctors.detail', user.doctor.slug)} className="block h-full">
                                     <div className="p-6 flex-grow">
                                         <div className="flex items-start gap-5">
                                             <div className="flex-shrink-0">
@@ -68,7 +70,7 @@ export default function Doctors({ doctors }) {
                                             <div className="flex-1 min-w-0">
                                                 <h3 className="text-xl font-bold text-gray-800 truncate">Dr. {user.name}</h3>
                                                 <p className="text-sm font-medium text-beige-600 truncate">{user.doctor.department?.name}</p>
-                                                <p className="text-sm font-medium text-gray-600 line-clamp-1">{user.doctor.qualification}</p>
+                                                <p className="text-sm font-medium text-gray-600 line-clamp-1">{Array.isArray(user.doctor.qualification) ? user.doctor.qualification.join(', ') : user.doctor.qualification}</p>
                                                 <p className="font-medium text-xs line-clamp-1">
                                                     {user.doctor.available_days && Array.isArray(user.doctor.available_days) 
                                                         ? user.doctor.available_days.join(', ') 

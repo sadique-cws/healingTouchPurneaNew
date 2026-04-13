@@ -52,8 +52,8 @@ class AppointmentController extends Controller
             'filters' => $request->only(['search', 'date', 'start_date', 'end_date', 'status']),
             'stats' => [
                 'today' => Appointment::whereDate('appointment_date', Carbon::today())->count(),
-                'pending' => Appointment::where('status', 'Pending')->count(),
-                'confirmed' => Appointment::where('status', 'Confirmed')->count(),
+                'pending' => Appointment::where('status', 'pending')->count(),
+                'confirmed' => Appointment::where('status', 'confirmed')->count(),
             ]
         ]);
     }

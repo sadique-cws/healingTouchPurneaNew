@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function ReceptionLayout({ children }) {
-    const { auth } = usePage().props;
+    const page = usePage();
+    const { auth } = page.props;
+    const currentUrl = page.url;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const navigation = [
         { name: 'Dashboard', href: route('reception.dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-        { name: 'New Registration', href: '#', icon: 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z' },
-        { name: 'Queue Today', href: '#', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
     ];
 
     return (
@@ -30,7 +30,7 @@ export default function ReceptionLayout({ children }) {
 
                     <nav className="flex-1 px-4 space-y-1">
                         {navigation.map((item) => {
-                            const isActive = usePage().url === item.href;
+                            const isActive = currentUrl === item.href;
                             return (
                                 <Link
                                     key={item.name}

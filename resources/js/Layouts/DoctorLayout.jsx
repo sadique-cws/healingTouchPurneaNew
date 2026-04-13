@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 export default function DoctorLayout({ children }) {
-    const { auth, doctor } = usePage().props;
+    const page = usePage();
+    const { auth, doctor } = page.props;
+    const currentUrl = page.url;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const navigation = [
         { name: 'Dashboard', href: route('doctor.dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-        { name: 'My Schedule', href: '#', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-        { name: 'Patient Files', href: '#', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
     ];
 
     return (
@@ -30,7 +30,7 @@ export default function DoctorLayout({ children }) {
 
                     <nav className="flex-1 px-4 space-y-1">
                         {navigation.map((item) => {
-                            const isActive = usePage().url === item.href;
+                            const isActive = currentUrl === item.href;
                             return (
                                 <Link
                                     key={item.name}

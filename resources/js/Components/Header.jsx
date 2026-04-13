@@ -20,7 +20,8 @@ export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
         { name: 'Services', href: route('services.page') },
         { name: 'Our Doctors', href: route('our.doctors') },
         { name: 'About Us', href: route('about.page') },
-        { name: 'Gallery', href: '#' }, // Assuming gallery link
+        { name: 'Gallery', href: route('gallery.page') },
+        { name: 'Careers', href: route('careers.page') },
         { name: 'Contact', href: route('contact.page') },
     ];
 

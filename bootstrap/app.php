@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\ReceptionMiddleware;
+use App\Http\Middleware\DoctorMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'reception' => ReceptionMiddleware::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'doctor' => DoctorMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -37,7 +37,7 @@ class ReceptionController extends Controller
                 return back()->withErrors(['email' => 'Unauthorized access. Only reception can log in here.']);
             }
 
-            if (!$user->isActive) {
+            if (isset($user->isActive) && !$user->isActive) {
                 Auth::logout();
                 return back()->withErrors(['email' => 'Your account is currently inactive.']);
             }

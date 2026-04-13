@@ -146,16 +146,15 @@ export default function Index({ appointments, filters, stats }) {
                                                 value={apt.status}
                                                 onChange={(e) => updateStatus(apt.id, e.target.value)}
                                                 className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-teal-500 transition-all ${
-                                                    apt.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 
-                                                    apt.status === 'Pending' ? 'bg-amber-50 text-amber-600' : 
-                                                    apt.status === 'Cancelled' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'
+                                                    apt.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' : 
+                                                    apt.status === 'pending' ? 'bg-amber-50 text-amber-600' : 
+                                                    apt.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'
                                                 }`}
                                             >
-                                                <option value="Pending">Pending</option>
-                                                <option value="Confirmed">Confirmed</option>
-                                                <option value="Checked In">Checked In</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value="Cancelled">Cancelled</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="checked_in">Checked In</option>
+                                                <option value="cancelled">Cancelled</option>
                                             </select>
                                         </td>
                                         <td className="px-8 py-6 text-right">

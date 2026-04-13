@@ -66,7 +66,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/heroImageHt.jpg?updatedAt=1746616206447" alt="Doctor with patient" className="w-full h-auto rounded-2xl shadow-2xl relative" />
                         </div>
                         {/* Floating Elements */}
-                        <div className="absolute top-10 -left-6 bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3 animate-float">
+                        <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-lg flex items-center space-x-3 animate-float">
                             <div className="bg-beige-100 p-2 rounded-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -136,24 +136,45 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                     </div>
                 </div>
             </section>
-            {/* Services Highlights Section */}
-            <section className="py-20 bg-white border-t border-gray-50">
-                <div className="container mx-auto px-4 max-w-7xl text-center">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-12">Our Major <span className="text-beige-600">Specialities</span></h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                        {[
-                            { icon: '🏥', name: 'ICU / NICU' },
-                            { icon: '🧠', name: 'Neurosurgery' },
-                            { icon: '🩺', name: 'Multispeciality' },
-                            { icon: '🤰', name: 'Maternity' },
-                            { icon: '🧪', name: 'Pathology' },
-                            { icon: '🦴', name: 'Orthopedics' }
-                        ].map((s, idx) => (
-                            <div key={idx} className="p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:bg-beige-50 hover:border-beige-200 transition-all cursor-default group">
-                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">{s.icon}</div>
-                                <p className="font-bold text-gray-700 text-sm">{s.name}</p>
+            <section id="about" className="py-12 bg-gradient-to-r from-beige-50 to-beige-100">
+                <div className="container mx-auto px-4 max-w-7xl">
+                    <div className="text-center mb-12">
+                        <span className="text-beige-600 font-semibold text-sm uppercase tracking-wider">Our Story</span>
+                        <h2 className="text-3xl md:text-4xl font-bold text-beige-900 mt-2 mb-4">About <span className="text-beige-600">{hotelName}</span></h2>
+                        <div className="w-24 h-1 bg-beige-400 mx-auto mb-6"></div>
+                        <p className="text-gray-600 max-w-3xl mx-auto">
+                            Founded with a mission to provide accessible and exceptional healthcare to our community, serving with compassion since 1995.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row items-center gap-12">
+                        <div className="md:w-1/2">
+                            <div className="relative">
+                                <div className="absolute -inset-4 bg-gradient-to-r from-beige-200 to-beige-300 rounded-xl blur-lg opacity-70 -z-10"></div>
+                                <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877" alt="Healing Touch Hospital Building" className="w-full h-auto rounded-xl shadow-lg" />
+                                <div className="absolute -bottom-6 -right-6 bg-white py-3 px-6 rounded-full shadow-lg">
+                                    <p className="text-gray-800 font-bold text-xl">25+ Years of Excellence</p>
+                                </div>
                             </div>
-                        ))}
+                        </div>
+                        <div className="md:w-1/2">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6">Our Mission</h3>
+                            <p className="text-gray-700 mb-8 leading-relaxed">
+                                At {hotelName}, our mission is to enhance the health and wellbeing of the communities we serve by providing patient-centered care that is compassionate, accessible, and of the highest quality.
+                            </p>
+
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6">Our Values</h3>
+                            <ul className="space-y-3 text-beige-700">
+                                {['Excellence', 'Compassion', 'Innovation', 'Integrity'].map((value) => (
+                                    <li key={value} className="flex items-start bg-white p-4 rounded-lg shadow-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-beige-600 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span><span className="font-bold text-gray-800">{value}:</span> <span className="text-gray-700">Delivering trusted, patient-first healthcare.</span></span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -203,6 +224,15 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                     </div>
                 </div>
             </section>
+
+            <div id="mobile-book-btn" className="fixed bottom-8 right-4 md:hidden z-50 transition-all duration-300">
+                <Link href={route('book.appointment')} className="bg-beige-600 hover:bg-beige-700 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-2xl flex items-center gap-2 transition-all duration-300 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-sm font-medium whitespace-nowrap">Book Now</span>
+                </Link>
+            </div>
         </div>
     );
 }

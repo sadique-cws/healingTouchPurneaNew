@@ -12,9 +12,18 @@ Route::get('/services', [PatientBookingController::class, 'services'])->name('se
 Route::get('/our-doctors', [PatientBookingController::class, 'doctors'])->name('our.doctors');
 Route::get('/about-us', [PatientBookingController::class, 'about'])->name('about.page');
 Route::get('/contact-us', [PatientBookingController::class, 'contact'])->name('contact.page');
+Route::get('/careers', [PatientBookingController::class, 'careers'])->name('careers.page');
+Route::get('/career/{id}', [PatientBookingController::class, 'careerDetail'])->name('career.detail');
+Route::get('/gallery', [PatientBookingController::class, 'gallery'])->name('gallery.page');
+Route::get('/terms-conditions', [PatientBookingController::class, 'terms'])->name('terms.conditions');
+Route::get('/privacy-policy', [PatientBookingController::class, 'privacy'])->name('privacy.policy');
 Route::get('/book-appointment/{slug?}', [PatientBookingController::class, 'book_appointment'])->name('book.appointment');
 Route::post('/api/appointment/slots', [PatientBookingController::class, 'get_slots'])->name('api.appointment.slots');
 Route::post('/api/appointment/book', [PatientBookingController::class, 'store_appointment'])->name('api.appointment.book');
+Route::get('/manage-appointments', [PatientBookingController::class, 'manageAppointments'])->name('manage.appointments');
+Route::post('/manage-appointments/{appointment}/send-otp', [PatientBookingController::class, 'sendCancelOtp'])->name('manage.appointments.send-otp');
+Route::post('/manage-appointments/{appointment}/verify-otp', [PatientBookingController::class, 'verifyCancelOtp'])->name('manage.appointments.verify-otp');
+Route::get('/appointment-receipt/{appointment}', [PatientBookingController::class, 'appointmentReceipt'])->name('appointment.receipt');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -84,7 +93,7 @@ Route::prefix('doctor')->name('doctor.')->group(function () {
     Route::post('/login', [\App\Http\Controllers\Doctor\DoctorController::class, 'login']);
     Route::post('/logout', [\App\Http\Controllers\Doctor\DoctorController::class, 'logout'])->name('logout');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['doctor'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Doctor\DoctorController::class, 'dashboard'])->name('dashboard');
         Route::get('/appointment/{appointment}', [\App\Http\Controllers\Doctor\DoctorController::class, 'show'])->name('appointment.show');
         Route::post('/availability', [\App\Http\Controllers\Doctor\DoctorController::class, 'updateAvailability'])->name('availability.update');
@@ -96,7 +105,7 @@ Route::prefix('reception')->name('reception.')->group(function () {
     Route::post('/login', [\App\Http\Controllers\Reception\ReceptionController::class, 'login']);
     Route::post('/logout', [\App\Http\Controllers\Reception\ReceptionController::class, 'logout'])->name('logout');
 
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['reception'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Reception\ReceptionController::class, 'dashboard'])->name('dashboard');
         Route::post('/appointment', [\App\Http\Controllers\Reception\ReceptionController::class, 'storeAppointment'])->name('appointment.store');
         Route::get('/appointment/{appointment}/edit', [\App\Http\Controllers\Reception\ReceptionController::class, 'edit'])->name('appointment.edit');
@@ -106,5 +115,9 @@ Route::prefix('reception')->name('reception.')->group(function () {
         Route::get('/download-tomorrow', [\App\Http\Controllers\Reception\ReceptionController::class, 'downloadTomorrowPDF'])->name('download.tomorrow');
     });
 });
+
+Route::get('/doctor/{slug}', [PatientBookingController::class, 'doctorDetails'])
+    ->where('slug', '^(?!login$|dashboard$).+')
+    ->name('doctors.detail');
 
 require __DIR__.'/auth.php';
