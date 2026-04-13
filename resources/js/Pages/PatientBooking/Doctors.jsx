@@ -25,7 +25,7 @@ export default function Doctors({ doctors }) {
             <Head title="Our Doctors | Healing Touch Hospital" />
             <Header />
             
-            <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mt-20 to-white pt-28 w-full">
+            <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6  to-white pt-28 w-full">
                 {/* Heading with enhanced styling */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Meet Our Expert</h1>

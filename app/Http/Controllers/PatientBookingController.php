@@ -128,6 +128,11 @@ class PatientBookingController extends Controller
         return Inertia::render('PatientBooking/Account', $this->getGlobalSettings());
     }
 
+    public function bookingHelp(): \Inertia\Response
+    {
+        return Inertia::render('PatientBooking/BookingHelp', $this->getGlobalSettings());
+    }
+
     public function manageAppointments(Request $request): \Inertia\Response
     {
         $searchMethod = $request->input('method', 'phone');

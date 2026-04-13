@@ -116,6 +116,28 @@ export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
                             ))}
                         </nav>
 
+                        <div className="hidden lg:block">
+                            <Link 
+                                href={route('book.appointment')} 
+                                className="bg-beige-600 hover:bg-beige-700 text-white px-5 py-2.5 rounded-lg transition-colors duration-150 border border-beige-600 font-bold text-xs tracking-wide uppercase flex items-center gap-2"
+                            >
+                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
+                                Book Appointment
+                            </Link>
+                        </div>
+
+                        <div className="lg:hidden">
+                            <Link
+                                href={route('booking.help')}
+                                className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white text-gray-600 hover:text-beige-700 hover:border-beige-200"
+                                aria-label="Booking Help"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.25 9a3.75 3.75 0 117.5 0c0 1.35-.74 2.22-1.95 2.88-1.02.55-1.8 1.05-1.8 2.12v.25M12 17h.01" />
+                                </svg>
+                            </Link>
+                        </div>
+
                     </div>
                 </div>
             </header>

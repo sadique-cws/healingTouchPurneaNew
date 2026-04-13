@@ -474,7 +474,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </button>
                         </div>
 
-                        <div className="sm:hidden h-20" />
+                        <div className="sm:hidden h-10" />
                         <div className="sm:hidden fixed bottom-[5.5rem] inset-x-0 z-40 px-3">
                             <button
                                 disabled={!data.doctor_slug || !data.time}
