@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
-export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
+export default function Header({ hospitalName = 'Healing Touch Hospital', hideMobileTabs = false }) {
     const [scrolled, setScrolled] = useState(false);
     const { url } = usePage();
 
@@ -142,7 +142,7 @@ export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
                 </div>
             </header>
 
-            <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+            {!hideMobileTabs && <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
                 <div className="grid grid-cols-5 gap-1 px-3 py-2.5">
                         {mobileTabs.map((tab) => {
                             const tabPath = normalizePath(tab.href);
@@ -161,7 +161,7 @@ export default function Header({ hospitalName = 'Healing Touch Hospital' }) {
                             );
                         })}
                 </div>
-            </div>
+            </div>}
         </>
     );
 }
