@@ -13,12 +13,16 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 md:p-6 font-['Inter']">
+        <div className="relative min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 md:p-6 font-['Inter']">
             <Head title="Doctor Login" />
+            <div className="absolute inset-0">
+                <img src="/images/hospital1.jpg" alt="Hospital" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-white/85" />
+            </div>
             
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl shadow-teal-500/10 p-6 md:p-8 space-y-8 border border-slate-100">
+            <div className="relative z-10 w-full max-w-md bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl shadow-teal-500/10 p-6 md:p-8 space-y-8 border border-slate-100">
                 <div className="text-center">
-                    <div className="w-14 h-14 bg-teal-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-teal-500/30 mb-6">
+                    <div className="w-14 h-14 bg-teal-600 rounded-lg mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-teal-500/30 mb-6">
                         HT
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Clinician Login</h1>
@@ -33,7 +37,7 @@ export default function Login() {
                                 type="email" 
                                 value={data.email}
                                 onChange={e => setData('email', e.target.value)}
-                                className="w-full pl-5 pr-5 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-800"
+                                className="w-full pl-5 pr-5 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-800"
                                 placeholder="doctor@healingtouch.com"
                                 required 
                             />
@@ -44,13 +48,13 @@ export default function Login() {
                     <div>
                         <div className="flex justify-between items-center mb-3 px-1">
                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Secure Password</label>
-                            <Link className="text-[10px] font-black text-teal-600 uppercase tracking-widest">Forgot?</Link>
+                            <Link href={route('password.request')} className="text-[10px] font-black text-teal-600 uppercase tracking-widest">Forgot?</Link>
                         </div>
                         <input 
                             type="password" 
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
-                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-800"
+                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-800"
                             placeholder="••••••••"
                             required 
                         />
@@ -70,30 +74,20 @@ export default function Login() {
                     <button 
                         type="submit" 
                         disabled={processing}
-                        className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3.5 rounded-xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-lg shadow-teal-500/30 active:scale-[0.98] disabled:opacity-50"
+                            className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3.5 rounded-md font-black text-sm uppercase tracking-[0.2em] transition-all shadow-lg shadow-teal-500/30 active:scale-[0.98] disabled:opacity-50"
                     >
                         {processing ? 'Verifying...' : 'Access My Dashboard'}
                     </button>
-
-                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Panel Links</p>
-                        <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
-                            <Link href={route('userlandingpage')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Public Site</Link>
-                            <Link href={route('admin.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Admin</Link>
-                            <Link href={route('reception.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Reception</Link>
-                            <Link href={route('login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Patient</Link>
-                        </div>
-                    </div>
                     
                     <div className="text-center pt-4">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                            Need help? <Link className="text-teal-600">Contact Administration</Link>
+                            Need help? <Link href={route('contact.page')} className="text-teal-600">Contact Administration</Link>
                         </p>
                     </div>
                 </form>
             </div>
             
-            <p className="mt-10 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Healing Touch Healthcare System</p>
+            <p className="relative z-10 mt-10 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Healing Touch Healthcare System</p>
         </div>
     );
 }

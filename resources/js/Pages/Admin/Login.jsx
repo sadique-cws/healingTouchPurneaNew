@@ -1,4 +1,4 @@
-import { useForm, Head, Link } from '@inertiajs/react';
+import { useForm, Head } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Login() {
@@ -17,21 +17,22 @@ export default function Login() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden px-4 py-6">
             <Head title="Admin Login" />
-            
-            {/* Background decorative elements */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-teal-50 rounded-full blur-3xl -mr-48 -mt-48 opacity-50" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-50 rounded-full blur-3xl -ml-48 -mb-48 opacity-50" />
+
+            <div className="absolute inset-0">
+                <img src="/images/hospital1.jpg" alt="Hospital" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-white/85" />
+            </div>
 
             <div className="w-full max-w-md relative z-10">
                 <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg border border-slate-100 mb-6 group transition-all duration-300 hover:scale-105">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-lg shadow-lg border border-slate-100 mb-6 group transition-all duration-300 hover:scale-105">
                         <span className="text-3xl font-black text-teal-600">H</span>
                     </div>
                     <h1 className="text-3xl font-black text-slate-800 tracking-tight">Admin Portal</h1>
                     <p className="text-slate-500 mt-2 font-medium">Please sign in to your dashboard</p>
                 </div>
 
-                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100">
+                <div className="bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-100">
                     <form onSubmit={submit} className="space-y-6">
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-widest">Email Address</label>
@@ -43,7 +44,7 @@ export default function Login() {
                                     type="email"
                                     value={data.email}
                                     onChange={e => setData('email', e.target.value)}
-                                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="admin@healingtouch.com"
                                     required
                                 />
@@ -61,7 +62,7 @@ export default function Login() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
-                                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="••••••••"
                                     required
                                 />
@@ -83,7 +84,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-4 rounded-xl font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
+                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-4 rounded-md font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
                         >
                             {processing ? (
                                 <>
@@ -98,15 +99,6 @@ export default function Login() {
                             )}
                         </button>
 
-                        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Go to Panel</p>
-                            <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
-                                <Link href={route('userlandingpage')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Public Site</Link>
-                                <Link href={route('doctor.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Doctor</Link>
-                                <Link href={route('reception.login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Reception</Link>
-                                <Link href={route('login')} className="rounded-xl border border-slate-200 bg-white px-3 py-3 text-center text-slate-700">Patient</Link>
-                            </div>
-                        </div>
                     </form>
                 </div>
 
