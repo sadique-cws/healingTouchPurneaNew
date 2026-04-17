@@ -20,9 +20,7 @@ export default function ReceptionLayout({ children }) {
         audio.preload = 'auto';
         notificationAudioRef.current = audio;
 
-        if (!window.Echo) {
-            return;
-        }
+        if (!window.Echo) return;
 
         const channel = window.Echo.channel('appointments-channel');
 
@@ -37,13 +35,10 @@ export default function ReceptionLayout({ children }) {
                 ...payload,
                 _alertId: `${payload?.id || 'appointment'}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
             };
-
-            setAppointmentAlerts((previousAlerts) => [alertItem, ...previousAlerts]);
+            setAppointmentAlerts((previous) => [alertItem, ...previous]);
         });
 
-        return () => {
-            window.Echo.leave('appointments-channel');
-        };
+        return () => window.Echo.leave('appointments-channel');
     }, []);
 
     useEffect(() => {
@@ -51,118 +46,136 @@ export default function ReceptionLayout({ children }) {
             setIsSidebarOpen(window.innerWidth >= 1024);
             setIsMobileSidebarOpen(false);
         };
-
         syncLayout();
         window.addEventListener('resize', syncLayout);
-
         return () => window.removeEventListener('resize', syncLayout);
     }, []);
+
+    useEffect(() => {
+        setIsMobileSidebarOpen(false);
+    }, [currentUrl]);
+
+    useEffect(() => {
+        document.body.style.overflow = isMobileSidebarOpen ? 'hidden' : '';
+
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                setIsMobileSidebarOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleEscape);
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleEscape);
+        };
+    }, [isMobileSidebarOpen]);
 
     const showSidebarLabels = isSidebarOpen || isMobileSidebarOpen;
 
     const handleSidebarToggle = () => {
         if (window.innerWidth < 1024) {
-            setIsMobileSidebarOpen((previous) => !previous);
+            setIsMobileSidebarOpen((prev) => !prev);
             return;
         }
-
-        setIsSidebarOpen((previous) => !previous);
+        setIsSidebarOpen((prev) => !prev);
     };
 
     return (
-        <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none">
+        <div className="flex bg-[#f4f6f9] min-h-screen font-inter select-none overflow-x-hidden w-full relative">
+            {/* Backdrop for Mobile Sidebar */}
             {isMobileSidebarOpen && (
                 <button
                     type="button"
                     aria-label="Close sidebar"
                     onClick={() => setIsMobileSidebarOpen(false)}
-                    className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px] lg:hidden"
+                    className="fixed inset-0 z-40 bg-slate-900/60 transition-opacity lg:hidden"
                 />
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[85vw] max-w-[18rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
+            <aside className={`fixed inset-y-0 left-0 bg-white border-r border-slate-200 shadow-sm transition-all duration-300 ease-in-out z-50 w-[80vw] max-w-[18rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-72' : 'lg:w-24'}`}>
                 <div className="flex flex-col h-full overflow-y-auto">
-                    <div className="p-4 mb-2">
-                        <div className="flex items-center gap-3">
-                            <ApplicationLogo className="h-11 w-11 shrink-0 text-[#00685f] shadow-lg shadow-[#00685f]/10" />
-                            {showSidebarLabels && (
-                                <div className="flex flex-col">
-                                    <span className="text-base font-black text-[#0d1c2e] leading-none font-manrope">Healing Touch</span>
-                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Reception Desk</span>
-                                </div>
-                            )}
-                        </div>
+                    <div className="p-4 mb-2 md:p-6 md:mb-4 flex items-center gap-4">
+                        <ApplicationLogo className="h-10 w-10 md:h-12 md:w-12 shrink-0 text-amber-500 shadow-sm" />
+                        {showSidebarLabels && (
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-lg font-black text-slate-800 leading-tight truncate">Healing Touch</span>
+                                <span className="text-[11px] uppercase tracking-widest font-bold text-slate-500 truncate mt-0.5">Front Desk</span>
+                            </div>
+                        )}
                     </div>
 
-                    <nav className="flex-1 px-3 space-y-1">
+                    <nav className="flex-1 px-3 md:px-4 space-y-1.5">
                         {navigation.map((item) => {
-                            const isActive = currentUrl === item.href;
+                            const isActive = currentUrl === item.href || currentUrl.startsWith(`${item.href}/`) || currentUrl.startsWith(`${item.href}?`);
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setIsMobileSidebarOpen(false)}
-                                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group relative ${
+                                    className={`flex items-center gap-3.5 p-3.5 md:p-4 rounded-2xl transition-all duration-300 group relative ${
                                         isActive 
-                                        ? 'bg-[#00685f]/10 text-[#00685f]' 
-                                        : 'text-[#0d1c2e]/50 hover:bg-[#00685f]/5 hover:text-[#0d1c2e]'
+                                        ? 'bg-gradient-to-r from-amber-50 to-white text-amber-600 border border-amber-100 shadow-sm' 
+                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                                     }`}
                                 >
                                     {isActive && (
-                                        <div className="absolute left-0 w-1 h-7 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-300" />
+                                        <div className="absolute left-0 w-1.5 h-8 bg-amber-500 rounded-r-full" />
                                     )}
-                                    <svg className={`w-[22px] h-[22px] shrink-0 transition-transform duration-300 ${
-                                        isActive ? 'text-[#00685f] scale-110' : 'text-[#0d1c2e]/40 group-hover:scale-110'
+                                    <svg className={`w-6 h-6 md:w-7 md:h-7 shrink-0 transition-transform duration-300 ${
+                                        isActive ? 'text-amber-500' : 'text-slate-400 group-hover:scale-105 group-hover:text-amber-400'
                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d={item.icon} />
                                     </svg>
-                                    {showSidebarLabels && <span className="font-bold text-sm tracking-tight">{item.name}</span>}
+                                    {showSidebarLabels && <span className="font-bold text-base tracking-tight">{item.name}</span>}
                                 </Link>
                             );
                         })}
                     </nav>
 
-                    <div className="px-4 pb-3">
-                        <div className="rounded-xl border border-[#00685f]/10 bg-white/70 px-3 py-3">
-                            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#00685f]/50">Mode to Reception Desk</p>
-                            <Link href={route('userlandingpage')} className="mt-2 inline-flex text-xs font-semibold text-[#0d1c2e]/60 hover:text-[#00685f] transition-colors">Public Site</Link>
+                    <div className="px-4 pb-4">
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-center">
+                            <p className="text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Internal Area</p>
+                            <Link href={route('userlandingpage')} className="inline-flex w-full items-center justify-center text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl px-3 py-2.5 hover:text-amber-600 hover:border-amber-200 shadow-sm">
+                                Public Site
+                            </Link>
                         </div>
                     </div>
 
-                    <div className="p-4 mt-auto">
+                    <div className="p-4 md:p-5 mt-auto border-t border-slate-100">
                         <Link
                             method="post"
                             href={route('reception.logout')}
                             as="button"
-                            className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/60 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
+                            className="w-full flex items-center justify-center gap-3 p-3.5 md:p-4 rounded-xl bg-slate-50 border border-slate-100 text-red-500 hover:bg-red-50 hover:border-red-100 transition-all duration-300 group shadow-sm"
                         >
-                            <svg className="w-[22px] h-[22px] shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                            <svg className="w-5 h-5 md:w-6 md:h-6 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            {showSidebarLabels && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
+                            {showSidebarLabels && <span className="font-bold text-sm tracking-widest uppercase">Logout</span>}
                         </Link>
                     </div>
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <main className={`flex-1 transition-all duration-300 ease-in-out ml-0 ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'}`}>
+            {/* Main Content Area */}
+            <main className={`flex-1 transition-all duration-300 ease-in-out min-h-screen flex flex-col w-full max-w-[100vw] ${isSidebarOpen ? 'lg:ml-72 lg:max-w-[calc(100vw-18rem)]' : 'lg:ml-24 lg:max-w-[calc(100vw-6rem)]'}`}>
+                {/* Floating Notifications */}
                 {appointmentAlerts.length > 0 && (
-                    <div className="fixed top-4 right-4 z-[60] max-w-sm w-full space-y-3">
+                    <div className="fixed top-4 right-4 z-[60] w-[calc(100vw-2rem)] max-w-sm space-y-3">
                         {appointmentAlerts.map((alertItem) => (
-                            <div key={alertItem._alertId} className="bg-white rounded-xl shadow-lg border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
+                            <div key={alertItem._alertId} className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-4 md:p-5 animate-in slide-in-from-top-4 duration-300">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <p className="text-xs font-black text-[#00685f] uppercase tracking-[0.2em]">New Appointment</p>
-                                        <p className="text-sm font-bold text-[#0d1c2e] mt-1">{alertItem.patient_name || 'Patient'}</p>
-                                        <p className="text-xs text-[#0d1c2e]/70 mt-1">Dr. {alertItem.doctor_name || 'N/A'} • {alertItem.appointment_time || '-'}</p>
-                                        <p className="text-xs text-[#0d1c2e]/70 mt-0.5">ID: {alertItem.appointment_no || '-'}</p>
+                                        <p className="text-[11px] font-black text-emerald-600 uppercase tracking-widest">New Appointment</p>
+                                        <p className="text-base font-bold text-slate-800 mt-1">{alertItem.patient_name || 'Patient'}</p>
+                                        <p className="text-sm font-semibold text-slate-500 mt-1">Dr. {alertItem.doctor_name || 'N/A'} • {alertItem.appointment_time || '-'}</p>
                                     </div>
                                     <button
                                         type="button"
-                                        onClick={() => setAppointmentAlerts((previousAlerts) => previousAlerts.filter((item) => item._alertId !== alertItem._alertId))}
-                                        className="text-[#0d1c2e]/40 hover:text-[#0d1c2e] transition-colors"
+                                        onClick={() => setAppointmentAlerts((prev) => prev.filter((item) => item._alertId !== alertItem._alertId))}
+                                        className="w-8 h-8 flex items-center justify-center bg-slate-50 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100"
                                     >
                                         ✕
                                     </button>
@@ -172,30 +185,28 @@ export default function ReceptionLayout({ children }) {
                     </div>
                 )}
 
-                {/* Header */}
-                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-4 md:px-8 py-3 md:py-4.5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
-                    <button onClick={handleSidebarToggle} className="p-2.5 bg-white rounded-lg text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
-                        <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                {/* Mobile & Desktop Header */}
+                <header className={`fixed top-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/70 shadow-sm px-4 md:px-8 py-3 flex justify-between items-center transition-all duration-300 left-0 ${isSidebarOpen ? 'lg:left-72' : 'lg:left-24'}`}>
+                    <button onClick={handleSidebarToggle} className="p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-slate-600 hover:text-amber-600 hover:bg-amber-50 hover:border-amber-100 sm:hidden">
+                        <svg className="w-5 h-5 md:w-6 md:h-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
-                    <div className="flex items-center gap-3 md:gap-6 ml-auto">
+                    <div className="flex items-center gap-3 md:gap-5 ml-auto">
                         <div className="text-right hidden sm:block">
-                            <p className="text-sm font-black text-[#0d1c2e] font-manrope">{auth.user.name}</p>
-                            <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">Front Desk Manager</p>
+                            <p className="text-sm md:text-base font-black text-slate-800 leading-none">{auth.user.name}</p>
+                            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-1">Reception</p>
                         </div>
-                        <div className="relative group">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-white rounded-lg overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
-                                <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
-                            </div>
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-100 rounded-2xl overflow-hidden border border-amber-200 shadow-sm">
+                            <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=fff&color=f59e0b&bold=true`} alt="Avatar" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </header>
 
-                <div className="px-4 md:px-8 pb-8 md:pb-10 pt-4 md:pt-5 inertia-transition-fade max-w-[1600px] mx-auto">
+                {/* Page Content */}
+                <div className="flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-24 pb-6 md:pt-24 md:pb-8 overflow-x-hidden">
                     {children}
                 </div>
             </main>
         </div>
     );
 }
-
