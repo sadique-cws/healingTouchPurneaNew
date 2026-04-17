@@ -16,24 +16,26 @@ export default function Index({ settings }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('admin.settings.update'));
+        if (window.confirm('Save settings changes?')) {
+            post(route('admin.settings.update'));
+        }
     };
 
     return (
         <AdminLayout>
             <Head title="Hospital Settings" />
 
-            <div className="max-w-4xl space-y-6 md:space-y-8">
+            <div className="max-w-4xl mx-auto w-full space-y-5 md:space-y-8">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-800 tracking-tight">Configuration Hub</h2>
+                    <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">Configuration Hub</h2>
                     <p className="text-slate-500 font-medium">Control global hospital identity, contacts, and notifications</p>
                 </div>
 
                 <form onSubmit={submit} className="space-y-6 md:space-y-7">
                     {/* General Section */}
-                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 space-y-5">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">General Identity</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Hospital Name</label>
                                 <input 
@@ -46,18 +48,18 @@ export default function Index({ settings }) {
                             </div>
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Hospital Logo</label>
-                                <div className="flex items-center gap-4 p-2 bg-slate-50 rounded-xl border border-slate-100">
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 bg-slate-50 rounded-lg border border-slate-100">
                                     <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center shadow-sm">
                                         <svg className="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                     </div>
-                                    <button type="button" className="text-xs font-black text-teal-600 uppercase tracking-widest px-4">Change Logo</button>
+                                    <button type="button" className="text-xs font-black text-teal-600 uppercase tracking-widest px-0 sm:px-4 text-left sm:text-center">Change Logo</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Contact Section */}
-                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 space-y-5">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Contact & Location</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -91,7 +93,7 @@ export default function Index({ settings }) {
                     </div>
 
                     {/* Social Section */}
-                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    <div className="bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-sm border border-slate-100 space-y-5">
                         <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Social Networks</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
@@ -128,8 +130,8 @@ export default function Index({ settings }) {
                     </div>
 
                     {/* Notifications Section */}
-                    <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
-                        <div className="flex justify-between items-center">
+                    <div className="bg-white p-5 sm:p-6 md:p-8 rounded-xl shadow-sm border border-slate-100">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                             <div>
                                 <h3 className="text-[14px] font-black text-slate-800 tracking-tight">SMS Notifications</h3>
                                 <p className="text-xs text-slate-400 font-bold uppercase mt-1 tracking-wider">Enable automatic booking confirmations</p>
@@ -144,11 +146,11 @@ export default function Index({ settings }) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end pt-4">
+                    <div className="flex justify-end pt-2 md:pt-4">
                         <button 
                             type="submit" 
                             disabled={processing}
-                            className="bg-slate-900 hover:bg-black text-white px-10 py-4 rounded-xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50"
+                            className="w-full sm:w-auto bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-lg font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                         >
                             {processing ? 'Saving...' : 'Securely Save Changes'}
                         </button>

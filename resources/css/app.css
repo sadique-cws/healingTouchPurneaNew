@@ -30,8 +30,8 @@
 
 @layer components {
   .glass-sidebar {
-    @apply bg-[#00685f]/5 backdrop-blur-xl border-none;
-    background: linear-gradient(135deg, rgba(0, 104, 95, 0.05) 0%, rgba(0, 131, 120, 0.05) 100%);
+    @apply bg-white/95 backdrop-blur-0 border-r border-slate-200 shadow-2xl;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
   }
 
   .card-ethereal {

@@ -15,7 +15,9 @@ export default function Index({ appointments, filters, stats }) {
     };
 
     const updateStatus = (id, status) => {
-        router.patch(route('admin.appointments.status', id), { status });
+        if (window.confirm('Change appointment status?')) {
+            router.patch(route('admin.appointments.status', id), { status });
+        }
     };
 
     const downloadReceipt = (id) => {
@@ -26,10 +28,10 @@ export default function Index({ appointments, filters, stats }) {
         <AdminLayout>
             <Head title="Appointments" />
 
-            <div className="space-y-6 md:space-y-8">
+            <div className="space-y-5 md:space-y-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
                     <div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Appointments Ledger</h2>
+                        <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">Appointments Ledger</h2>
                         <p className="text-slate-500 font-medium">Monitor and manage patient bookings across all departments</p>
                     </div>
                 </div>
@@ -38,8 +40,8 @@ export default function Index({ appointments, filters, stats }) {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 xl:gap-5">
                     {/* Quick Stats */}
                     <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
-                            <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600">
+                        <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                            <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center text-teal-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
                             <div>
@@ -47,8 +49,8 @@ export default function Index({ appointments, filters, stats }) {
                                 <p className="text-xl font-black text-slate-800">{stats.today}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
-                            <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
+                        <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                            <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <div>
@@ -56,8 +58,8 @@ export default function Index({ appointments, filters, stats }) {
                                 <p className="text-xl font-black text-slate-800">{stats.pending}</p>
                             </div>
                         </div>
-                        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
-                            <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
+                        <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-4">
+                            <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                             </div>
                             <div>
@@ -68,7 +70,7 @@ export default function Index({ appointments, filters, stats }) {
                     </div>
 
                     {/* Date Filters */}
-                    <div className="flex bg-white p-2 rounded-2xl border border-slate-100 shadow-sm gap-1">
+                    <div className="flex bg-white p-2 rounded-xl border border-slate-100 shadow-sm gap-1 overflow-x-auto no-scrollbar">
                         <button 
                             onClick={() => filterByDate('today')}
                             className={`flex-1 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${filters.date === 'today' ? 'bg-slate-800 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-50'}`}
@@ -92,7 +94,7 @@ export default function Index({ appointments, filters, stats }) {
 
                 {/* Main Table Section */}
                 <div className="space-y-4">
-                    <form onSubmit={handleSearch} className="flex gap-4">
+                    <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         <div className="relative flex-1">
                             <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -101,15 +103,84 @@ export default function Index({ appointments, filters, stats }) {
                                 type="text"
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
-                                className="w-full pl-12 pr-4 py-4 bg-white border-none rounded-2xl shadow-sm ring-1 ring-slate-100 focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                className="w-full pl-12 pr-4 py-3.5 sm:py-4 bg-white border-none rounded-xl shadow-sm ring-1 ring-slate-100 focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
                                 placeholder="Search by patient, doctor, or appointment no..."
                             />
                         </div>
-                        <button type="submit" className="px-8 py-4 bg-slate-800 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg active:scale-95 transition-all">Search</button>
+                        <button type="submit" className="w-full sm:w-auto px-8 py-3.5 sm:py-4 bg-slate-800 text-white rounded-xl font-black text-sm uppercase tracking-widest shadow-lg active:scale-95 transition-all">Search</button>
                     </form>
 
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                        <table className="w-full text-left">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="md:hidden divide-y divide-slate-100">
+                            {appointments.data.length > 0 ? appointments.data.map((apt) => (
+                                <div key={apt.id} className="p-4 space-y-4">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p className="text-sm font-black text-slate-800 uppercase leading-none">{apt.appointment_no}</p>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1.5">{new Date(apt.appointment_date).toLocaleDateString()}</p>
+                                        </div>
+                                        <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
+                                            apt.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' :
+                                            apt.status === 'pending' ? 'bg-amber-50 text-amber-600' :
+                                            apt.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'
+                                        }`}>
+                                            {apt.status}
+                                        </span>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-3 text-sm">
+                                        <div className="rounded-xl bg-slate-50 p-3">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Patient</p>
+                                            <p className="mt-1 font-black text-slate-800">{apt.patient?.name}</p>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{apt.patient?.phone}</p>
+                                        </div>
+                                        <div className="rounded-xl bg-slate-50 p-3">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Doctor</p>
+                                            <p className="mt-1 font-black text-slate-800">Dr. {apt.doctor?.user?.name}</p>
+                                            <p className="text-[10px] text-teal-600 font-bold uppercase mt-1">{apt.doctor?.department?.name}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-xl bg-slate-50 p-3 space-y-3">
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Update status</p>
+                                            <select 
+                                                value={apt.status}
+                                                onChange={(e) => updateStatus(apt.id, e.target.value)}
+                                                className="mt-2 w-full text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-lg border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-teal-500 transition-all bg-white"
+                                            >
+                                                <option value="pending">Pending</option>
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="checked_in">Checked In</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <button 
+                                                onClick={() => downloadReceipt(apt.id)}
+                                                className="flex-1 py-3 bg-white text-slate-700 rounded-xl font-black text-xs uppercase tracking-widest"
+                                            >
+                                                PDF
+                                            </button>
+                                            <button 
+                                                onClick={() => router.delete(route('admin.appointments.destroy', apt.id))}
+                                                className="flex-1 py-3 bg-red-50 text-red-600 rounded-xl font-black text-xs uppercase tracking-widest"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )) : (
+                                <div className="px-4 py-16 text-center">
+                                    <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">No appointments found matching your criteria</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="hidden md:block w-full max-w-full overflow-x-auto no-scrollbar">
+                        <table className="w-full min-w-[920px] text-left">
                             <thead className="bg-slate-50 border-b border-slate-100">
                                 <tr>
                                     <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">ID / Date</th>
@@ -122,11 +193,11 @@ export default function Index({ appointments, filters, stats }) {
                             <tbody className="divide-y divide-slate-100">
                                 {appointments.data.length > 0 ? appointments.data.map((apt) => (
                                     <tr key={apt.id} className="hover:bg-slate-50/50 transition-colors group">
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
                                             <p className="text-sm font-black text-slate-800 uppercase leading-none">{apt.appointment_no}</p>
                                             <p className="text-[10px] text-slate-400 font-bold uppercase mt-1.5">{new Date(apt.appointment_date).toLocaleDateString()}</p>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
                                             <div className="flex items-center space-x-3">
                                                 <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-400 text-xs shadow-inner">
                                                     {apt.patient?.name?.charAt(0)}
@@ -137,11 +208,11 @@ export default function Index({ appointments, filters, stats }) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
                                             <p className="text-sm font-black text-slate-700 leading-none">Dr. {apt.doctor?.user?.name}</p>
                                             <p className="text-[10px] text-teal-600 font-bold uppercase mt-1.5 leading-none">{apt.doctor?.department?.name}</p>
                                         </td>
-                                        <td className="px-8 py-6">
+                                        <td className="px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
                                             <select 
                                                 value={apt.status}
                                                 onChange={(e) => updateStatus(apt.id, e.target.value)}
@@ -157,7 +228,7 @@ export default function Index({ appointments, filters, stats }) {
                                                 <option value="cancelled">Cancelled</option>
                                             </select>
                                         </td>
-                                        <td className="px-8 py-6 text-right">
+                                        <td className="px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 text-right">
                                             <div className="flex justify-end space-x-2">
                                                 <button 
                                                     onClick={() => downloadReceipt(apt.id)}
@@ -184,6 +255,7 @@ export default function Index({ appointments, filters, stats }) {
                                 )}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

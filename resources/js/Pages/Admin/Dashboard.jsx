@@ -45,12 +45,13 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-10">
                     {/* Today's Appointments Table */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="flex justify-between items-end gap-4">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end sm:gap-4">
                             <h2 className="text-2xl font-black text-[#0d1c2e] tracking-tight font-manrope">Today's Patient Queue</h2>
                             <button className="text-[10px] font-black text-[#00685f] hover:text-[#008378] uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-[#00685f] transition-all pb-1">Historical Logs</button>
                         </div>
                         <div className="card-ethereal overflow-hidden rounded-lg">
-                            <table className="w-full text-left">
+                            <div className="overflow-x-auto">
+                            <table className="w-full min-w-[720px] text-left">
                                 <thead className="bg-[#eff4ff]">
                                     <tr>
                                         <th className="px-8 py-5 text-[10px] font-black text-[#0d1c2e]/40 uppercase tracking-[0.2em]">Patient Profile</th>
@@ -104,6 +105,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                                     )}
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
 

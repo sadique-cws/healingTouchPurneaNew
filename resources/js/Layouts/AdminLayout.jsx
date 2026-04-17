@@ -5,34 +5,14 @@ export default function AdminLayout({ children }) {
     const page = usePage();
     const { auth } = page.props;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [appointmentAlerts, setAppointmentAlerts] = useState([]);
     const notificationAudioRef = useRef(null);
-    const isAudioUnlockedRef = useRef(false);
 
     useEffect(() => {
         const audio = new Audio('/sounds/notification.mp3');
         audio.preload = 'auto';
         notificationAudioRef.current = audio;
-
-        const unlockAudio = () => {
-            if (!notificationAudioRef.current || isAudioUnlockedRef.current) {
-                return;
-            }
-
-            notificationAudioRef.current.muted = true;
-            notificationAudioRef.current
-                .play()
-                .then(() => {
-                    notificationAudioRef.current.pause();
-                    notificationAudioRef.current.currentTime = 0;
-                    notificationAudioRef.current.muted = false;
-                    isAudioUnlockedRef.current = true;
-                })
-                .catch(() => {});
-        };
-
-        window.addEventListener('click', unlockAudio, { once: true });
-        window.addEventListener('keydown', unlockAudio, { once: true });
 
         if (!window.Echo) {
             return;
@@ -56,12 +36,30 @@ export default function AdminLayout({ children }) {
         });
 
         return () => {
-            window.removeEventListener('click', unlockAudio);
-            window.removeEventListener('keydown', unlockAudio);
-
             window.Echo.leave('appointments-channel');
         };
     }, []);
+
+    useEffect(() => {
+        const syncLayout = () => {
+            setIsSidebarOpen(window.innerWidth >= 1024);
+            setIsMobileSidebarOpen(false);
+        };
+
+        syncLayout();
+        window.addEventListener('resize', syncLayout);
+
+        return () => window.removeEventListener('resize', syncLayout);
+    }, []);
+
+    const handleSidebarToggle = () => {
+        if (window.innerWidth < 1024) {
+            setIsMobileSidebarOpen((previous) => !previous);
+            return;
+        }
+
+        setIsSidebarOpen((previous) => !previous);
+    };
 
     const navigation = [
         { name: 'Dashboard', href: route('admin.dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -74,15 +72,26 @@ export default function AdminLayout({ children }) {
         { name: 'Settings', href: route('admin.settings.index'), icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
     ];
 
+    const showSidebarLabels = isSidebarOpen || isMobileSidebarOpen;
+
     return (
         <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none">
+            {isMobileSidebarOpen && (
+                <button
+                    type="button"
+                    aria-label="Close sidebar"
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                    className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px] lg:hidden"
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
-                <div className="flex flex-col h-full">
+            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[85vw] max-w-[18rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
+                <div className="flex flex-col h-full overflow-y-auto">
                     <div className="p-5 mb-2">
                         <div className="flex items-center gap-3">
                             <div className="w-11 h-11 bg-[#00685f] rounded-xl flex items-center justify-center text-white font-black shrink-0 shadow-lg shadow-[#00685f]/15 rotate-2">H</div>
-                            {isSidebarOpen && (
+                            {showSidebarLabels && (
                                 <div className="flex flex-col">
                                     <span className="text-lg font-black text-[#0d1c2e] leading-none font-manrope">Healing</span>
                                     <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Touch Portal</span>
@@ -98,6 +107,7 @@ export default function AdminLayout({ children }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
+                                    onClick={() => setIsMobileSidebarOpen(false)}
                                     className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group relative ${
                                         isActive 
                                         ? 'bg-[#00685f]/10 text-[#00685f]' 
@@ -112,7 +122,7 @@ export default function AdminLayout({ children }) {
                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                                     </svg>
-                                    {isSidebarOpen && <span className="font-bold text-sm tracking-tight leading-none">{item.name}</span>}
+                                    {showSidebarLabels && <span className="font-bold text-sm tracking-tight leading-none">{item.name}</span>}
                                 </Link>
                             );
                         })}
@@ -135,14 +145,14 @@ export default function AdminLayout({ children }) {
                             <svg className="w-[22px] h-[22px] shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            {isSidebarOpen && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
+                            {showSidebarLabels && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
                         </Link>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+            <main className={`flex-1 transition-all duration-300 ease-in-out ml-0 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
                 {appointmentAlerts.length > 0 && (
                     <div className="fixed top-4 right-4 z-[60] max-w-sm w-full space-y-3">
                         {appointmentAlerts.map((alertItem) => (
@@ -168,8 +178,8 @@ export default function AdminLayout({ children }) {
                 )}
 
                 {/* Header */}
-                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-6 md:px-8 py-4 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
-                    <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-white rounded-xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
+                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-4 sm:px-6 md:px-8 py-4 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
+                    <button onClick={handleSidebarToggle} className="p-2.5 bg-white rounded-xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
                         <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
@@ -186,7 +196,7 @@ export default function AdminLayout({ children }) {
                     </div>
                 </header>
 
-                <div className="px-6 md:px-8 pb-8 md:pb-10 pt-5 inertia-transition-fade">
+                <div className="px-4 sm:px-6 md:px-8 pb-8 md:pb-10 pt-5 inertia-transition-fade">
                     {children}
                 </div>
             </main>

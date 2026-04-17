@@ -32,8 +32,14 @@ export default function Index({ careers }) {
         setIsModalOpen(true);
     };
 
+    const confirmAction = (message) => window.confirm(message);
+
     const submit = (e) => {
         e.preventDefault();
+        if (!confirmAction(editingCareer ? 'Update this job post?' : 'Create this job post?')) {
+            return;
+        }
+
         if (editingCareer) {
             put(route('admin.careers.update', editingCareer.id), {
                 onSuccess: () => setIsModalOpen(false),
@@ -46,31 +52,33 @@ export default function Index({ careers }) {
     };
 
     const toggleStatus = (id) => {
-        router.patch(route('admin.careers.toggle-status', id));
+        if (confirmAction('Change job status?')) {
+            router.patch(route('admin.careers.toggle-status', id));
+        }
     };
 
     return (
         <AdminLayout>
             <Head title="Career Management" />
 
-            <div className="space-y-6 md:space-y-8">
-                <div className="flex justify-between items-end">
+            <div className="space-y-5 md:space-y-8">
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end">
                     <div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">Talent Acquisition</h2>
+                        <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">Talent Acquisition</h2>
                         <p className="text-slate-500 font-medium">Post and manage hospital job openings</p>
                     </div>
                     <button 
                         onClick={openAddModal}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20"
+                        className="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2"
                     >
                         Create Job Post
                     </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
                     {careers.data.map((job) => (
-                        <div key={job.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col group hover:shadow-lg transition-all duration-300">
-                            <div className="flex justify-between items-start mb-6">
+                        <div key={job.id} className="bg-white rounded-xl p-5 sm:p-6 shadow-sm border border-slate-100 flex flex-col group hover:shadow-lg transition-all duration-300">
+                            <div className="flex justify-between items-start mb-5">
                                 <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${job.status ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                                     {job.status ? 'Hiring' : 'Closed'}
                                 </span>
@@ -84,8 +92,8 @@ export default function Index({ careers }) {
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-black text-slate-800 mb-2 leading-tight">{job.title}</h3>
-                            <p className="text-slate-500 text-sm font-medium mb-6 line-clamp-3">{job.description}</p>
+                            <h3 className="text-lg font-black text-slate-800 mb-2 leading-tight">{job.title}</h3>
+                            <p className="text-slate-500 text-sm font-medium mb-5 line-clamp-3">{job.description}</p>
                             
                             <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
                                 <div>
@@ -105,35 +113,35 @@ export default function Index({ careers }) {
             {/* Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm">
-                    <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="text-2xl font-black text-slate-800 tracking-tight">{editingCareer ? 'Edit Opportunity' : 'New Career Post'}</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                        <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl animate-in fade-in zoom-in duration-300">
+                        <div className="p-5 sm:p-6 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">{editingCareer ? 'Edit Opportunity' : 'New Career Post'}</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
                                 <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         
-                        <form onSubmit={submit} className="p-6 md:p-8 space-y-5">
+                        <form onSubmit={submit} className="p-5 sm:p-6 md:p-8 space-y-5">
                             <div>
                                 <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Job Title</label>
                                 <input 
                                     type="text" 
                                     value={data.title}
                                     onChange={e => setData('title', e.target.value)}
-                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                    className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                     placeholder="e.g., Staff Nurse, Resident Doctor"
                                     required
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Salary Range</label>
                                     <input 
                                         type="text" 
                                         value={data.salary}
                                         onChange={e => setData('salary', e.target.value)}
-                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                         placeholder="₹ 20,000 - 30,000"
                                     />
                                 </div>
@@ -143,7 +151,7 @@ export default function Index({ careers }) {
                                         type="text" 
                                         value={data.location}
                                         onChange={e => setData('location', e.target.value)}
-                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
+                                        className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-700"
                                     />
                                 </div>
                             </div>
@@ -172,11 +180,11 @@ export default function Index({ careers }) {
                                 </label>
                             </div>
 
-                            <div className="pt-6 border-t border-slate-50 flex justify-end">
+                            <div className="pt-5 border-t border-slate-50 flex justify-end">
                                 <button 
                                     type="submit" 
                                     disabled={processing}
-                                    className="px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-indigo-500/30 active:scale-95 disabled:opacity-50"
+                                    className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-indigo-500/30 active:scale-95 disabled:opacity-50"
                                 >
                                     {processing ? 'Posting...' : editingCareer ? 'Update Opportunity' : 'Post Opportunity'}
                                 </button>
