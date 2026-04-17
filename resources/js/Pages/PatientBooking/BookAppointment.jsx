@@ -256,9 +256,9 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     };
 
     return (
-        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-12 lg:pb-0 flex flex-col">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-24 lg:pb-0 flex flex-col">
             <Head title="Book Appointment | Healing Touch Hospital" />
-            <Header hideMobileTabs />
+            <Header />
 
             <div className="max-w-6xl mx-auto w-full px-2.5 sm:px-6 lg:px-8 py-2.5 sm:py-8 mt-16">
                 <div className="mb-2.5 sm:mb-4 md:mb-6 bg-gradient-to-r from-beige-600 to-beige-800 rounded-lg sm:rounded-xl py-2.5 md:py-4 px-3 md:px-6 text-white border border-beige-700">
@@ -634,7 +634,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-1.5 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
                             <button
                                 disabled={stepOneDisabled}
                                 onClick={handleStepOneContinue}
@@ -721,7 +721,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         {/* <div className="sm:hidden" /> */}
-                        <div className="sm:hidden fixed bottom-1.5 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
                             <button
                                 disabled={!patientFormComplete}
                                 onClick={() => setStep(3)}
@@ -829,7 +829,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <button onClick={() => setStep(2)} className="text-sm font-semibold text-gray-600">← Edit Details</button>
                         </div>
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-1.5 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
                             <button
                                 disabled={isSubmitting}
                                 onClick={submitBooking}

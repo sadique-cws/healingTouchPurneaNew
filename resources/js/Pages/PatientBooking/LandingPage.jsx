@@ -64,16 +64,14 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                                 Browse Doctors
                             </Link>
                         </div>
-                        <div className="md:hidden grid grid-cols-[1fr,auto] gap-2 mt-3">
+                        <div className="md:hidden mt-3">
                             <Link href={route('book.appointment')} className="rounded-xl border border-beige-600 bg-beige-600 px-4 py-3 text-sm font-black text-white shadow-sm flex items-center justify-center gap-2">
                                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3M5 11h14M6.75 21h10.5A2.25 2.25 0 0019.5 18.75V6.75A2.25 2.25 0 0017.25 4.5H6.75A2.25 2.25 0 004.5 6.75v12A2.25 2.25 0 006.75 21z" />
                                 </svg>
                                 Book Appointment
                             </Link>
-                            <Link href={route('manage.appointments')} className="rounded-xl border border-gray-200 bg-white px-3 py-3 text-xs font-black text-gray-700 shadow-sm flex items-center justify-center">
-                                Manage
-                            </Link>
+                            
                         </div>
                         {/* Quick Stats */}
                         <div className="grid grid-cols-2 gap-2 mt-3 sm:mt-6 max-w-sm">
@@ -103,19 +101,19 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                         </div>
                     </div>
                     <div className="md:w-1/2 relative px-0 md:px-4 pt-0 md:pt-0 order-1 md:order-2">
-                        <div className="relative h-[235px] sm:h-[320px] md:h-auto overflow-hidden rounded-2xl border border-gray-200 shadow-sm md:shadow-none bg-gray-200">
+                        <div className="relative h-[235px] sm:h-[320px] md:h-[380px] lg:h-[430px] overflow-hidden rounded-2xl border border-gray-200 shadow-sm md:shadow-none bg-gray-200">
                             {heroSlides.map((slide, index) => (
                                 <img
                                     key={slide.src}
                                     src={slide.src}
                                     alt={slide.label}
-                                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 md:relative md:h-auto ${activeHeroSlide === index ? 'opacity-100' : 'opacity-0 md:opacity-100'} ${index > 0 ? 'md:hidden' : ''}`}
+                                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${activeHeroSlide === index ? 'opacity-100' : 'opacity-0'}`}
                                 />
                             ))}
-                            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/55 to-transparent p-3 md:hidden">
+                            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/55 to-transparent p-3 md:p-4">
                                 <div className="text-white">
                                     <p className="text-xs font-black uppercase tracking-[0.16em] opacity-80">Healing Touch</p>
-                                    <p className="text-base font-black">{heroSlides[activeHeroSlide].label}</p>
+                                    <p className="text-base md:text-lg font-black">{heroSlides[activeHeroSlide].label}</p>
                                 </div>
                                 <div className="flex gap-1.5">
                                     {heroSlides.map((slide, index) => (
@@ -231,15 +229,15 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                         <p className="max-w-2xl md:mx-auto text-xs md:text-base text-gray-600">Experience healthcare excellence with our state-of-the-art facilities and compassionate medical professionals.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
-                        <div className="hidden md:block bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group">
+                    <div className="flex md:grid md:grid-cols-3 gap-3 md:gap-5 overflow-x-auto md:overflow-visible no-scrollbar snap-x pb-1">
+                        <div className="bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group min-w-[82%] sm:min-w-[58%] md:min-w-0 snap-start">
                             <div className="bg-beige-100 p-2.5 md:p-3 rounded-lg inline-block mb-3 md:mb-4 group-hover:bg-beige-200 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 md:h-10 md:w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
                             </div>
                             <h3 className="text-base md:text-xl font-bold text-gray-800 mb-2 md:mb-3">Expert Doctors</h3>
-                            <p className="text-sm md:text-base text-gray-600 leading-relaxed">Board-certified specialists with years of experience dedicated to providing compassionate patient care.</p>
+                            <p className="text-sm md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">Board-certified specialists with years of experience dedicated to providing compassionate patient care.</p>
                             <div className="mt-4 flex items-center text-beige-600 font-medium">
                                 <Link href={route('our.doctors')}><span>Learn more</span></Link>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
@@ -248,14 +246,14 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             </div>
                         </div>
 
-                        <div className="bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group">
+                        <div className="bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group min-w-[82%] sm:min-w-[58%] md:min-w-0 snap-start">
                             <div className="bg-beige-100 p-2.5 md:p-3 rounded-lg inline-block mb-3 md:mb-4 group-hover:bg-beige-200 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 md:h-10 md:w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                             </div>
                             <h3 className="text-base md:text-xl font-bold text-gray-800 mb-2 md:mb-3">Advanced Facilities</h3>
-                            <p className="text-sm md:text-base text-gray-600 leading-relaxed">State-of-the-art medical equipment and modern healing environments designed for optimal patient recovery.</p>
+                            <p className="text-sm md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">State-of-the-art medical equipment and modern healing environments designed for optimal patient recovery.</p>
                             <div className="mt-4 flex items-center text-beige-600 font-medium">
                                 <Link href={route('services.page')}><span>Learn more</span></Link>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
@@ -264,55 +262,71 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             </div>
                         </div>
 
-                        <div className="bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group">
+                        <div className="bg-gray-50 md:bg-white p-4 md:p-6 rounded-xl md:rounded-lg border border-gray-200 group min-w-[82%] sm:min-w-[58%] md:min-w-0 snap-start">
                             <div className="bg-beige-100 p-2.5 md:p-3 rounded-lg inline-block mb-3 md:mb-4 group-hover:bg-beige-200 transition-colors duration-150">
-                                <svg xmlns="http://www.w3.org/200/svg" className="h-7 w-7 md:h-10 md:w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 md:h-10 md:w-10 text-beige-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                             </div>
                             <h3 className="text-base md:text-xl font-bold text-gray-800 mb-2 md:mb-3">Patient-Centered Care</h3>
-                            <p className="text-sm md:text-base text-gray-600 leading-relaxed">Personalized treatment plans focused on your health and comfort, putting your needs at the center of everything we do.</p>
+                            <p className="text-sm md:text-base text-gray-600 leading-relaxed line-clamp-3 md:line-clamp-none">Personalized treatment plans focused on your health and comfort, putting your needs at the center of everything we do.</p>
                         </div>
                     </div>
                 </div>
             </section>
-            <section id="about" className="py-6 md:py-10 bg-beige-50 border-y border-gray-200">
+            <section id="about" className="py-6 md:py-12 bg-beige-50 border-y border-gray-200">
                 <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
-                    <div className="mb-4 md:mb-12 md:text-center">
+                    <div className="mb-4 md:mb-10 text-center">
                         <span className="text-beige-600 font-semibold text-[11px] md:text-sm uppercase tracking-wider">Our Story</span>
-                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2 md:mb-4">About <span className="text-beige-600">{hotelName}</span></h2>
-                        <div className="hidden md:block w-24 h-1 bg-beige-400 mx-auto mb-6"></div>
-                        <p className="text-xs md:text-base text-gray-600 max-w-3xl md:mx-auto">
-                            Founded with a mission to provide accessible and exceptional healthcare to our community, serving with compassion since 1995.
-                        </p>
+                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2">About <span className="text-beige-600">{hotelName}</span></h2>
+                        <div className="hidden md:block w-24 h-1 bg-beige-400 mx-auto mt-4"></div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                        <div className="md:w-1/2">
-                            <div className="relative">
-                                <img src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877" alt="Healing Touch Hospital Building" className="w-full h-[190px] md:h-auto object-cover rounded-xl md:rounded-lg border border-gray-200" />
-                                <div className="absolute -bottom-3 right-3 md:-bottom-4 md:-right-4 bg-white py-2 px-3 md:px-4 rounded-lg border border-gray-200 shadow-sm md:shadow-none">
-                                    <p className="text-gray-800 font-bold text-xs md:text-base">25+ Years of Excellence</p>
+                    <div className="rounded-2xl md:rounded-3xl border border-beige-100 bg-white p-3 md:p-8 shadow-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr] gap-4 md:gap-8 items-start">
+                            <div className="space-y-3 md:space-y-4">
+                                <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-gray-200">
+                                    <img
+                                        src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877"
+                                        alt="Healing Touch Hospital Building"
+                                        className="w-full h-[180px] sm:h-[220px] md:h-[310px] object-cover"
+                                    />
+                                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 md:p-4">
+                                        <p className="text-[11px] md:text-xs font-black uppercase tracking-[0.14em] text-white/80">Since 1995</p>
+                                        <p className="text-sm md:text-base font-black text-white">Serving families with trusted care</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-gray-500">Experience</p>
+                                        <p className="text-sm md:text-base font-black text-gray-800 mt-0.5">25+ Years</p>
+                                    </div>
+                                    <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-gray-500">Approach</p>
+                                        <p className="text-sm md:text-base font-black text-gray-800 mt-0.5">Patient First</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="md:w-1/2 mt-2 md:mt-0">
-                            <h3 className="text-lg md:text-2xl font-bold text-gray-800 mb-2 md:mb-6">Our Mission</h3>
-                            <p className="text-sm md:text-base text-gray-700 mb-4 md:mb-8 leading-relaxed">
-                                At {hotelName}, our mission is to enhance the health and wellbeing of the communities we serve by providing patient-centered care that is compassionate, accessible, and of the highest quality.
-                            </p>
 
-                            <h3 className="text-lg md:text-2xl font-bold text-gray-800 mb-3 md:mb-6">Our Values</h3>
-                            <ul className="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-3 text-beige-700">
-                                {['Excellence', 'Compassion', 'Innovation', 'Integrity'].map((value) => (
-                                    <li key={value} className="flex items-start bg-white p-2.5 md:p-3 rounded-lg border border-gray-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 text-beige-600 mr-2 md:mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <span className="text-xs md:text-base"><span className="font-bold text-gray-800">{value}</span><span className="hidden md:inline text-gray-700">: Delivering trusted, patient-first healthcare.</span></span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <div className="rounded-xl md:rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-6">
+                                <h3 className="text-base md:text-2xl font-bold text-gray-800">Our Mission</h3>
+                                <p className="text-sm md:text-base text-gray-700 mt-2 leading-relaxed">
+                                    At {hotelName}, our mission is to provide accessible, compassionate, and high-quality healthcare for every family in the community.
+                                </p>
+
+                                <h3 className="text-base md:text-2xl font-bold text-gray-800 mt-5 md:mt-7">Our Values</h3>
+                                <ul className="mt-3 grid grid-cols-1 gap-2.5 text-beige-700">
+                                    {['Excellence', 'Compassion', 'Innovation', 'Integrity'].map((value) => (
+                                        <li key={value} className="flex items-start bg-white p-3 rounded-lg border border-gray-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 text-beige-600 mr-2.5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            <span className="text-xs md:text-sm text-gray-700"><span className="font-bold text-gray-800">{value}</span> — Delivering trusted, patient-first healthcare.</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
