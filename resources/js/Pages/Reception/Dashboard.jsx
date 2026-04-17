@@ -30,6 +30,8 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
 
     const selectedDoctor = doctors.find(d => String(d.id) === String(data.doctor_id));
 
+    const confirmAction = (message) => window.confirm(message);
+
     const getSlotMeta = (slot) => {
         if (slot?.status === 'elapsed') {
             return {
@@ -145,6 +147,10 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
 
     const submitBooking = (e) => {
         e.preventDefault();
+
+        if (!confirmAction('Complete this registration?')) {
+            return;
+        }
         
         // Validate required fields before submission
         const requiredFields = ['name', 'phone', 'age', 'gender', 'address', 'doctor_id', 'appointment_date', 'appointment_time', 'amount'];
@@ -182,14 +188,14 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
     };
 
     const updateStatus = (id, status) => {
-        if (!confirm(`Are you sure you want to change appointment status to ${status.replace('_', ' ')}?`)) {
+        if (!confirmAction(`Change appointment status to ${status.replace('_', ' ')}?`)) {
             return;
         }
         router.patch(route('reception.appointment.status', id), { status });
     };
 
     const collectPayment = (id) => {
-        if (confirm('Confirm payment collection?')) {
+        if (confirmAction('Confirm payment collection?')) {
             router.post(route('reception.appointment.collect', id));
         }
     };
@@ -246,8 +252,8 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
 
                 {/* Stats Ledger */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-                    <div className="bg-white p-4 md:p-5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-3">
-                        <div className="w-14 h-14 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600">
+                        <div className="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                            <div className="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
                             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                         </div>
                         <div>
@@ -255,8 +261,8 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                             <h4 className="text-2xl font-black text-slate-800 tracking-tighter mt-0.5">{stats.total}</h4>
                         </div>
                     </div>
-                    <div className="bg-white p-4 md:p-5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-3">
-                        <div className="w-14 h-14 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600">
+                    <div className="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div className="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
                             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
@@ -264,8 +270,8 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                             <h4 className="text-2xl font-black text-slate-800 tracking-tighter mt-0.5">{stats.checked_in}</h4>
                         </div>
                     </div>
-                    <div className="bg-white p-4 md:p-5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-3">
-                        <div className="w-14 h-14 bg-red-50 rounded-lg flex items-center justify-center text-red-600">
+                    <div className="bg-white p-4 md:p-5 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                        <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-600">
                             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div>
@@ -276,22 +282,97 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                 </div>
 
                 {/* Main Table */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="p-4 md:p-5 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <h3 className="text-xl font-black text-slate-800 tracking-tight">Active Registrations</h3>
-                        <form onSubmit={handleSearch} className="relative w-full md:w-80 lg:w-96">
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-4 md:p-5 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <h3 className="text-xl font-black text-slate-800 tracking-tight">Active Registrations</h3>
+                            <form onSubmit={handleSearch} className="relative w-full md:w-80 lg:w-96">
                             <input 
                                 type="text" 
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
-                                className="w-full pl-12 pr-6 py-3.5 bg-slate-50 border-none rounded-xl focus:ring-4 focus:ring-amber-500/10 font-bold text-slate-700"
+                                    className="w-full pl-12 pr-6 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-4 focus:ring-amber-500/10 font-bold text-slate-700"
                                 placeholder="Search by name or mobile..."
                             />
                             <svg className="w-5 h-5 absolute left-4 top-4.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </form>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <div className="md:hidden divide-y divide-slate-100">
+                        {appointments.map((apt) => (
+                            <div key={apt.id} className="p-4 space-y-4">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-sm shadow-lg shadow-black/10">
+                                                {apt.queue_number}
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-black text-slate-800 leading-tight uppercase tracking-tight">{apt.patient.name}</p>
+                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{apt.patient.phone}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${apt.payment?.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
+                                        {apt.payment?.status}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 text-sm">
+                                    <div className="rounded-lg bg-slate-50 p-3">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Doctor</p>
+                                        <p className="mt-1 text-sm font-bold text-slate-700">Dr. {apt.doctor.user.name}</p>
+                                        <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mt-1">{apt.appointment_time}</p>
+                                    </div>
+                                    <div className="rounded-lg bg-slate-50 p-3">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</p>
+                                        <select 
+                                            value={apt.status}
+                                            onChange={(e) => updateStatus(apt.id, e.target.value)}
+                                            className={`mt-1 w-full text-[10px] font-black uppercase tracking-widest border-none rounded-lg px-3 py-2 focus:ring-0 cursor-pointer ${
+                                                apt.status === 'pending' ? 'bg-amber-50 text-amber-700' :
+                                                apt.status === 'confirmed' ? 'bg-emerald-50 text-emerald-600' :
+                                                apt.status === 'checked_in' ? 'bg-blue-50 text-blue-600' : 
+                                                'bg-red-50 text-red-600'
+                                            }`}
+                                        >
+                                            <option value="pending">Pending</option>
+                                            <option value="checked_in">Checked In</option>
+                                            <option value="confirmed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    {apt.payment?.status === 'due' && (
+                                        <button 
+                                            onClick={() => collectPayment(apt.id)}
+                                            className="flex-1 py-3 bg-slate-900 text-white rounded-lg font-black text-[10px] uppercase tracking-widest"
+                                        >
+                                            Collect ₹{apt.doctor.fee}
+                                        </button>
+                                    )}
+                                    <Link 
+                                        href={route('reception.appointment.edit', apt.id)}
+                                        className="flex-1 py-3 bg-white border border-slate-100 rounded-lg text-slate-700 font-black text-[10px] uppercase tracking-widest text-center"
+                                    >
+                                        Edit
+                                    </Link>
+                                    <a
+                                        href={route('appointment.receipt', apt.id)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex-1 py-3 bg-amber-50 text-amber-600 rounded-lg font-black text-[10px] uppercase tracking-widest text-center"
+                                        title="Print PDF Receipt"
+                                    >
+                                        PDF
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left min-w-[980px]">
                             <thead className="bg-slate-50">
                                 <tr>
@@ -355,7 +436,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                             <div className="flex justify-end gap-2">
                                                 <Link 
                                                     href={route('reception.appointment.edit', apt.id)}
-                                                    className="p-3 bg-white border border-slate-100 rounded-md text-slate-400 hover:text-slate-900 shadow-sm transition-all hover:scale-105"
+                                                    className="p-3 bg-white border border-slate-100 rounded-lg text-slate-400 hover:text-slate-900 shadow-sm transition-all hover:scale-105"
                                                 >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                                 </Link>
@@ -363,7 +444,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                                     href={route('appointment.receipt', apt.id)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="p-3 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-amber-600 shadow-sm transition-all hover:scale-105"
+                                                    className="p-3 bg-white border border-slate-100 rounded-lg text-slate-400 hover:text-amber-600 shadow-sm transition-all hover:scale-105"
                                                     title="Print PDF Receipt"
                                                 >
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
@@ -380,11 +461,11 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
 
             {/* Registration Modal */}
             {isRegModalOpen && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-6 bg-slate-900/60 backdrop-blur-sm" style={{backdropFilter: 'blur(4px)'}}>
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-6 bg-slate-900/60 backdrop-blur-sm" style={{backdropFilter: 'blur(4px)'}}>
                     <div className="bg-white w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 max-h-[90vh] flex flex-col">
-                        <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <div className="p-5 sm:p-6 md:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-800 tracking-tight">Patient Registration</h3>
+                                <h3 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">Patient Registration</h3>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Step {step} of 3</p>
                             </div>
                             <button onClick={() => { setIsRegModalOpen(false); setStep(1); }} className="p-2.5 hover:bg-white rounded-lg transition-colors shadow-sm">
@@ -392,7 +473,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                             </button>
                         </div>
                         
-                        <form onSubmit={submitBooking} className="p-5 md:p-8 overflow-y-auto flex-1">
+                        <form onSubmit={submitBooking} className="p-4 sm:p-5 md:p-8 overflow-y-auto flex-1">
                             {Object.keys(errors).length > 0 && (
                                 <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
                                     <p className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-2">Validation Errors</p>
@@ -406,7 +487,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                             
                             {step === 1 && (
                                 <div className="space-y-6 animate-in slide-in-from-right duration-500">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                         <div>
                                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Patient Full Name</label>
                                             <input 
@@ -430,7 +511,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                             />
                                             {errors.phone && <p className="text-red-500 text-[10px] font-bold mt-2">{errors.phone}</p>}
                                         </div>
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-2 gap-3">
                                             <div>
                                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Age</label>
                                                 <input 
@@ -596,11 +677,11 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                             </label>
                                         </div>
                                     </div>
-                                    <div className="flex justify-between pt-6 border-t border-slate-50">
+                                    <div className="flex justify-between pt-5 border-t border-slate-50 gap-3">
                                         <button 
                                             type="button"
                                             onClick={() => setStep(1)}
-                                            className="px-8 py-4 bg-white text-slate-500 rounded-xl font-black text-xs uppercase tracking-widest shadow-sm border border-slate-100 transition-all"
+                                            className="px-6 py-4 bg-white text-slate-500 rounded-lg font-black text-xs uppercase tracking-widest shadow-sm border border-slate-100 transition-all"
                                         >
                                             Back
                                         </button>
@@ -608,7 +689,7 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                             type="button"
                                             onClick={() => setStep(3)}
                                             disabled={!data.appointment_time || loadingSlots}
-                                            className="px-8 py-4 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 transition-all"
+                                            className="px-6 py-4 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 transition-all"
                                         >
                                             Next: Final Review
                                         </button>
@@ -619,8 +700,8 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                             {step === 3 && (
                                 <div className="space-y-6 animate-in slide-in-from-right duration-500">
                                     <div className="bg-slate-50 p-5 md:p-7 rounded-lg border-2 border-dashed border-slate-200">
-                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-10 text-center">Summary of Registration</h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8">
+                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-8 text-center">Summary of Registration</h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-8">
                                             <div>
                                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Patient</p>
                                                 <p className="text-xl font-black text-slate-800 uppercase leading-none">{data.name}</p>
@@ -646,18 +727,18 @@ export default function Dashboard({ appointments = [], filters = {}, doctors = [
                                         </div>
                                     </div>
                                     
-                                    <div className="flex justify-between pt-6">
+                                    <div className="flex justify-between pt-5 gap-3">
                                         <button 
                                             type="button"
                                             onClick={() => setStep(2)}
-                                            className="px-8 py-4 bg-white text-slate-500 rounded-xl font-black text-xs uppercase tracking-widest shadow-sm border border-slate-100 transition-all"
+                                            className="px-6 py-4 bg-white text-slate-500 rounded-lg font-black text-xs uppercase tracking-widest shadow-sm border border-slate-100 transition-all"
                                         >
                                             Back
                                         </button>
                                         <button 
                                             type="submit" 
                                             disabled={processing}
-                                            className="px-8 py-4 bg-slate-900 hover:bg-black text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95"
+                                            className="px-6 py-4 bg-slate-900 hover:bg-black text-white rounded-lg font-black text-xs uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95"
                                         >
                                             {processing ? 'Processing...' : 'Complete Registration'}
                                         </button>

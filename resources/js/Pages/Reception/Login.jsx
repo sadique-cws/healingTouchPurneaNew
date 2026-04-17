@@ -20,10 +20,10 @@ export default function Login() {
                 <div className="absolute inset-0 bg-white/85" />
             </div>
             
-            <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-6 md:p-8 space-y-8 relative z-10 border border-slate-100">
+            <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-2xl p-6 md:p-8 space-y-7 relative z-10 border border-slate-100">
 
                 <div className="text-center relative z-10">
-                    <div className="w-14 h-14 bg-amber-500 rounded-lg mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-amber-500/40 mb-6">
+                    <div className="w-14 h-14 bg-amber-500 rounded-lg mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-amber-500/40 mb-5">
                          R
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Front Desk Access</h1>
@@ -37,7 +37,7 @@ export default function Login() {
                             type="email" 
                             value={data.email}
                             onChange={e => setData('email', e.target.value)}
-                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-md focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
+                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
                             placeholder="staff@healingtouch.com"
                             required 
                         />
@@ -50,7 +50,7 @@ export default function Login() {
                             type="password" 
                             value={data.password}
                             onChange={e => setData('password', e.target.value)}
-                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-md focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
+                            className="w-full px-5 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-4 focus:ring-amber-500/10 transition-all font-bold text-slate-800 placeholder:text-slate-300"
                             placeholder="••••••••"
                             required 
                         />
@@ -73,7 +73,7 @@ export default function Login() {
                     <button 
                         type="submit" 
                         disabled={processing}
-                        className="w-full bg-slate-900 border-b-4 border-slate-950 hover:bg-black text-white py-3.5 rounded-md font-black text-sm uppercase tracking-[0.3em] transition-all active:translate-y-1 active:border-b-0 disabled:opacity-50"
+                        className="w-full bg-slate-900 border-b-4 border-slate-950 hover:bg-black text-white py-3.5 rounded-lg font-black text-sm uppercase tracking-[0.3em] transition-all active:translate-y-1 active:border-b-0 disabled:opacity-50"
                     >
                         {processing ? 'Authenticating...' : 'Establish Connection'}
                     </button>
