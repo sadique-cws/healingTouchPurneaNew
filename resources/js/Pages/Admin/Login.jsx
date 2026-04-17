@@ -1,3 +1,4 @@
+import ApplicationLogo from '@/Components/ApplicationLogo';
 import { useForm, Head } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -20,19 +21,22 @@ export default function Login() {
 
             <div className="absolute inset-0">
                 <img src="/images/hospital1.jpg" alt="Hospital" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-white/85" />
+                <div className="absolute inset-0" />
             </div>
 
-            <div className="w-full max-w-md relative z-10">
-                <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-lg shadow-lg border border-slate-100 mb-6 group transition-all duration-300 hover:scale-105">
-                        <span className="text-3xl font-black text-teal-600">H</span>
+            <div className="w-full max-w-md relative z-10 bg-white rounded p-5">
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-3 ">
+                        <ApplicationLogo className="h-11 w-11 shrink-0 text-teal-600" />
+                        <div className="text-left leading-tight">
+                            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-teal-600">Admin Portal</p>
+                            <h1 className="text-lg font-black text-slate-800 tracking-tight">Healing Touch</h1>
+                        </div>
                     </div>
-                    <h1 className="text-3xl font-black text-slate-800 tracking-tight">Admin Portal</h1>
-                    <p className="text-slate-500 mt-2 font-medium">Please sign in to your dashboard</p>
+                    <p className="text-slate-500 mt-3 font-medium text-sm">Please sign in to your dashboard</p>
                 </div>
 
-                <div className="bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-100">
+                <div className="bg-white/95 backdrop-blur-sm p-5 md:p-7 ">
                     <form onSubmit={submit} className="space-y-6">
                         <div>
                             <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-widest">Email Address</label>
@@ -44,7 +48,7 @@ export default function Login() {
                                     type="email"
                                     value={data.email}
                                     onChange={e => setData('email', e.target.value)}
-                                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-4 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.email ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="admin@healingtouch.com"
                                     required
                                 />
@@ -62,7 +66,7 @@ export default function Login() {
                                     type={showPassword ? 'text' : 'password'}
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
-                                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border-none rounded-md focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
+                                    className={`w-full pl-12 pr-12 py-3.5 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-teal-500 transition-all font-medium text-slate-700 ${errors.password ? 'ring-2 ring-red-500' : ''}`}
                                     placeholder="••••••••"
                                     required
                                 />
@@ -84,7 +88,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-4 rounded-md font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
+                            className="w-full bg-[#0d9488] hover:bg-[#0f766e] text-white py-4 rounded-lg font-black text-lg tracking-widest uppercase transition-all duration-300 shadow-xl shadow-teal-500/30 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
                         >
                             {processing ? (
                                 <>

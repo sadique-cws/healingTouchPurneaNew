@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function Header({ hospitalName = 'Healing Touch Hospital', hideMobileTabs = false }) {
     const [scrolled, setScrolled] = useState(false);
@@ -92,14 +93,12 @@ export default function Header({ hospitalName = 'Healing Touch Hospital', hideMo
                     <div className="flex justify-between items-center">
                         <div className="flex items-center">
                             <Link href="/" className="flex items-center space-x-3 group">
-                                <div className="overflow-hidden rounded-lg h-10 w-10 flex items-center justify-center bg-beige-50 border border-beige-200 transition-colors duration-150 group-hover:bg-beige-100">
-                                    <span className="font-black text-beige-700 text-lg">H</span>
-                                </div>
-                                <div>
-                                    <h1 className="font-black text-xl text-gray-800 tracking-tight leading-none group-hover:text-beige-700 transition-colors">
+                                <ApplicationLogo className="h-10 w-10 shrink-0 text-beige-700 transition-transform duration-150 group-hover:scale-105" />
+                                <div className="leading-none">
+                                    <h1 className="font-black text-lg sm:text-xl text-gray-800 tracking-tight leading-none group-hover:text-beige-700 transition-colors">
                                         <span className="text-beige-700">{firstWord}</span> {restOfName}
                                     </h1>
-                                    <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hospital (Purnea)</p>
+                                    <p className="text-[10px] sm:text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hospital (Purnea)</p>
                                 </div>
                             </Link>
                         </div>
@@ -119,7 +118,7 @@ export default function Header({ hospitalName = 'Healing Touch Hospital', hideMo
                         <div className="hidden lg:block">
                             <Link 
                                 href={route('book.appointment')} 
-                                className="bg-beige-600 hover:bg-beige-700 text-white px-5 py-2.5 rounded-lg transition-colors duration-150 border border-beige-600 font-bold text-xs tracking-wide uppercase flex items-center gap-2"
+                                className="bg-beige-600 hover:bg-beige-700 text-white px-4 py-2.5 rounded-lg transition-colors duration-150 border border-beige-600 font-bold text-[11px] tracking-wide uppercase flex items-center gap-2"
                             >
                                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" /></svg>
                                 Book Appointment
@@ -142,8 +141,8 @@ export default function Header({ hospitalName = 'Healing Touch Hospital', hideMo
                 </div>
             </header>
 
-            {!hideMobileTabs && <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
-                <div className="grid grid-cols-5 gap-1 px-3 py-2.5">
+            {!hideMobileTabs && <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/96 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+                <div className="grid grid-cols-5 gap-1 px-2.5 py-2">
                         {mobileTabs.map((tab) => {
                             const tabPath = normalizePath(tab.href);
                             const currentPath = normalizePath(url);

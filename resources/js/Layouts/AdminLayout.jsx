@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 export default function AdminLayout({ children }) {
     const page = usePage();
@@ -88,13 +89,13 @@ export default function AdminLayout({ children }) {
             {/* Sidebar */}
             <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[85vw] max-w-[18rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
                 <div className="flex flex-col h-full overflow-y-auto">
-                    <div className="p-5 mb-2">
+                    <div className="p-4 mb-2">
                         <div className="flex items-center gap-3">
-                            <div className="w-11 h-11 bg-[#00685f] rounded-xl flex items-center justify-center text-white font-black shrink-0 shadow-lg shadow-[#00685f]/15 rotate-2">H</div>
+                            <ApplicationLogo className="h-11 w-11 shrink-0 text-[#00685f] shadow-lg shadow-[#00685f]/10" />
                             {showSidebarLabels && (
                                 <div className="flex flex-col">
-                                    <span className="text-lg font-black text-[#0d1c2e] leading-none font-manrope">Healing</span>
-                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Touch Portal</span>
+                                    <span className="text-base font-black text-[#0d1c2e] leading-none font-manrope">Healing Touch</span>
+                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Admin Portal</span>
                                 </div>
                             )}
                         </div>
@@ -178,8 +179,8 @@ export default function AdminLayout({ children }) {
                 )}
 
                 {/* Header */}
-                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-4 sm:px-6 md:px-8 py-4 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
-                    <button onClick={handleSidebarToggle} className="p-2.5 bg-white rounded-xl text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
+                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-4 sm:px-6 md:px-8 py-3.5 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
+                    <button onClick={handleSidebarToggle} className="p-2.5 bg-white rounded-lg text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
                         <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
@@ -189,7 +190,7 @@ export default function AdminLayout({ children }) {
                             <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">System Admin</p>
                         </div>
                         <div className="relative group">
-                            <div className="w-11 h-11 bg-white rounded-xl overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
+                            <div className="w-10 h-10 md:w-11 md:h-11 bg-white rounded-lg overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
                                 <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
                             </div>
                         </div>

@@ -1,3 +1,4 @@
+import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function Login() {
@@ -17,14 +18,18 @@ export default function Login() {
             <Head title="Reception Login" />
             <div className="absolute inset-0">
                 <img src="/images/hospital1.jpg" alt="Hospital" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-white/85" />
+                <div className="absolute inset-0 " />
             </div>
             
-            <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-2xl p-6 md:p-8 space-y-7 relative z-10 border border-slate-100">
+            <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 md:p-7 space-y-7 relative z-10 border border-slate-100">
 
                 <div className="text-center relative z-10">
-                    <div className="w-14 h-14 bg-amber-500 rounded-lg mx-auto flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-amber-500/40 mb-5">
-                         R
+                    <div className="inline-flex items-center gap-3 mb-4">
+                        <ApplicationLogo className="h-11 w-11 shrink-0 text-amber-500" />
+                        <div className="text-left leading-tight">
+                            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-amber-500">Reception Portal</p>
+                            <h1 className="text-lg font-black text-slate-800 tracking-tight">Healing Touch</h1>
+                        </div>
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Front Desk Access</h1>
                     <p className="text-slate-500 font-medium mt-2 text-sm">Authorized personnel only. Please verify your identity.</p>
