@@ -141,7 +141,7 @@ export default function Header({ hospitalName = 'Healing Touch Hospital', hideMo
                 </div>
             </header>
 
-            {!hideMobileTabs && <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/96 backdrop-blur-md border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+            {!hideMobileTabs && <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/96 backdrop-blur-md border-t border-gray-200">
                 <div className="grid grid-cols-5 gap-1 px-2.5 py-2">
                         {mobileTabs.map((tab) => {
                             const tabPath = normalizePath(tab.href);

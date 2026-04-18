@@ -6,6 +6,7 @@ import PublicFooter from '@/Components/PublicFooter';
 
 export default function BookAppointment({ departments = [], doctors = [], preselected_slug }) {
     const [step, setStep] = useState(1);
+    const [showBookingNotes, setShowBookingNotes] = useState(true);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [availableSlots, setAvailableSlots] = useState([]);
     const [loadingSlots, setLoadingSlots] = useState(false);
@@ -241,7 +242,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     );
     const isChoosingSlot = step === 1 && doctorConfirmed;
     const stepOneDisabled = isChoosingSlot ? !data.time : !data.doctor_slug;
-    const stepOneCtaLabel = isChoosingSlot ? 'Continue' : 'Continue';
+    const stepOneCtaLabel = isChoosingSlot ? 'आगे बढ़ें' : 'आगे बढ़ें';
     const handleStepOneContinue = () => {
         if (!data.doctor_slug) return;
 
@@ -256,33 +257,41 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     };
 
     return (
-        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-24 lg:pb-0 flex flex-col">
-            <Head title="Book Appointment | Healing Touch Hospital" />
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-20 sm:pb-24 lg:pb-0 flex flex-col">
+            <Head title="अपॉइंटमेंट बुक करें | Healing Touch Hospital" />
             <Header />
 
             <div className="max-w-6xl mx-auto w-full px-2.5 sm:px-6 lg:px-8 py-2.5 sm:py-8 mt-16">
                 <div className="mb-2.5 sm:mb-4 md:mb-6 bg-gradient-to-r from-beige-600 to-beige-800 rounded-lg sm:rounded-xl py-2.5 md:py-4 px-3 md:px-6 text-white border border-beige-700">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
-                            <h1 className="text-base sm:text-lg md:text-xl font-bold">Book Your Appointment</h1>
+                            <h1 className="text-base sm:text-lg md:text-xl font-bold">ऑनलाइन अपॉइंटमेंट बुकिंग</h1>
                             <p className="text-beige-100 text-[11px] sm:text-xs opacity-90 mt-0.5">
-                                {step === 1 ? (doctorConfirmed ? 'Choose appointment time' : 'Choose your doctor') : step === 2 ? 'Add patient details' : step === 3 ? 'Confirm booking' : 'Appointment booked'}
+                                {showBookingNotes
+                                    ? 'पहले नियम पढ़ें, फिर डॉक्टर चुनें'
+                                    : step === 1
+                                        ? (doctorConfirmed ? 'समय चुनें' : 'डॉक्टर चुनें')
+                                        : step === 2
+                                            ? 'मरीज की जानकारी भरें'
+                                            : step === 3
+                                                ? 'बुकिंग पक्का करें'
+                                                : 'अपॉइंटमेंट बुक हो गया'}
                             </p>
                         </div>
                         <Link href={route('manage.appointments')} className="hidden md:inline-flex items-center text-white hover:text-beige-200 text-[11px] sm:text-xs mt-1 md:mt-0 ml-auto text-right">
                             <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            Already have an Appointment? Check existing appointment
+                            अपनी मौजूदा बुकिंग स्थिति जांचें
                         </Link>
                     </div>
 
-                    <div className="mt-3 relative hidden sm:block">
+                    {!showBookingNotes && <div className="mt-3 relative hidden sm:block">
                         <div className="absolute top-3 left-0 right-0 h-0.5 bg-beige-300 rounded-full z-0 mx-6 md:mx-12"></div>
                         <div className="absolute top-3 left-0 h-0.5 bg-white rounded-full z-10 transition-all duration-500 mx-6 md:mx-12" style={{ width: `${Math.min(90, (step - 1) * 30)}%` }}></div>
                         <div className="relative z-20 flex items-center justify-between gap-2 md:gap-6">
                             {[
-                                { id: 1, label: 'Doctor' },
-                                { id: 2, label: 'Details' },
-                                { id: 3, label: 'Review' }
+                                { id: 1, label: 'डॉक्टर' },
+                                { id: 2, label: 'जानकारी' },
+                                { id: 3, label: 'पुष्टि' }
                             ].map((s) => (
                                 <div key={s.id} className="flex flex-1 flex-col items-center min-w-0">
                                     <div className={`w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center font-bold text-[10px] md:text-xs transition-all duration-300 ${step >= s.id ? 'bg-white text-beige-700 border-2 border-white' : 'bg-beige-700 text-white border border-beige-300'}`}>
@@ -294,18 +303,60 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </div>}
 
                     <div className="md:hidden mt-2 flex justify-end">
                         <Link href={route('manage.appointments')} className="inline-flex items-center text-white hover:text-beige-200 text-[11px] ml-auto text-right">
                             <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            Check existing booking
+                            बुकिंग स्थिति जांचें
                         </Link>
                     </div>
                 </div>
 
+                {showBookingNotes && (
+                    <div className="bg-white border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-6 space-y-4">
+                        <div>
+                            <h2 className="text-base sm:text-xl font-bold text-gray-900">Healing Touch Hospital में अपॉइंटमेंट बुक करें</h2>
+                            <h3 className="mt-2 text-sm sm:text-base font-semibold text-beige-700">सूचना</h3>
+                        </div>
+
+                        <ul className="space-y-2 text-[13px] sm:text-sm text-gray-700 list-disc pl-5">
+                            <li>ऑनलाइन बुकिंग केवल अगले दिन के अपॉइंटमेंट के लिए है।</li>
+                            <li>यदि आप आज रात 12:00 बजे से पहले बुकिंग करते हैं, तो कल के लिए आपकी नियुक्ति की पुष्टि की जाएगी।</li>
+                            <li>कृपया बुकिंग के दौरान अपना फोन नंबर प्रदान करें। बुकिंग की पुष्टि उसी नंबर पर भेजी जाएगी।</li>
+                            <li>यदि आप किसी और का फोन नंबर प्रदान करते हैं, तो Healing Touch Hospital उस बुकिंग की गारंटी नहीं लेगा।</li>
+                            <li>बुकिंग से संबंधित किसी भी जानकारी के लिए अस्पताल के आधिकारिक नंबर या हेल्पडेस्क से संपर्क करें।</li>
+                        </ul>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
+                            <Link href={route('manage.appointments')} className="inline-flex items-center text-beige-700 hover:text-beige-800 text-sm font-semibold">
+                                Check your existing booking status<br className="sm:hidden" />
+                                <span className="ml-1 sm:ml-2">अपनी मौजूदा बुकिंग स्थिति जांचें</span>
+                            </Link>
+                            <button
+                                type="button"
+                                onClick={() => setShowBookingNotes(false)}
+                                className="hidden sm:inline-flex w-full sm:w-auto px-5 py-2.5 rounded-lg bg-beige-600 text-white font-semibold hover:bg-beige-700 justify-center"
+                            >
+                                आगे बढ़ें
+                            </button>
+                        </div>
+
+                        <div className="sm:hidden h-10" />
+                        <div className="sm:hidden fixed inset-x-0 z-50 px-3 bottom-[4.5rem]">
+                            <button
+                                type="button"
+                                onClick={() => setShowBookingNotes(false)}
+                                className="w-full px-6 py-3 bg-beige-600 text-white rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold"
+                            >
+                                आगे बढ़ें
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Step 1: Doctor/Date/Time */}
-                {step === 1 && (
+                {!showBookingNotes && step === 1 && (
                     <div className="space-y-2.5 sm:space-y-6">
                         {!isDoctorLocked && (
                             <div className="bg-white p-3 sm:p-5 rounded-lg sm:rounded-xl border border-gray-200">
@@ -313,12 +364,12 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                     <div className="p-1.5 sm:p-2 bg-beige-100 rounded-md sm:rounded-lg text-beige-600">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                                     </div>
-                                    Select Department
+                                    विभाग चुनें
                                 </h2>
                                 {departments.length > 0 ? (
                                     <div className="overflow-x-auto no-scrollbar pb-1">
                                         <div className="grid grid-rows-2 sm:grid-rows-2 grid-flow-col auto-cols-max gap-1.5 sm:gap-2 w-max min-w-full">
-                                            <button onClick={() => setSelectedDepartment(null)} className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 ${selectedDepartment === null ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>All Departments</button>
+                                            <button onClick={() => setSelectedDepartment(null)} className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 ${selectedDepartment === null ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>सभी विभाग</button>
                                             {departments.map(d => (
                                                 <button key={d.id} onClick={() => setSelectedDepartment(d.id)} className={`shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 ${selectedDepartment === d.id ? 'bg-beige-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}>{d.name}</button>
                                             ))}
@@ -334,9 +385,9 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                         <div className="bg-white p-3 sm:p-5 rounded-lg sm:rounded-xl border border-gray-200">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 mb-3 sm:mb-6">
-                                <h2 className="text-base sm:text-lg font-bold text-gray-800">{doctorConfirmed && selectedDoctor ? 'Selected Doctor' : 'Choose a Doctor'}</h2>
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800">{doctorConfirmed && selectedDoctor ? 'चुना हुआ डॉक्टर' : 'डॉक्टर चुनें'}</h2>
                                 <div className="flex items-center gap-3">
-                                    <div className="text-[11px] sm:text-sm text-gray-500">Booking is available for tomorrow only.</div>
+                                    <div className="text-[11px] sm:text-sm text-gray-500">बुकिंग सिर्फ कल के लिए उपलब्ध है।</div>
                                 </div>
                             </div>
 
@@ -517,7 +568,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 <div className="flex items-center justify-between mb-2.5 sm:mb-4">
                                     <h2 className="text-sm sm:text-lg font-bold text-gray-800 flex items-center gap-2">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-beige-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                        Select Date
+                                        तारीख चुनें
                                     </h2>
                                     <button
                                         type="button"
@@ -529,7 +580,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                         }}
                                         className="rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-bold text-gray-600 hover:text-beige-700"
                                     >
-                                        Back
+                                        वापस
                                     </button>
                                 </div>
 
@@ -542,7 +593,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 <div className="mb-3 sm:mb-6">
                                     <div className="flex border-b border-gray-200">
                                         <button type="button" className="py-2 sm:py-3 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm focus:outline-none border-beige-600 text-beige-600">
-                                            Tomorrow
+                                            कल
                                             <span className="text-xs block text-gray-500">{formatShortDate(data.date)}</span>
                                         </button>
                                     </div>
@@ -551,7 +602,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 <div className="bg-gray-50 rounded-lg sm:rounded-2xl border border-gray-100 p-3 sm:p-5">
                                     <div className="flex items-center gap-2 mb-3 sm:mb-4">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-beige-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                        <h3 className="text-sm sm:text-lg font-semibold text-gray-800">Select Appointment Time</h3>
+                                        <h3 className="text-sm sm:text-lg font-semibold text-gray-800">अपॉइंटमेंट का समय चुनें</h3>
                                     </div>
 
                                     {loadingSlots ? (
@@ -597,10 +648,10 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                                             <div className="pt-2.5 sm:pt-3 border-t border-gray-200 flex flex-wrap items-center gap-2.5 sm:gap-3 text-[10px] sm:text-[11px] text-gray-600">
                                                 {[
-                                                    { label: 'Available', dot: 'bg-green-500' },
-                                                    { label: 'Filling', dot: 'bg-yellow-500' },
-                                                    { label: 'Last', dot: 'bg-red-500' },
-                                                    { label: 'Full', dot: 'bg-gray-400' },
+                                                    { label: 'खाली', dot: 'bg-green-500' },
+                                                    { label: 'भर रहा', dot: 'bg-yellow-500' },
+                                                    { label: 'अंतिम', dot: 'bg-red-500' },
+                                                    { label: 'फुल', dot: 'bg-gray-400' },
                                                 ].map((item) => (
                                                     <div key={item.label} className="inline-flex items-center gap-1.5">
                                                         <span className={`w-2.5 h-2.5 rounded-full ${item.dot}`}></span>
@@ -611,8 +662,8 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                         </div>
                                     ) : (
                                         <div className="py-8 sm:py-10 text-center rounded-lg sm:rounded-2xl border border-dashed border-red-200 bg-red-50">
-                                            <div className="text-sm sm:text-base text-red-500 font-semibold mb-1">No appointment time available for this doctor on tomorrow.</div>
-                                            <div className="text-xs sm:text-sm text-red-400">Choose another doctor or try again later.</div>
+                                            <div className="text-sm sm:text-base text-red-500 font-semibold mb-1">इस डॉक्टर के लिए कल का समय उपलब्ध नहीं है।</div>
+                                            <div className="text-xs sm:text-sm text-red-400">कृपया दूसरा डॉक्टर चुनें या बाद में कोशिश करें।</div>
                                         </div>
                                     )}
                                 </div>
@@ -622,7 +673,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         <div className="hidden sm:flex flex-col sm:flex-row justify-between gap-3 text-sm items-center mt-5">
                             <Link href={route('manage.appointments')} className="inline-flex items-center text-beige-600 hover:underline text-md mt-1 md:mt-0">
                                 <svg className="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                Check your appointment.
+                                अपनी बुकिंग स्थिति जांचें
                             </Link>
 
                             <button disabled={stepOneDisabled} onClick={handleStepOneContinue} className={`w-full sm:w-auto px-6 py-3 bg-beige-600 text-white rounded-xl border border-beige-600 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}>
@@ -634,13 +685,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
                             <button
                                 disabled={stepOneDisabled}
                                 onClick={handleStepOneContinue}
                                 className={`w-full px-6 py-3 bg-beige-600 text-white rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}
                             >
-                                <span>{stepOneCtaLabel}</span>
+                                <span>आगे बढ़ें</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -650,42 +701,42 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                 )}
 
                 {/* Step 2: Patient Info */}
-                {step === 2 && (
+                {!showBookingNotes && step === 2 && (
                     <div className="bg-white p-3 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl border border-gray-200 mb-5">
                         <div className="flex items-center justify-between mb-3 sm:mb-8 border-b border-gray-100 pb-3 sm:pb-5">
                             <div>
-                                <h2 className="text-base sm:text-xl font-bold text-gray-800">Patient Information</h2>
-                                <p className="text-gray-500 text-[11px] sm:text-sm mt-0.5 sm:mt-1">Fill your details for confirmation.</p>
+                                <h2 className="text-base sm:text-xl font-bold text-gray-800">मरीज की जानकारी</h2>
+                                <p className="text-gray-500 text-[11px] sm:text-sm mt-0.5 sm:mt-1">कृपया सरल जानकारी भरें।</p>
                             </div>
-                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="text-beige-700 font-semibold text-xs sm:text-sm bg-beige-50 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-lg hover:bg-beige-100 transition-colors">← Back</button>
+                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="text-beige-700 font-semibold text-xs sm:text-sm bg-beige-50 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-lg hover:bg-beige-100 transition-colors">← वापस</button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-6">
                             <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0" />}>Full Name</FieldLabel>
-                                <input type="text" value={data.name} onChange={e => setData('name', e.target.value)} className={inputClass} placeholder="Patient full name" />
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0" />}>पूरा नाम</FieldLabel>
+                                <input type="text" value={data.name} onChange={e => setData('name', e.target.value)} className={inputClass} placeholder="मरीज का पूरा नाम" />
                             </div>
                             <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106a1.125 1.125 0 00-1.173.417l-.97 1.293a12.035 12.035 0 01-5.973-5.973l1.293-.97a1.125 1.125 0 00.417-1.173L8.963 5.102A1.125 1.125 0 007.872 4.25H6.5A2.25 2.25 0 004.25 6.5v.25" />}>Mobile Number</FieldLabel>
-                                <input type="tel" inputMode="numeric" value={data.phone} onChange={e => handlePhone(e.target.value)} className={inputClass} placeholder="10 digit mobile number" />
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106a1.125 1.125 0 00-1.173.417l-.97 1.293a12.035 12.035 0 01-5.973-5.973l1.293-.97a1.125 1.125 0 00.417-1.173L8.963 5.102A1.125 1.125 0 007.872 4.25H6.5A2.25 2.25 0 004.25 6.5v.25" />}>मोबाइल नंबर</FieldLabel>
+                                <input type="tel" inputMode="numeric" value={data.phone} onChange={e => handlePhone(e.target.value)} className={inputClass} placeholder="10 अंकों का मोबाइल नंबर" />
                             </div>
                             <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
                                 <div>
-                                    <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />}>Age</FieldLabel>
-                                    <input type="tel" inputMode="numeric" value={data.age} onChange={e => handleAge(e.target.value)} className={inputClass} placeholder="Age" />
+                                    <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />}>उम्र</FieldLabel>
+                                    <input type="tel" inputMode="numeric" value={data.age} onChange={e => handleAge(e.target.value)} className={inputClass} placeholder="उम्र" />
                                 </div>
                                 <div>
-                                    <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM4.5 19.5a8.25 8.25 0 0115 0" />}>Pincode</FieldLabel>
-                                    <input type="tel" inputMode="numeric" value={data.pincode} onChange={handlePincode} className={`${inputClass} font-mono tracking-widest`} placeholder="6 digit pincode" />
+                                    <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM4.5 19.5a8.25 8.25 0 0115 0" />}>पिनकोड</FieldLabel>
+                                    <input type="tel" inputMode="numeric" value={data.pincode} onChange={handlePincode} className={`${inputClass} font-mono tracking-widest`} placeholder="6 अंकों का पिनकोड" />
                                 </div>
                             </div>
                             <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.5v15m7.5-7.5h-15" />}>Gender</FieldLabel>
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.5v15m7.5-7.5h-15" />}>लिंग</FieldLabel>
                                 <div className="rounded-lg border border-gray-200 bg-gray-100 p-1">
                                     <div className="grid grid-cols-3 gap-1">
                                         {[
-                                            ['male', 'Male'],
-                                            ['female', 'Female'],
-                                            ['other', 'Other'],
+                                            ['male', 'पुरुष'],
+                                            ['female', 'महिला'],
+                                            ['other', 'अन्य'],
                                         ].map(([value, label]) => (
                                             <button
                                                 key={value}
@@ -700,41 +751,41 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
                             </div>
                             <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3M4.5 9.75h15M6.75 21h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v12A2.25 2.25 0 006.75 21z" />}>Appointment Date</FieldLabel>
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3M4.5 9.75h15M6.75 21h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v12A2.25 2.25 0 006.75 21z" />}>अपॉइंटमेंट तारीख</FieldLabel>
                                 <div className="py-2.5 sm:py-3 px-3 sm:px-4 bg-beige-50 rounded-md sm:rounded-xl text-beige-700 text-sm sm:text-base font-semibold border border-beige-100 flex justify-between items-center group">
                                     {formatDisplayDate(data.date)}
-                                    <button onClick={() => setStep(1)} className="text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 opacity-0 opacity-100 transition-opacity">CHANGE</button>
+                                    <button onClick={() => setStep(1)} className="text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 opacity-0 opacity-100 transition-opacity">बदलें</button>
                                 </div>
                             </div>
                             <div className="md:col-span-2">
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.592 0L21.75 12M4.5 9.75v9A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25v-9" />}>Complete Address</FieldLabel>
-                                <input type="text" value={data.address} onChange={e => setData('address', e.target.value)} className={inputClass} placeholder="House / road / village" />
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.592 0L21.75 12M4.5 9.75v9A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25v-9" />}>पूरा पता</FieldLabel>
+                                <input type="text" value={data.address} onChange={e => setData('address', e.target.value)} className={inputClass} placeholder="घर / रोड / गाँव" />
                             </div>
                             <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21s7.5-4.5 7.5-11.25a7.5 7.5 0 00-15 0C4.5 16.5 12 21 12 21zM12 12.75a3 3 0 100-6 3 3 0 000 6z" />}>City / Location</FieldLabel>
-                                <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className={inputClass} placeholder="City or location" />
+                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21s7.5-4.5 7.5-11.25a7.5 7.5 0 00-15 0C4.5 16.5 12 21 12 21zM12 12.75a3 3 0 100-6 3 3 0 000 6z" />}>शहर / लोकेशन</FieldLabel>
+                                <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className={inputClass} placeholder="शहर या स्थान" />
                             </div>
                         </div>
                         <div className="hidden sm:flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-2xl gap-3">
-                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="w-full sm:w-auto px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 bg-white rounded-xl border border-gray-200 transition-colors">Back to Time</button>
-                            <button disabled={!patientFormComplete} onClick={() => setStep(3)} className={`w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-xl border border-beige-600 font-semibold transition-colors ${disabledCtaClass}`}>Review Appointment</button>
+                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="w-full sm:w-auto px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 bg-white rounded-xl border border-gray-200 transition-colors">समय पर वापस जाएँ</button>
+                            <button disabled={!patientFormComplete} onClick={() => setStep(3)} className={`w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-xl border border-beige-600 font-semibold transition-colors ${disabledCtaClass}`}>बुकिंग देखें</button>
                         </div>
 
                         {/* <div className="sm:hidden" /> */}
-                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
                             <button
                                 disabled={!patientFormComplete}
                                 onClick={() => setStep(3)}
                                 className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold transition-colors ${disabledCtaClass}`}
                             >
-                                Review Appointment
+                                बुकिंग देखें
                             </button>
                         </div>
                     </div>
                 )}
 
                 {/* Step 3: Review - MATCHED TO SCREENSHOT */}
-                {step === 3 && (
+                {!showBookingNotes && step === 3 && (
                     <div className="bg-white rounded-lg sm:rounded-2xl border border-gray-100 overflow-hidden">
                         <div className="p-3 sm:p-6 md:p-8 border-b border-beige-50 bg-beige-50/30">
                             <div className="flex items-start gap-2.5 sm:gap-4">
@@ -742,8 +793,8 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                                 </div>
                                 <div>
-                                    <h2 className="text-base sm:text-xl font-bold text-gray-900 leading-tight">Review Appointment</h2>
-                                    <p className="text-[11px] sm:text-sm text-gray-500 mt-0.5 sm:mt-1">Verify all details before confirming.</p>
+                                    <h2 className="text-base sm:text-xl font-bold text-gray-900 leading-tight">बुकिंग की पुष्टि</h2>
+                                    <p className="text-[11px] sm:text-sm text-gray-500 mt-0.5 sm:mt-1">कृपया जानकारी एक बार देख लें।</p>
                                 </div>
                             </div>
                         </div>
@@ -820,7 +871,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 Edit Details
                             </button>
                             <button disabled={isSubmitting} onClick={submitBooking} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 disabled:opacity-60 text-white px-6 sm:px-10 py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
-                                {isSubmitting ? 'Checking slot...' : 'Confirm Appointment'}
+                                {isSubmitting ? 'कृपया प्रतीक्षा करें...' : 'अपॉइंटमेंट पक्का करें'}
                                 {!isSubmitting && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>}
                             </button>
                         </div>
@@ -829,13 +880,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <button onClick={() => setStep(2)} className="text-sm font-semibold text-gray-600">← Edit Details</button>
                         </div>
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-20 inset-x-0 z-50 px-3 pb-[env(safe-area-inset-bottom)]">
+                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
                             <button
                                 disabled={isSubmitting}
                                 onClick={submitBooking}
                                 className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold ${disabledCtaClass}`}
                             >
-                                {isSubmitting ? 'Checking slot...' : 'Confirm Appointment'}
+                                {isSubmitting ? 'कृपया प्रतीक्षा करें...' : 'अपॉइंटमेंट पक्का करें'}
                             </button>
                         </div>
                         {submitError && (
@@ -845,7 +896,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                 )}
 
                 {/* Step 4: Success */}
-                {step === 4 && (
+                {!showBookingNotes && step === 4 && (
                     <div className="bg-white p-4 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl border border-gray-100 text-center max-w-xl mx-auto overflow-hidden relative">
                         {/* Decorative Background Ring */}
                         <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-beige-50 rounded-full -translate-y-1/2 translate-x-1/2 -z-0 opacity-50"></div>
