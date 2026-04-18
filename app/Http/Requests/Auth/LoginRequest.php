@@ -30,6 +30,7 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'expo_push_token' => ['nullable', 'string', 'max:255'],
         ];
     }
 

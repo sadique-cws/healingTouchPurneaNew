@@ -51,6 +51,9 @@ class AdminController extends Controller
         }
 
         Auth::login($user);
+        $user->forceFill([
+            'expo_push_token' => $request->input('expo_push_token'),
+        ])->save();
         $request->session()->regenerate();
 
         return redirect()->intended(route('admin.dashboard'));

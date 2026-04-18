@@ -34,6 +34,9 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
+        $user?->forceFill([
+            'expo_push_token' => $request->input('expo_push_token'),
+        ])->save();
 
         $target = match ($user?->role) {
             'admin' => route('admin.dashboard', absolute: false),

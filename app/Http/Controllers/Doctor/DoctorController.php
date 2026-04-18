@@ -25,6 +25,9 @@ class DoctorController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             if (auth()->user()->role === 'doctor') {
+                auth()->user()->forceFill([
+                    'expo_push_token' => $request->input('expo_push_token'),
+                ])->save();
                 $request->session()->regenerate();
                 return redirect()->intended(route('doctor.dashboard'));
             }

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'role',
         'description',
+        'expo_push_token',
     ];
     public function doctor()
     {

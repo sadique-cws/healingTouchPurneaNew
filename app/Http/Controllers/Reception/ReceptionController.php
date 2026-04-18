@@ -42,6 +42,10 @@ class ReceptionController extends Controller
                 return back()->withErrors(['email' => 'Your account is currently inactive.']);
             }
 
+            $user->forceFill([
+                'expo_push_token' => $request->input('expo_push_token'),
+            ])->save();
+
             $request->session()->regenerate();
             return redirect()->intended(route('reception.dashboard'));
         }

@@ -1,14 +1,25 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { useForm, Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Login() {
+    const getExpoPushToken = () => {
+        if (typeof window === 'undefined') return null;
+
+        return window.localStorage.getItem('healingTouchPushToken') || null;
+    };
+
     const { data, setData, post, processing, errors } = useForm({
         email: '',
         password: '',
+        expo_push_token: getExpoPushToken(),
     });
 
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        setData('expo_push_token', getExpoPushToken());
+    }, [setData]);
 
     const submit = (e) => {
         e.preventDefault();
