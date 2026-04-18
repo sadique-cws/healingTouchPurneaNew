@@ -9,7 +9,7 @@ export default function Login() {
         return window.localStorage.getItem('healingTouchPushToken') || null;
     };
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, transform } = useForm({
         email: '',
         password: '',
         expo_push_token: getExpoPushToken(),
@@ -23,6 +23,10 @@ export default function Login() {
 
     const submit = (e) => {
         e.preventDefault();
+        transform((formData) => ({
+            ...formData,
+            expo_push_token: getExpoPushToken(),
+        }));
         post(route('admin.login'));
     };
 

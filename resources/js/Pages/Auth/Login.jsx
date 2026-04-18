@@ -9,7 +9,7 @@ export default function Login({ status, canResetPassword }) {
         return window.localStorage.getItem('healingTouchPushToken') || null;
     };
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset, transform } = useForm({
         email: '',
         password: '',
         remember: false,
@@ -22,6 +22,11 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
+
+        transform((formData) => ({
+            ...formData,
+            expo_push_token: getExpoPushToken(),
+        }));
 
         post(route('login'), {
             onFinish: () => reset('password'),
