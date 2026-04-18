@@ -35,11 +35,46 @@ export default function BookAppointment({ departments = [], doctors = [], presel
         notes: ''
     });
 
-    const filteredDoctors = selectedDepartment
-        ? doctors.filter(d => d.department_id === selectedDepartment)
-        : doctors;
+    const bookingWeekday = new Date(`${data.date}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
 
-    const selectedDoctor = doctors.find(d => d.slug === data.doctor_slug);
+    const normalizeAvailableDays = (availableDays) => {
+        if (Array.isArray(availableDays)) {
+            return availableDays.map((day) => String(day).trim().toLowerCase()).filter(Boolean);
+        }
+
+        if (typeof availableDays === 'string') {
+            const trimmed = availableDays.trim();
+            if (!trimmed) return [];
+
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed)) {
+                    return parsed.map((day) => String(day).trim().toLowerCase()).filter(Boolean);
+                }
+            } catch {
+                return trimmed.split(',').map((day) => day.trim().toLowerCase()).filter(Boolean);
+            }
+        }
+
+        return [];
+    };
+
+    const isDoctorBookableOnDate = (doctor) => {
+        const days = normalizeAvailableDays(doctor?.available_days);
+
+        if (!days.length) {
+            return true;
+        }
+
+        return days.includes(bookingWeekday);
+    };
+
+    const bookableDoctors = doctors.filter(isDoctorBookableOnDate);
+    const filteredDoctors = selectedDepartment
+        ? bookableDoctors.filter((doctor) => doctor.department_id === selectedDepartment)
+        : bookableDoctors;
+
+    const selectedDoctor = bookableDoctors.find((doctor) => doctor.slug === data.doctor_slug);
     const isDoctorLocked = Boolean(selectedDoctor && doctorConfirmed);
 
     const resetDoctorSelection = () => {
@@ -54,7 +89,19 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     };
 
     useEffect(() => {
-        if (data.doctor_slug && data.date && doctorConfirmed) {
+        if (data.doctor_slug && !selectedDoctor) {
+            setData('doctor_slug', '');
+            setData('time', '');
+            setAvailableSlots([]);
+            setDoctorConfirmed(false);
+            setShowDoctorDetails(false);
+            setExpandedDoctorSlug(null);
+            setSlotsMessage('यह डॉक्टर चुनी गई तारीख के लिए उपलब्ध नहीं है। कृपया दूसरा डॉक्टर चुनें।');
+        }
+    }, [data.doctor_slug, selectedDoctor, setData]);
+
+    useEffect(() => {
+        if (data.doctor_slug && data.date && doctorConfirmed && selectedDoctor) {
             setLoadingSlots(true);
             setSlotsMessage('');
             axios.post(route('api.appointment.slots'), {
@@ -70,7 +117,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                 setLoadingSlots(false);
             });
         }
-    }, [data.doctor_slug, data.date, doctorConfirmed]);
+    }, [data.doctor_slug, data.date, doctorConfirmed, selectedDoctor]);
 
     const handlePhone = (value) => {
         setData('phone', value.replace(/\D/g, '').slice(0, 10));
@@ -557,8 +604,8 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             ) : !selectedDoctor && !doctorConfirmed ? (
                                 <div className="mt-4 p-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
                                     {selectedDepartment
-                                        ? 'No doctors found for this department.'
-                                        : 'No doctors available right now.'}
+                                        ? 'इस विभाग में चुनी गई तारीख के लिए कोई डॉक्टर उपलब्ध नहीं है।'
+                                        : 'चुनी गई तारीख के लिए कोई डॉक्टर उपलब्ध नहीं है।'}
                                 </div>
                             ) : null}
                         </div>
