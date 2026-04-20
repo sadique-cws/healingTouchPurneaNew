@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\AppointmentBooked;
+use App\Jobs\SendExpoPushNotification;
 use App\Jobs\SendOtpJob;
 use App\Models\Appointment;
 use App\Models\Career;
@@ -588,6 +589,29 @@ class PatientBookingController extends Controller
 
         $appointment->load(['patient', 'doctor.user', 'doctor.department']);
         event(new AppointmentBooked($appointment));
+
+        $receptionUsers = User::query()
+            ->where('role', 'reception')
+            ->whereNotNull('expo_push_token')
+            ->pluck('expo_push_token')
+            ->filter(fn ($token) => is_string($token) && trim($token) !== '');
+
+        $bookingLink = route('reception.dashboard');
+
+        foreach ($receptionUsers as $token) {
+            SendExpoPushNotification::dispatch(
+                token: $token,
+                title: 'New Appointment Booked',
+                body: 'A new appointment has been booked. Tap to view details.',
+                data: [
+                    'type' => 'booking',
+                    'booking_id' => $appointment->id,
+                    'booking_code' => (string) $appointment->appointment_no,
+                    'link' => $bookingLink,
+                    'role' => 'reception',
+                ]
+            );
+        }
 
         if ((string) Setting::get('sms_status', '0') === '1') {
             $this->sendAppointmentSms($patient->phone, $patient->name, $appointment);
