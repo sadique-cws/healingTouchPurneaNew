@@ -69,11 +69,19 @@ export default function Index({ careers }) {
                     </div>
                     <button 
                         onClick={openAddModal}
-                        className="w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2"
+                        className="hidden sm:inline-flex w-full sm:w-auto justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg font-black text-sm tracking-widest uppercase transition-all shadow-lg shadow-indigo-500/20 items-center gap-2"
                     >
                         Create Job Post
                     </button>
                 </div>
+
+                <button
+                    onClick={openAddModal}
+                    className="sm:hidden fixed bottom-4 right-4 z-40 h-12 w-12 rounded-full bg-indigo-600 text-white shadow-xl shadow-indigo-500/30 flex items-center justify-center"
+                    aria-label="Create job post"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" /></svg>
+                </button>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
                     {careers.data.map((job) => (
@@ -112,8 +120,8 @@ export default function Index({ careers }) {
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-slate-900/60 backdrop-blur-sm">
-                        <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl animate-in fade-in zoom-in duration-300">
+                <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center px-0 sm:px-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-xl shadow-2xl animate-in fade-in zoom-in duration-300">
                         <div className="p-5 sm:p-6 border-b border-slate-100 flex justify-between items-center">
                             <h3 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">{editingCareer ? 'Edit Opportunity' : 'New Career Post'}</h3>
                             <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-slate-100 rounded-lg transition-colors">

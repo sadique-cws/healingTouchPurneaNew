@@ -146,13 +146,24 @@ export default function Index({ settings }) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end pt-2 md:pt-4">
+                    <div className="hidden sm:flex justify-end pt-2 md:pt-4">
                         <button 
                             type="submit" 
                             disabled={processing}
                             className="w-full sm:w-auto bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-lg font-black text-sm uppercase tracking-[0.2em] transition-all shadow-2xl active:scale-95 disabled:opacity-50"
                         >
                             {processing ? 'Saving...' : 'Securely Save Changes'}
+                        </button>
+                    </div>
+
+                    <div className="sm:hidden h-16" />
+                    <div className="sm:hidden fixed bottom-4 inset-x-0 z-40 px-4">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="w-full bg-slate-900 hover:bg-black text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 disabled:opacity-50"
+                        >
+                            {processing ? 'Saving...' : 'Save Changes'}
                         </button>
                     </div>
                 </form>

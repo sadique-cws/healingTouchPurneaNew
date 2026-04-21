@@ -14,35 +14,51 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
         <AdminLayout>
             <Head title="Clinical Dashboard" />
             
-            <div className="space-y-8 md:space-y-10">
+            <div className="space-y-4 md:space-y-8">
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                     <div>
-                        <h1 className="text-5xl font-black text-[#0d1c2e] tracking-tight font-manrope leading-none">
+                        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-black text-[#0d1c2e] tracking-tight font-manrope leading-none">
                             Hospital Analytics
                         </h1>
-                        <p className="text-[#0d1c2e]/40 font-bold uppercase tracking-[0.2em] text-[10px] mt-4">
+                        <p className="text-[#0d1c2e]/40 font-bold uppercase tracking-[0.18em] text-[10px] mt-2.5 md:mt-4">
                             Operational Intelligence &bull; {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </p>
                     </div>
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 xl:gap-6">
+                <div className="md:hidden -mx-1 overflow-x-auto no-scrollbar pb-1">
+                    <div className="flex gap-3 px-1 w-max min-w-full">
+                        {statCards.map((stat) => (
+                            <div key={stat.name} className="card-ethereal min-w-[220px] p-3.5 flex items-center space-x-3 hover:translate-y-[-2px]">
+                                <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black text-[#0d1c2e]/30 uppercase tracking-[0.2em]">{stat.name}</p>
+                                    <p className="text-2xl font-black text-[#0d1c2e] tracking-tighter leading-none mt-1">{stat.value}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-3.5 xl:gap-6">
                     {statCards.map((stat) => (
-                        <div key={stat.name} className="card-ethereal p-6 flex items-center space-x-4 hover:translate-y-[-2px]">
-                            <div className={`w-14 h-14 ${stat.color} rounded-lg flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
-                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
+                        <div key={stat.name} className="card-ethereal p-4 sm:p-5 flex items-center space-x-3 sm:space-x-4 hover:translate-y-[-2px]">
+                            <div className={`w-12 h-12 sm:w-14 sm:h-14 ${stat.color} rounded-lg flex items-center justify-center text-white shadow-lg shadow-teal-900/10 rotate-2`}>
+                                <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} /></svg>
                             </div>
                             <div>
                                 <p className="text-[10px] font-black text-[#0d1c2e]/30 uppercase tracking-[0.2em]">{stat.name}</p>
-                                <p className="text-3xl font-black text-[#0d1c2e] tracking-tighter leading-none mt-1">{stat.value}</p>
+                                <p className="text-2xl sm:text-3xl font-black text-[#0d1c2e] tracking-tighter leading-none mt-1">{stat.value}</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 xl:gap-10">
                     {/* Today's Appointments Table */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end sm:gap-4">
@@ -50,7 +66,33 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                             <button className="text-[10px] font-black text-[#00685f] hover:text-[#008378] uppercase tracking-[0.2em] border-b-2 border-transparent hover:border-[#00685f] transition-all pb-1">Historical Logs</button>
                         </div>
                         <div className="card-ethereal overflow-hidden rounded-lg">
-                            <div className="overflow-x-auto">
+                            <div className="md:hidden divide-y divide-slate-100">
+                                {todayAppointments.data.length > 0 ? todayAppointments.data.map((apt) => (
+                                    <div key={apt.id} className="p-3 space-y-2.5">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-black text-[#0d1c2e] truncate">{apt.patient?.name}</p>
+                                                <p className="text-[10px] text-[#0d1c2e]/50 font-bold uppercase mt-1 tracking-wider">{apt.appointment_time}</p>
+                                            </div>
+                                            <span className={`status-pill whitespace-nowrap ${
+                                                apt.status === 'Cancelled' ? 'bg-red-50 text-red-600' : 'bg-teal-50 text-teal-700'
+                                            }`}>
+                                                {apt.status}
+                                            </span>
+                                        </div>
+                                        <div className="rounded-lg bg-teal-50 p-2.5">
+                                            <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.16em]">Doctor</p>
+                                            <p className="mt-1 text-sm font-bold text-[#0d1c2e]">Dr. {apt.doctor?.user?.name}</p>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <div className="px-4 py-12 text-center">
+                                        <p className="text-[#0d1c2e]/40 font-black uppercase tracking-[0.2em] text-[10px]">No Active Patients</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="hidden md:block overflow-x-auto">
                             <table className="w-full min-w-[720px] text-left">
                                 <thead className="bg-[#eff4ff]">
                                     <tr>
@@ -80,9 +122,7 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                                             </td>
                                             <td className="px-8 py-6">
                                                 <span className={`status-pill ${
-                                                    apt.status === 'Completed' ? 'status-accepted' :
-                                                    apt.status === 'Cancelled' ? 'bg-red-50 text-red-600' :
-                                                    'status-pending'
+                                                    apt.status === 'Cancelled' ? 'bg-red-50 text-red-600' : 'bg-teal-50 text-teal-700'
                                                 }`}>
                                                     {apt.status}
                                                 </span>
@@ -110,14 +150,14 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                     </div>
 
                     {/* Sidebar widgets */}
-                    <div className="space-y-12">
+                    <div className="space-y-4 md:space-y-10">
                         {/* Demographics */}
-                        <div className="card-ethereal p-7 bg-[#0d1c2e] text-white overflow-hidden relative group rounded-lg">
+                        <div className="card-ethereal p-4 md:p-7 bg-[#0d1c2e] text-white overflow-hidden relative group rounded-lg">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <svg className="w-32 h-32 rotate-12 translate-x-8 -translate-y-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             </div>
-                            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400 mb-8 relative z-10">Patient Population</h3>
-                            <div className="space-y-6 relative z-10">
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-teal-400 mb-6 relative z-10">Patient Population</h3>
+                            <div className="space-y-4 relative z-10">
                                 {Object.entries(demographics).map(([gender, count]) => (
                                     <div key={gender}>
                                         <div className="flex justify-between items-end mb-2">
@@ -136,12 +176,12 @@ export default function Dashboard({ stats, todayAppointments, availableDoctors, 
                         </div>
 
                         {/* Available Doctors List */}
-                        <div className="card-ethereal p-7 rounded-lg">
-                            <h4 className="text-sm font-black text-[#0d1c2e] font-manrope mb-8 inline-flex items-center gap-3">
-                                <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/50"></span>
+                        <div className="card-ethereal p-4 md:p-7 rounded-lg">
+                            <h4 className="text-sm font-black text-[#0d1c2e] font-manrope mb-4 md:mb-8 inline-flex items-center gap-3">
+                                <span className="w-2.5 h-2.5 bg-teal-500 rounded-full shadow-lg shadow-teal-500/50"></span>
                                 Clinical Staff Online
                             </h4>
-                            <div className="space-y-6">
+                            <div className="space-y-3.5 md:space-y-6">
                                 {availableDoctors.map((doc) => (
                                     <div key={doc.id} className="flex items-center space-x-5 group cursor-pointer">
                                         <div className="w-12 h-12 rounded-lg bg-[#eff4ff] flex items-center justify-center border-none overflow-hidden group-hover:scale-105 transition-transform shadow-sm">

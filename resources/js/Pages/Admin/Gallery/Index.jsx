@@ -1,7 +1,9 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, router } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function Index({ galleries }) {
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
         image: null,
         title: '',
@@ -15,7 +17,10 @@ export default function Index({ galleries }) {
 
         post(route('admin.gallery.store'), {
             forceFormData: true,
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                reset();
+                setIsUploadModalOpen(false);
+            },
         });
     };
 
@@ -37,7 +42,7 @@ export default function Index({ galleries }) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 xl:gap-8">
                     {/* Upload Section */}
-                    <div className="lg:col-span-1">
+                    <div className="hidden lg:block lg:col-span-1">
                         <form onSubmit={submit} className="bg-white p-5 sm:p-6 md:p-7 rounded-xl shadow-sm border border-slate-100 space-y-5 lg:sticky lg:top-6">
                             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.24em]">Add New Visual</h3>
                             
@@ -101,6 +106,57 @@ export default function Index({ galleries }) {
                         </div>
                     </div>
                 </div>
+
+                <button
+                    type="button"
+                    onClick={() => setIsUploadModalOpen(true)}
+                    className="lg:hidden fixed bottom-4 right-4 z-40 h-12 w-12 rounded-full bg-teal-600 text-white shadow-xl shadow-teal-500/30 flex items-center justify-center"
+                    aria-label="Upload image"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 4v16m8-8H4" /></svg>
+                </button>
+
+                {isUploadModalOpen && (
+                    <div className="fixed inset-0 z-[70] bg-slate-900/60 backdrop-blur-sm lg:hidden" onClick={() => setIsUploadModalOpen(false)}>
+                        <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-2xl p-4 max-h-[82vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                            <div className="mx-auto h-1.5 w-12 rounded-full bg-slate-200 mb-4" />
+                            <form onSubmit={submit} className="space-y-4">
+                                <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">Add New Visual</h3>
+
+                                <div>
+                                    <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Image Title</label>
+                                    <input
+                                        type="text"
+                                        value={data.title}
+                                        onChange={e => setData('title', e.target.value)}
+                                        className="w-full px-4 py-3 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-teal-500 transition-all font-bold text-slate-700"
+                                        placeholder="e.g., Main Operation Theater"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-[11px] font-black text-slate-600 uppercase mb-2">Select Image</label>
+                                    <div className="p-4 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 text-center">
+                                        <input
+                                            type="file"
+                                            onChange={e => setData('image', e.target.files[0])}
+                                            className="text-xs font-bold text-slate-500 file:bg-slate-800 file:text-white file:border-none file:px-4 file:py-2 file:rounded-lg file:mr-4 file:cursor-pointer"
+                                        />
+                                    </div>
+                                    {errors.image && <p className="mt-1 text-xs text-red-500 font-bold">{errors.image}</p>}
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-black text-xs uppercase tracking-widest"
+                                >
+                                    {processing ? 'Uploading...' : 'Upload to Gallery'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </AdminLayout>
     );

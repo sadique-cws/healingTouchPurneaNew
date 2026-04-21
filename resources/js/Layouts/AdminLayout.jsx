@@ -76,7 +76,7 @@ export default function AdminLayout({ children }) {
     const showSidebarLabels = isSidebarOpen || isMobileSidebarOpen;
 
     return (
-        <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none">
+        <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none overflow-x-hidden">
             {isMobileSidebarOpen && (
                 <button
                     type="button"
@@ -87,21 +87,21 @@ export default function AdminLayout({ children }) {
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[85vw] max-w-[18rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
+            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[80vw] max-w-[16.5rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
                 <div className="flex flex-col h-full overflow-y-auto">
-                    <div className="p-4 mb-2">
+                    <div className="p-3 mb-1">
                         <div className="flex items-center gap-3">
-                            <ApplicationLogo className="h-11 w-11 shrink-0 text-[#00685f] shadow-lg shadow-[#00685f]/10" />
+                            <ApplicationLogo className="h-10 w-10 shrink-0 text-[#00685f] shadow-lg shadow-[#00685f]/10" />
                             {showSidebarLabels && (
                                 <div className="flex flex-col">
-                                    <span className="text-base font-black text-[#0d1c2e] leading-none font-manrope">Healing Touch</span>
+                                    <span className="text-sm font-black text-[#0d1c2e] leading-none font-manrope">Healing Touch</span>
                                     <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Admin Portal</span>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <nav className="flex-1 px-3 space-y-1">
+                    <nav className="flex-1 px-2.5 space-y-1">
                         {navigation.map((item) => {
                             const isActive = page.url === item.href;
                             return (
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }) {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setIsMobileSidebarOpen(false)}
-                                    className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 group relative ${
+                                    className={`flex items-center gap-3 p-2.5 rounded-xl transition-all duration-300 group relative ${
                                         isActive 
                                         ? 'bg-[#00685f]/10 text-[#00685f]' 
                                         : 'text-[#0d1c2e]/50 hover:bg-[#00685f]/5 hover:text-[#0d1c2e]'
@@ -118,12 +118,12 @@ export default function AdminLayout({ children }) {
                                     {isActive && (
                                         <div className="absolute left-0 w-1 h-7 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-300" />
                                     )}
-                                    <svg className={`w-[22px] h-[22px] shrink-0 transition-transform duration-300 ${
+                                    <svg className={`w-5 h-5 shrink-0 transition-transform duration-300 ${
                                         isActive ? 'text-[#00685f] scale-110' : 'text-[#0d1c2e]/40 group-hover:scale-110'
                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                                     </svg>
-                                    {showSidebarLabels && <span className="font-bold text-sm tracking-tight leading-none">{item.name}</span>}
+                                    {showSidebarLabels && <span className="font-bold text-[13px] tracking-tight leading-none">{item.name}</span>}
                                 </Link>
                             );
                         })}
@@ -136,14 +136,14 @@ export default function AdminLayout({ children }) {
                         </div>
                     </div>
 
-                    <div className="p-4 mt-auto">
+                    <div className="p-3 mt-auto">
                         <Link
                             method="post"
                             href={route('admin.logout')}
                             as="button"
-                            className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/60 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
+                            className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-white/60 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
                         >
-                            <svg className="w-[22px] h-[22px] shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
                             {showSidebarLabels && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
@@ -153,9 +153,9 @@ export default function AdminLayout({ children }) {
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-300 ease-in-out ml-0 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+            <main className={`flex-1 transition-all duration-300 ease-in-out ml-0 min-w-0 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
                 {appointmentAlerts.length > 0 && (
-                    <div className="fixed top-4 right-4 z-[60] max-w-sm w-full space-y-3">
+                    <div className="fixed bottom-3 sm:bottom-auto sm:top-4 inset-x-0 sm:inset-x-auto sm:right-4 z-[60] sm:max-w-sm w-full px-3 sm:px-0 space-y-2.5">
                         {appointmentAlerts.map((alertItem) => (
                             <div key={alertItem._alertId} className="bg-white rounded-xl shadow-lg border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
                                 <div className="flex items-start justify-between gap-3">
@@ -179,8 +179,8 @@ export default function AdminLayout({ children }) {
                 )}
 
                 {/* Header */}
-                <header className="sticky top-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-4 sm:px-6 md:px-8 py-3.5 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60">
-                    <button onClick={handleSidebarToggle} className="p-2.5 bg-white rounded-lg text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
+                <header className={`fixed top-0 right-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-3 sm:px-6 md:px-8 py-2.5 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60 left-0 ${isSidebarOpen ? 'lg:left-64' : 'lg:left-20'}`}>
+                    <button onClick={handleSidebarToggle} className="p-2 bg-white rounded-lg text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
                         <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
                     </button>
                     
@@ -190,14 +190,14 @@ export default function AdminLayout({ children }) {
                             <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">System Admin</p>
                         </div>
                         <div className="relative group">
-                            <div className="w-10 h-10 md:w-11 md:h-11 bg-white rounded-lg overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
+                            <div className="w-9 h-9 md:w-11 md:h-11 bg-white rounded-lg overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
                                 <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
                             </div>
                         </div>
                     </div>
                 </header>
 
-                <div className="px-4 sm:px-6 md:px-8 pb-8 md:pb-10 pt-5 inertia-transition-fade">
+                <div className="px-3 sm:px-6 md:px-8 pb-6 md:pb-10 pt-16 md:pt-20 inertia-transition-fade">
                     {children}
                 </div>
             </main>
