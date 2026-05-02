@@ -73,6 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Gallery
         Route::get('/gallery', [\App\Http\Controllers\Admin\GalleryController::class, 'index'])->name('gallery.index');
         Route::post('/gallery', [\App\Http\Controllers\Admin\GalleryController::class, 'store'])->name('gallery.store');
+        Route::put('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'update'])->name('gallery.update');
         Route::delete('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'destroy'])->name('gallery.destroy');
 
         // Careers

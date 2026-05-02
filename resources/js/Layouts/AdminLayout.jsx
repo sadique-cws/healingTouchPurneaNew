@@ -2,10 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 
+const DESKTOP_SIDEBAR_KEY = 'admin.sidebar.desktopOpen';
+
 export default function AdminLayout({ children }) {
     const page = usePage();
     const { auth } = page.props;
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(() => {
+        if (typeof window === 'undefined') {
+            return true;
+        }
+
+        const savedValue = window.localStorage.getItem(DESKTOP_SIDEBAR_KEY);
+
+        if (savedValue !== null) {
+            return savedValue === 'true';
+        }
+
+        return true;
+    });
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [appointmentAlerts, setAppointmentAlerts] = useState([]);
     const notificationAudioRef = useRef(null);
@@ -42,16 +56,25 @@ export default function AdminLayout({ children }) {
     }, []);
 
     useEffect(() => {
-        const syncLayout = () => {
-            setIsSidebarOpen(window.innerWidth >= 1024);
-            setIsMobileSidebarOpen(false);
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setIsMobileSidebarOpen(false);
+            }
         };
 
-        syncLayout();
-        window.addEventListener('resize', syncLayout);
+        handleResize();
+        window.addEventListener('resize', handleResize);
 
-        return () => window.removeEventListener('resize', syncLayout);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    useEffect(() => {
+        window.localStorage.setItem(DESKTOP_SIDEBAR_KEY, String(isDesktopSidebarOpen));
+    }, [isDesktopSidebarOpen]);
+
+    useEffect(() => {
+        setIsMobileSidebarOpen(false);
+    }, [page.url]);
 
     const handleSidebarToggle = () => {
         if (window.innerWidth < 1024) {
@@ -59,7 +82,7 @@ export default function AdminLayout({ children }) {
             return;
         }
 
-        setIsSidebarOpen((previous) => !previous);
+        setIsDesktopSidebarOpen((previous) => !previous);
     };
 
     const navigation = [
@@ -73,104 +96,150 @@ export default function AdminLayout({ children }) {
         { name: 'Settings', href: route('admin.settings.index'), icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
     ];
 
-    const showSidebarLabels = isSidebarOpen || isMobileSidebarOpen;
+    const showSidebarLabels = isDesktopSidebarOpen || isMobileSidebarOpen;
 
     return (
-        <div className="flex bg-[#f6f8fb] min-h-screen font-inter select-none overflow-x-hidden">
+        <div className="flex bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen h-screen font-inter select-none overflow-x-hidden">
             {isMobileSidebarOpen && (
                 <button
                     type="button"
                     aria-label="Close sidebar"
                     onClick={() => setIsMobileSidebarOpen(false)}
-                    className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px] lg:hidden"
+                    className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm lg:hidden"
                 />
             )}
 
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 glass-sidebar transition-all duration-300 ease-in-out z-50 w-[80vw] max-w-[16.5rem] lg:w-auto lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
-                <div className="flex flex-col h-full overflow-y-auto">
-                    <div className="p-3 mb-1">
-                        <div className="flex items-center gap-3">
-                            <ApplicationLogo className="h-10 w-10 shrink-0 text-[#00685f] shadow-lg shadow-[#00685f]/10" />
+            <aside className={`fixed inset-y-0 left-0 z-50 w-[78vw] max-w-xs bg-white border-r border-slate-200/50 overflow-hidden flex flex-col transition-all duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${isDesktopSidebarOpen ? 'lg:w-64' : 'lg:w-20'}`}>
+                <div className="flex flex-col h-full">
+                    {/* Logo Section */}
+                    <div className="p-4 border-b border-slate-100">
+                        <div className="flex items-center  gap-3">
+                            <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                                <ApplicationLogo className="h-6 w-6" />
+                            </div>
                             {showSidebarLabels && (
-                                <div className="flex flex-col">
-                                    <span className="text-sm font-black text-[#0d1c2e] leading-none font-manrope">Healing Touch</span>
-                                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#00685f]">Admin Portal</span>
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-sm font-bold text-slate-900 leading-none truncate">Healing Touch</span>
+                                    <span className="text-xs text-teal-600 font-semibold">Admin</span>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <nav className="flex-1 px-2.5 space-y-1">
+                    {/* Navigation */}
+                    <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
                         {navigation.map((item) => {
-                            const isActive = page.url === item.href;
+                            const isActive = page.url === item.href || page.url.startsWith(`${item.href}/`);
                             return (
                                 <Link
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setIsMobileSidebarOpen(false)}
-                                    className={`flex items-center gap-3 p-2.5 rounded-xl transition-all duration-300 group relative ${
+                                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 relative group ${
                                         isActive 
-                                        ? 'bg-[#00685f]/10 text-[#00685f]' 
-                                        : 'text-[#0d1c2e]/50 hover:bg-[#00685f]/5 hover:text-[#0d1c2e]'
+                                            ? 'bg-teal-50 text-teal-700 font-semibold' 
+                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
                                 >
                                     {isActive && (
-                                        <div className="absolute left-0 w-1 h-7 bg-[#00685f] rounded-r-full animate-in slide-in-from-left-full duration-300" />
+                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-teal-600 rounded-r-full" />
                                     )}
-                                    <svg className={`w-5 h-5 shrink-0 transition-transform duration-300 ${
-                                        isActive ? 'text-[#00685f] scale-110' : 'text-[#0d1c2e]/40 group-hover:scale-110'
+                                    <svg className={`w-5 h-5 flex-shrink-0 transition-transform ${
+                                        isActive ? 'text-teal-600' : 'text-slate-400 group-hover:text-slate-600'
                                     }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                                     </svg>
-                                    {showSidebarLabels && <span className="font-bold text-[13px] tracking-tight leading-none">{item.name}</span>}
+                                    {showSidebarLabels && <span className="text-sm font-medium truncate">{item.name}</span>}
                                 </Link>
                             );
                         })}
                     </nav>
 
-                    <div className="px-4 pb-3">
-                        <div className="rounded-xl border border-[#00685f]/10 bg-white/70 px-3 py-3">
-                            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#00685f]/50">Mode to Admin Panel</p>
-                            <Link href={route('userlandingpage')} className="mt-2 inline-flex text-xs font-semibold text-[#0d1c2e]/60 hover:text-[#00685f] transition-colors">Public Site</Link>
-                        </div>
-                    </div>
+                    {/* Footer Section */}
+                    <div className="border-t border-slate-100 p-3 space-y-3">
+                        <Link
+                            href={route('userlandingpage')}
+                            className="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors text-sm"
+                        >
+                            <svg className="w-5 h-5 flex-shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                            {showSidebarLabels && <span className="font-medium">Public Site</span>}
+                        </Link>
 
-                    <div className="p-3 mt-auto">
                         <Link
                             method="post"
                             href={route('admin.logout')}
                             as="button"
-                            className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-white/60 text-[#0d1c2e]/40 hover:bg-red-50 hover:text-red-600 transition-all duration-300 group"
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors text-sm font-medium"
                         >
-                            <svg className="w-5 h-5 shrink-0 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                             </svg>
-                            {showSidebarLabels && <span className="font-black text-[10px] tracking-[0.2em] uppercase">Terminate Session</span>}
+                            {showSidebarLabels && <span>Logout</span>}
                         </Link>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className={`flex-1 transition-all duration-300 ease-in-out ml-0 min-w-0 ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
+            <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+                {/* Header */}
+                <header className="sticky top-0 z-40 bg-white border-b border-slate-200/50 backdrop-blur-md shrink-0">
+                    <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-3.5 lg:py-4">
+                        <button 
+                            onClick={handleSidebarToggle} 
+                            className="p-2 hover:bg-slate-100 rounded-lg text-slate-600 hover:text-slate-900 transition-colors"
+                            aria-label="Toggle sidebar"
+                        >
+                            <svg className="w-6 h-6 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg className={`w-6 h-6 hidden lg:block transition-transform duration-300 ${isDesktopSidebarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        
+                        <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="text-right hidden xs:block">
+                                <p className="text-sm font-semibold text-slate-900">{auth.user.name}</p>
+                                <p className="text-xs text-slate-500 font-medium">Admin</p>
+                            </div>
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg overflow-hidden shadow-md">
+                                <img 
+                                    src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=14b8a6&color=fff&bold=true`} 
+                                    alt={auth.user.name}
+                                    className="w-full h-full object-cover" 
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Notification Alerts */}
                 {appointmentAlerts.length > 0 && (
-                    <div className="fixed bottom-3 sm:bottom-auto sm:top-4 inset-x-0 sm:inset-x-auto sm:right-4 z-[60] sm:max-w-sm w-full px-3 sm:px-0 space-y-2.5">
-                        {appointmentAlerts.map((alertItem) => (
-                            <div key={alertItem._alertId} className="bg-white rounded-xl shadow-lg border border-[#00685f]/20 p-4 animate-in slide-in-from-top-2 duration-300">
+                    <div className="fixed bottom-4 sm:bottom-auto sm:top-20 right-4 z-[60] max-w-sm space-y-2">
+                        {appointmentAlerts.slice(0, 3).map((alertItem) => (
+                            <div 
+                                key={alertItem._alertId} 
+                                className="bg-white rounded-lg shadow-lg border border-teal-100 p-4 animate-in slide-in-from-top-2 duration-300 max-w-xs"
+                            >
                                 <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="text-xs font-black text-[#00685f] uppercase tracking-[0.2em]">New Appointment</p>
-                                        <p className="text-sm font-bold text-[#0d1c2e] mt-1">{alertItem.patient_name || 'Patient'}</p>
-                                        <p className="text-xs text-[#0d1c2e]/70 mt-1">Dr. {alertItem.doctor_name || 'N/A'} • {alertItem.appointment_time || '-'}</p>
-                                        <p className="text-xs text-[#0d1c2e]/70 mt-0.5">ID: {alertItem.appointment_no || '-'}</p>
+                                    <div className="min-w-0">
+                                        <p className="text-xs font-bold text-teal-600 uppercase tracking-wider">New Appointment</p>
+                                        <p className="text-sm font-semibold text-slate-900 mt-1.5 truncate">{alertItem.patient_name || 'Patient'}</p>
+                                        <p className="text-xs text-slate-600 mt-1">Dr. {alertItem.doctor_name || 'N/A'}</p>
+                                        <p className="text-xs text-slate-500 mt-0.5">{alertItem.appointment_time || '-'}</p>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => setAppointmentAlerts((previousAlerts) => previousAlerts.filter((item) => item._alertId !== alertItem._alertId))}
-                                        className="text-[#0d1c2e]/40 hover:text-[#0d1c2e] transition-colors"
+                                        className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0"
                                     >
-                                        ✕
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -178,27 +247,11 @@ export default function AdminLayout({ children }) {
                     </div>
                 )}
 
-                {/* Header */}
-                <header className={`fixed top-0 right-0 z-40 bg-[#f6f8fb]/90 backdrop-blur-2xl px-3 sm:px-6 md:px-8 py-2.5 md:py-5 flex justify-between items-center transition-all duration-300 border-b border-slate-200/60 left-0 ${isSidebarOpen ? 'lg:left-64' : 'lg:left-20'}`}>
-                    <button onClick={handleSidebarToggle} className="p-2 bg-white rounded-lg text-[#0d1c2e]/60 hover:text-[#00685f] shadow-sm hover:shadow-md transition-all">
-                        <svg className="w-5 h-5 transition-transform duration-500 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                    </button>
-                    
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <div className="text-right hidden sm:block">
-                            <p className="text-sm font-black text-[#0d1c2e] font-manrope">{auth.user.name}</p>
-                            <p className="text-[10px] font-black text-[#00685f] uppercase tracking-[0.3em] leading-none mt-1 opacity-60">System Admin</p>
-                        </div>
-                        <div className="relative group">
-                            <div className="w-9 h-9 md:w-11 md:h-11 bg-white rounded-lg overflow-hidden border-2 border-white shadow-lg group-hover:border-[#00685f]/20 transition-all duration-300 cursor-pointer">
-                                <img src={`https://ui-avatars.com/api/?name=${auth.user.name}&background=00685f&color=fff&bold=true`} alt="" className="w-full h-full object-cover" />
-                            </div>
-                        </div>
+                {/* Content Area */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden">
+                    <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                        {children}
                     </div>
-                </header>
-
-                <div className="px-3 sm:px-6 md:px-8 pb-6 md:pb-10 pt-16 md:pt-20 inertia-transition-fade">
-                    {children}
                 </div>
             </main>
         </div>
