@@ -1,15 +1,26 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function PublicFooter({
-    hospitalName = 'Healing Touch Hospital',
-    address = '',
-    contact_phone = '',
-    contact_email = '',
+    hospitalName: hospitalNameProp,
+    address: addressProp,
+    contact_phone: contactPhoneProp,
+    contact_email: contactEmailProp,
 }) {
+    const page = usePage();
+    const props = (page && page.props) || {};
+
+    const hospitalName = hospitalNameProp || props.hospital_name || props.hotelName || 'Healing Touch Hospital';
+    const address = addressProp || props.address || props.settings?.address || 'Purnea, Bihar';
+    const contact_phone = contactPhoneProp || props.contact_phone || props.contactPhone || props.settings?.contact_phone || '-';
+    const contact_email = contactEmailProp || props.contact_email || props.contactEmail || props.settings?.contact_email || '-';
+
+    const whatsapp = props.whatsapp_number || props.whatsapp || props.settings?.whatsapp_number || '';
+    const whatsappHref = whatsapp ? `https://wa.me/${(whatsapp || '').replace(/[^0-9]/g, '')}` : null;
+
     return (
-        <footer className="hidden lg:block mt-auto bg-white border-t border-gray-200 text-gray-700">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <footer className="mt-auto bg-white border-t border-gray-200 text-gray-700">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
                     <div>
                         <h3 className="text-lg font-bold text-gray-900">{hospitalName}</h3>
                         <p className="text-gray-600 mt-2 text-sm leading-relaxed">
@@ -42,9 +53,14 @@ export default function PublicFooter({
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-3">Contact</h4>
                         <div className="space-y-2 text-sm text-gray-600">
-                            <p>{address || 'Purnea, Bihar'}</p>
-                            <p>{contact_phone || '-'}</p>
-                            <p>{contact_email || '-'}</p>
+                            <p>{address}</p>
+                            <p>{contact_phone}</p>
+                            <p>{contact_email}</p>
+                            {whatsappHref && (
+                                <p>
+                                    <a href={whatsappHref} target="_blank" rel="noreferrer" className="text-beige-700 font-medium">Chat on WhatsApp</a>
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
