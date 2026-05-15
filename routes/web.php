@@ -6,6 +6,52 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\PatientBookingController;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
+
+// Sitemap Routes
+Route::get('/generate-sitemap', function () {
+    $sitemap = Sitemap::create();
+
+    // Static Pages
+    $sitemap->add(Url::create('/')->setPriority(1.0)->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY))
+        ->add(Url::create('/services')->setPriority(0.8))
+        ->add(Url::create('/our-doctors')->setPriority(0.8))
+        ->add(Url::create('/book-appointment')->setPriority(0.9))
+        ->add(Url::create('/about-us')->setPriority(0.7))
+        ->add(Url::create('/contact-us')->setPriority(0.7))
+        ->add(Url::create('/gallery')->setPriority(0.6))
+        ->add(Url::create('/careers')->setPriority(0.5))
+        ->add(Url::create('/terms-conditions')->setPriority(0.3))
+        ->add(Url::create('/privacy-policy')->setPriority(0.3));
+
+    // Dynamic Doctor Pages
+    \App\Models\Doctor::whereIn('status', [1, 2, '1', '2'])->each(function (\App\Models\Doctor $doctor) use ($sitemap) {
+        if ($doctor->slug) {
+            $sitemap->add(Url::create(route('doctors.detail', $doctor->slug))
+                ->setPriority(0.9)
+                ->setLastModificationDate($doctor->updated_at));
+        }
+    });
+
+    // Dynamic Career Pages
+    \App\Models\Career::where('status', true)->each(function (\App\Models\Career $career) use ($sitemap) {
+        $sitemap->add(Url::create(route('career.detail', $career->id))
+            ->setPriority(0.6)
+            ->setLastModificationDate($career->updated_at));
+    });
+
+    $sitemap->writeToFile(public_path('sitemap.xml'));
+
+    return 'Sitemap generated successfully with ' . count($sitemap->getTags()) . ' URLs!';
+});
+
+Route::get('/sitemap.xml', function () {
+    if (!file_exists(public_path('sitemap.xml'))) {
+        return redirect('/generate-sitemap');
+    }
+    return response()->file(public_path('sitemap.xml'));
+});
 
 Route::get('/', [PatientBookingController::class, 'index'])->name('userlandingpage');
 Route::get('/services', [PatientBookingController::class, 'services'])->name('services.page');

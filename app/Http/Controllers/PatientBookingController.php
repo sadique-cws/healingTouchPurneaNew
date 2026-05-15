@@ -21,6 +21,7 @@ use Inertia\Inertia;
 use Milon\Barcode\Facades\DNS1DFacade as DNS1D;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\MetaTagsService;
 
 class PatientBookingController extends Controller
 {
@@ -39,17 +40,22 @@ class PatientBookingController extends Controller
         return Inertia::render('PatientBooking/LandingPage', array_merge($this->getGlobalSettings(), [
             'doctors' => $doctors,
             'doctorCount' => $doctors->count(),
+            'seo' => MetaTagsService::getTags('userlandingpage'),
         ]));
     }
 
     public function about(): \Inertia\Response
     {
-        return Inertia::render('PatientBooking/About', $this->getGlobalSettings());
+        return Inertia::render('PatientBooking/About', array_merge($this->getGlobalSettings(), [
+            'seo' => MetaTagsService::getTags('about.page'),
+        ]));
     }
 
     public function services(): \Inertia\Response
     {
-        return Inertia::render('PatientBooking/Services', $this->getGlobalSettings());
+        return Inertia::render('PatientBooking/Services', array_merge($this->getGlobalSettings(), [
+            'seo' => MetaTagsService::getTags('services.page'),
+        ]));
     }
 
     /**
@@ -64,12 +70,15 @@ class PatientBookingController extends Controller
 
         return Inertia::render('PatientBooking/Doctors', array_merge($this->getGlobalSettings(), [
             'doctors' => $doctors,
+            'seo' => MetaTagsService::getTags('our.doctors'),
         ]));
     }
 
     public function contact(): \Inertia\Response
     {
-        return Inertia::render('PatientBooking/Contact', $this->getGlobalSettings());
+        return Inertia::render('PatientBooking/Contact', array_merge($this->getGlobalSettings(), [
+            'seo' => MetaTagsService::getTags('contact.page'),
+        ]));
     }
 
     public function careers(): \Inertia\Response
@@ -81,6 +90,7 @@ class PatientBookingController extends Controller
 
         return Inertia::render('PatientBooking/Careers', array_merge($this->getGlobalSettings(), [
             'careers' => $careers,
+            'seo' => MetaTagsService::getTags('careers.page'),
         ]));
     }
 
@@ -90,6 +100,7 @@ class PatientBookingController extends Controller
 
         return Inertia::render('PatientBooking/CareerDetail', array_merge($this->getGlobalSettings(), [
             'career' => $career,
+            'seo' => MetaTagsService::getTags('career.detail', ['career' => $id]),
         ]));
     }
 
@@ -99,6 +110,7 @@ class PatientBookingController extends Controller
 
         return Inertia::render('PatientBooking/Gallery', array_merge($this->getGlobalSettings(), [
             'images' => $images,
+            'seo' => MetaTagsService::getTags('gallery.page'),
         ]));
     }
 
@@ -111,6 +123,7 @@ class PatientBookingController extends Controller
 
         return Inertia::render('PatientBooking/DoctorDetails', array_merge($this->getGlobalSettings(), [
             'doctor' => $doctor,
+            'seo' => MetaTagsService::getTags('doctors.detail', ['doctor' => $slug]),
         ]));
     }
 

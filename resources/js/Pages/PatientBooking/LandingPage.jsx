@@ -2,8 +2,9 @@ import { Link, Head } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Header from '@/Components/Header';
 import PublicFooter from '@/Components/PublicFooter';
+import SEO from '@/Components/SEO';
 
-export default function LandingPage({ hotelName, address, contact_phone, whatsapp_number, contact_email, doctors }) {
+export default function LandingPage({ hotelName, address, contact_phone, whatsapp_number, contact_email, doctors, seo }) {
     const whatsappNumber = (whatsapp_number || contact_phone || '').replace(/[^0-9]/g, '');
     const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null;
     const heroSlides = [
@@ -32,7 +33,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
 
     return (
         <div className="public-page min-h-screen bg-[#f5f7fb] md:bg-[#f8f9ff] font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
-            <Head title="Healing Touch Hospital | Online Appointment Booking" />
+            <SEO seo={seo} />
 
             {/* Use the new full Header component */}
             <Header hospitalName={hotelName} />

@@ -1,11 +1,12 @@
 import { Link, Head } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import PublicFooter from '@/Components/PublicFooter';
+import SEO from '@/Components/SEO';
 
-export default function About({ hospital_name, contact_phone, contact_email, address }) {
+export default function About({ hospital_name, contact_phone, contact_email, address, seo }) {
     return (
         <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
-            <Head title="About Us | Healing Touch Hospital" />
+            <SEO seo={seo} />
             <Header />
             
             <section className="bg-white py-12 sm:py-16 px-4 md:px-12 mt-6 lg:px-24 pt-28 sm:pt-32">

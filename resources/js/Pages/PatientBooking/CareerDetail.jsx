@@ -1,11 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import PublicFooter from '@/Components/PublicFooter';
+import SEO from '@/Components/SEO';
 
-export default function CareerDetail({ career }) {
+export default function CareerDetail({ career, seo }) {
     return (
         <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-10 flex flex-col">
-            <Head title={career?.title || 'Job Opening - Healing Touch'} />
+            <SEO seo={seo} />
             <Header />
 
             <div className="bg-slate-900 mt-16 pt-12 sm:pt-16 pb-20 px-4 relative overflow-hidden">

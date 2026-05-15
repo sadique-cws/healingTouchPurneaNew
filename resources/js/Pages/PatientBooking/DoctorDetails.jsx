@@ -1,8 +1,9 @@
 import { Head, Link } from '@inertiajs/react';
 import Header from '@/Components/Header';
 import PublicFooter from '@/Components/PublicFooter';
+import SEO from '@/Components/SEO';
 
-export default function DoctorDetails({ doctor }) {
+export default function DoctorDetails({ doctor, seo }) {
     const qualification = Array.isArray(doctor?.qualification)
         ? doctor.qualification.join(', ')
         : String(doctor?.qualification || '-');
@@ -13,7 +14,7 @@ export default function DoctorDetails({ doctor }) {
 
     return (
         <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
-            <Head title={`Dr. ${doctor?.user?.name || 'Doctor'}`} />
+            <SEO seo={seo} />
             <Header />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
