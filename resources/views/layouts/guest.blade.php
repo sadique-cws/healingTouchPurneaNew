@@ -6,93 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>
-        {{ isset($title) ? $title . ' | ' . config('app.name', 'Healing Touch Hospital | Online Appointment Booking') : config('app.name', 'Healing Touch Hospital | Online Appointment Booking') }}
-    </title>
-    <!-- SEO Meta Tags -->
     @php
         $route = request()->route()?->getName();
-        $doctorId = $doctor->id ?? (request()->route('doctorId') ?? null);
-        $metaTags = App\Services\MetaTagsService::getTags($route, ['doctor' => $doctorId]);
+        $doctorSlug = request()->route('slug') ?? ($doctor->slug ?? ($doctor ?? null));
+        $careerId = request()->route('id') ?? ($career ?? null);
+        $metaTags = App\Services\MetaTagsService::getTags($route, [
+            'doctor' => $doctorSlug,
+            'career' => $careerId
+        ]);
     @endphp
+
+    <title>{{ $metaTags['title'] ?? config('app.name') }}</title>
+    
+    <!-- SEO Meta Tags -->
     <meta name="keywords" content="{{ $metaTags['keywords'] ?? '' }}">
     <meta name="description" content="{{ $metaTags['description'] ?? '' }}">
 
     <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:description"
-        content="Book appointments with top doctors at Healing Touch Hospital, Linebazar, Purnea. Quality healthcare services under one roof.">
-
+    <meta property="og:title" content="{{ $metaTags['title'] ?? config('app.name') }}">
+    <meta property="og:description" content="{{ $metaTags['description'] ?? '' }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="https://healingtouchpurnea.com/healingTouchLogo.jpeg">
-
-    <!-- Twitter Card Meta Tags -->
-    {{-- <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Healing Touch Hospital | Specialist Doctors & Online Appointments">
-    <meta name="twitter:description"
-        content="Online appointments, expert doctors, and quality medical care at Healing Touch Hospital in Purnea, Bihar.">
-    <meta name="twitter:image" content="https://healingtouchpurnea.com/assets/images/hospital-twitter-card.jpg"> --}}
+    <meta property="og:image" content="{{ asset('healingTouchLogo.jpeg') }}">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
-    <meta property="og:title"
-        content="{{ isset($title) ? $title . ' | ' . config('app.name', 'Healing Touch Hospital') : config('app.name', 'Healing Touch Hospital') }}  | Online Doctor Booking">
 
     <!-- Structured Data with JSON-LD -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Hospital",
-        "name": "Healing Touch Hospital",
-        "url": "https://healingtouchpurnea.com/",
-        "logo": "https://healingtouchpurnea.com/healingTouchLogo.jpeg",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Hope Chauraha, Rambagh Road, Linebazar",
-          "addressLocality": "Purnea",
-          "addressRegion": "Bihar",
-          "postalCode": "854301",
-          "addressCountry": "IN"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+91-7079025467",
-          "contactType": "Customer Support",
-          "areaServed": "IN",
-          "availableLanguage": ["English", "Hindi"]
-        },
-        "description": "Healing Touch Hospital offers online appointment booking with expert surgeons and gynecologists in Purnea, Bihar.",
-        "medicalSpecialty": ["Laparoscopic Surgery", "Laser Surgery", "Gynecology", "General Surgery"],
-        "department": [
-          {
-            "@type": "MedicalClinic",
-            "name": "Surgery Department",
-            "medicalSpecialty": "General Surgery",
-            "availableService": "Laparoscopic and laser surgeries",
-            "physician": {
-              "@type": "Physician",
-              "name": "Dr. Charly Kumar Sinha",
-              "medicalSpecialty": "Surgery",
-              "jobTitle": "Senior Surgeon"
-            }
-          },
-          {
-            "@type": "MedicalClinic",
-            "name": "Gynecology Department",
-            "medicalSpecialty": "Gynecology",
-            "physician": {
-              "@type": "Physician",
-              "name": "Dr. Kiran Kumari",
-              "medicalSpecialty": "Gynecology"
-            }
-          }
-        ],
-        "sameAs": [
-          "https://www.facebook.com/profile.php?id=61573927387041",
-          "https://www.instagram.com/_healingtouchhospital_?igsh=cDh4cDJjMGRpMnNx"
-        ]
-      }
-      </script>
+    {!! json_encode($metaTags['schema'] ?? [], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
 
     <link rel="icon" href="https://healingtouchpurnea.com/healingTouchLogo.jpeg" type="image/x-icon">
 

@@ -44,33 +44,46 @@ use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
 // SEO Routes
-
 Route::get('/generate-sitemap', function () {
-    Sitemap::create()
-        ->add(Url::create('/'))
-        ->add(Url::create('/services'))
-        ->add(Url::create('/our-doctors'))
-        ->add(Url::create('/book-appointment'))
-        ->add(Url::create('/about-us'))
-        ->add(Url::create('/contact-us'))
-        ->add(Url::create('/gallery'))
-        ->add(Url::create('/careers'));
+    $sitemap = Spatie\Sitemap\Sitemap::create();
 
-    Sitemap::create()
-        ->add(Url::create('/'))
-        ->add(Url::create('/services'))
-        ->add(Url::create('/our-doctors'))
-        ->add(Url::create('/book-appointment'))
-        ->add(Url::create('/about-us'))
-        ->add(Url::create('/contact-us'))
-        ->add(Url::create('/gallery'))
-        ->add(Url::create('/careers'))
-        ->writeToFile(public_path('sitemap.xml'));
+    // Static Pages
+    $sitemap->add(Spatie\Sitemap\Tags\Url::create('/')->setPriority(1.0)->setChangeFrequency(Spatie\Sitemap\Tags\Url::CHANGE_FREQUENCY_DAILY))
+        ->add(Spatie\Sitemap\Tags\Url::create('/services')->setPriority(0.8))
+        ->add(Spatie\Sitemap\Tags\Url::create('/our-doctors')->setPriority(0.8))
+        ->add(Spatie\Sitemap\Tags\Url::create('/book-appointment')->setPriority(0.9))
+        ->add(Spatie\Sitemap\Tags\Url::create('/about-us')->setPriority(0.7))
+        ->add(Spatie\Sitemap\Tags\Url::create('/contact-us')->setPriority(0.7))
+        ->add(Spatie\Sitemap\Tags\Url::create('/gallery')->setPriority(0.6))
+        ->add(Spatie\Sitemap\Tags\Url::create('/careers')->setPriority(0.5))
+        ->add(Spatie\Sitemap\Tags\Url::create('/terms-conditions')->setPriority(0.3))
+        ->add(Spatie\Sitemap\Tags\Url::create('/privacy-policy')->setPriority(0.3));
 
-    return 'Sitemap generated!';
+    // Dynamic Doctor Pages
+    App\Models\Doctor::whereIn('status', [1, 2])->each(function (App\Models\Doctor $doctor) use ($sitemap) {
+        if ($doctor->slug) {
+            $sitemap->add(Spatie\Sitemap\Tags\Url::create(route('doctors.detail', $doctor->slug))
+                ->setPriority(0.9)
+                ->setLastModificationDate($doctor->updated_at));
+        }
+    });
+
+    // Dynamic Career Pages
+    App\Models\Career::where('status', true)->each(function (App\Models\Career $career) use ($sitemap) {
+        $sitemap->add(Spatie\Sitemap\Tags\Url::create(route('career.detail', $career->id))
+            ->setPriority(0.6)
+            ->setLastModificationDate($career->updated_at));
+    });
+
+    $sitemap->writeToFile(public_path('sitemap.xml'));
+
+    return 'Sitemap generated successfully with ' . count($sitemap->getTags()) . ' URLs!';
 });
 
 Route::get('/sitemap.xml', function () {
+    if (!file_exists(public_path('sitemap.xml'))) {
+        return redirect('/generate-sitemap');
+    }
     return response()->file(public_path('sitemap.xml'));
 });
 

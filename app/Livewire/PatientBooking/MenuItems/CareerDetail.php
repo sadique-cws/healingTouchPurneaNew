@@ -30,6 +30,7 @@ class CareerDetail extends Component
     }
     public function render()
     {
-        return view('livewire.patient-booking.menu-items.career-detail');
+        return view('livewire.patient-booking.menu-items.career-detail')
+            ->layoutData(['career' => $this->career->id]);
     }
 }

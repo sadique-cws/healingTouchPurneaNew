@@ -48,6 +48,6 @@ class DoctorDetails extends Component
         return view('livewire.patient-booking.menu-items.doctor-details', [
             'doctor' => $this->doctor,
             'contact_phone' => $this->contactPhone,
-        ])->layoutData(['title' => $this->dynamicTitle]);
+        ])->layoutData(['doctor' => $this->doctor]);
     }
 }
