@@ -37,7 +37,7 @@ class MetaTagsService
             // Define all route specific tags
             $routeTags = [
                 'userlandingpage' => [
-                    'title' => "$hospitalName Purnea | Best Hospital in Line Bazar, Purnea",
+                    'title' => "$hospitalName Purnea | Best Hospital in Purnia, Bihar",
                     'keywords' => "$hospitalName, best hospital in Purnea, best hospital in Purnia, hospital in Line Bazar, hospital in Line Bazar Purnea, emergency hospital Purnea, $localKeywords, hospital near me, best doctor in Purnea, leading hospital in Purnea",
                     'description' => "$hospitalName in Line Bazar, Purnea (Purnia) is the best hospital in Purnea, offering specialized treatments in general medicine, surgery, gynecology, and critical care. As the leading hospital in Line Bazar, Purnea, we provide 24/7 emergency services, expert doctors, and advanced medical care."
                 ],
@@ -148,7 +148,7 @@ class MetaTagsService
     private static function getDefaultTags($hospitalName)
     {
         return [
-            'title' => "$hospitalName | Best Hospital in Purnea, Bihar",
+            'title' => "$hospitalName | Best Hospital in Purnea & Purnia, Bihar",
             'keywords' => "$hospitalName Purnea, best hospital Bihar, doctor appointment Purnea, hospital in Line Bazar",
             'description' => "$hospitalName - Quality Healthcare and Advanced Medical Treatments in Line Bazar, Purnea, Bihar."
         ];
