@@ -95,9 +95,9 @@ export default function Header({ hospitalName = 'Healing Touch Hospital', hideMo
                             <Link href="/" className="flex items-center space-x-3 group">
                                 <ApplicationLogo className="h-10 w-10 shrink-0 text-beige-700 transition-transform duration-150 group-hover:scale-105" />
                                 <div className="leading-none">
-                                    <h1 className="font-black text-lg sm:text-xl text-gray-800 tracking-tight leading-none group-hover:text-beige-700 transition-colors">
+                                    <div className="font-black text-lg sm:text-xl text-gray-800 tracking-tight leading-none group-hover:text-beige-700 transition-colors">
                                         <span className="text-beige-700">{firstWord}</span> {restOfName}
-                                    </h1>
+                                    </div>
                                     <p className="text-[10px] sm:text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Hospital (Purnea)</p>
                                 </div>
                             </Link>

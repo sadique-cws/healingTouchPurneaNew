@@ -9,15 +9,15 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
     const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null;
     const heroSlides = [
         {
-            src: 'https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/heroImageHt.jpg?updatedAt=1746616206447',
+            src: '/images/hospital-in-purnea-hero.jpg',
             label: 'Family Care',
         },
         {
-            src: '/images/hospital1.jpg',
+            src: '/images/hospital-in-purnea-facility.jpg',
             label: 'Modern Facility',
         },
         {
-            src: '/images/hospital4.jpg',
+            src: '/images/hospital-in-purnea-critical-care.jpg',
             label: 'Critical Care',
         },
     ];
@@ -48,7 +48,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             Open for appointments
                         </div>
                         <h1 className="mt-2 md:mt-0 text-[1.65rem] sm:text-4xl md:text-5xl font-bold text-neutral-800 leading-tight mb-2 md:mb-3">
-                            Compassionate Healthcare <span className="text-beige-700 block mt-1">For Your Family</span>
+                            Best Hospital in Purnea <span className="text-beige-700 block mt-1">Compassionate Care in Purnia</span>
                         </h1>
                         <p className="text-[13px] sm:text-lg text-gray-600 mb-3 sm:mb-6 leading-relaxed max-w-xl">
                             Experience world-class medical care with our team of dedicated specialists and
@@ -107,7 +107,8 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                                 <img
                                     key={slide.src}
                                     src={slide.src}
-                                    alt={slide.label}
+                                    alt={`Best Hospital in Purnea (Purnia) - ${slide.label}`}
+                                    title={`Best Hospital in Purnea (Purnia) - ${slide.label}`}
                                     className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${activeHeroSlide === index ? 'opacity-100' : 'opacity-0'}`}
                                 />
                             ))}
@@ -150,7 +151,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                     <div className="mb-4 md:mb-10 md:text-center flex md:block items-end justify-between gap-3">
                         <div>
                             <span className="text-beige-600 font-semibold text-[11px] md:text-sm uppercase tracking-wider">Our Trusted Specialists</span>
-                            <h2 className="text-xl md:text-4xl font-bold text-gray-800 mt-1 md:mt-2 md:mb-4">Meet Our <span className="text-beige-600">Experts</span></h2>
+                            <h2 className="text-xl md:text-4xl font-bold text-gray-800 mt-1 md:mt-2 md:mb-4">Specialists at our <span className="text-beige-600">Hospital in Purnea</span></h2>
                         </div>
                         <Link href={route('our.doctors')} className="md:hidden shrink-0 text-xs font-black text-beige-700">View all</Link>
                         <div className="hidden md:block w-24 h-1 bg-beige-600 mx-auto"></div>
@@ -165,7 +166,8 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                                             <img
                                                 className="w-16 h-16 md:w-20 md:h-20 rounded-lg object-cover border border-beige-200"
                                                 src={user.doctor?.image || '/images/default.jpg'}
-                                                alt={`Dr. ${user.name}`}
+                                                alt={`Dr. ${user.name} - Specialist Doctor at our Hospital in Purnea`}
+                                                title={`Dr. ${user.name} - Specialist Doctor at our Hospital in Purnea`}
                                             />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -225,7 +227,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                 <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
                     <div className="mb-4 md:mb-12 md:text-center">
                         <span className="text-beige-600 font-semibold text-[11px] md:text-sm uppercase tracking-wider">World-Class Medical Care</span>
-                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2 md:mb-4">Our <span className="text-beige-600">Facilities</span></h2>
+                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2 md:mb-4">Facilities at our <span className="text-beige-600">Hospital in Purnea</span></h2>
                         <div className="hidden md:block w-24 h-1 bg-beige-400 mx-auto mb-6"></div>
                         <p className="max-w-2xl md:mx-auto text-xs md:text-base text-gray-600">Experience healthcare excellence with our state-of-the-art facilities and compassionate medical professionals.</p>
                     </div>
@@ -279,7 +281,7 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                 <div className="container mx-auto px-3 sm:px-4 max-w-7xl">
                     <div className="mb-4 md:mb-10 text-center">
                         <span className="text-beige-600 font-semibold text-[11px] md:text-sm uppercase tracking-wider">Our Story</span>
-                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2">About <span className="text-beige-600">{hotelName}</span></h2>
+                        <h2 className="text-xl md:text-4xl font-bold text-beige-900 mt-1 md:mt-2">About Our <span className="text-beige-600">Hospital in Purnea / Purnia</span></h2>
                         <div className="hidden md:block w-24 h-1 bg-beige-400 mx-auto mt-4"></div>
                     </div>
 
@@ -288,8 +290,9 @@ export default function LandingPage({ hotelName, address, contact_phone, whatsap
                             <div className="space-y-3 md:space-y-4">
                                 <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-gray-200">
                                     <img
-                                        src="https://ik.imagekit.io/healingtouchpurnea/healingtouch/landingPageImages/hospital1.jpg?updatedAt=1746616525877"
-                                        alt="Healing Touch Hospital Building"
+                                        src="/images/hospital-in-purnea-building.jpg"
+                                        alt="Healing Touch - Best Hospital in Purnea / Purnia Building"
+                                        title="Healing Touch - Best Hospital in Purnea / Purnia Building"
                                         className="w-full h-[180px] sm:h-[220px] md:h-[310px] object-cover"
                                     />
                                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent p-3 md:p-4">
