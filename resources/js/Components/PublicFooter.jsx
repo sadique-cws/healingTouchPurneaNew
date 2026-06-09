@@ -18,7 +18,7 @@ export default function PublicFooter({
     const whatsappHref = whatsapp ? `https://wa.me/${(whatsapp || '').replace(/[^0-9]/g, '')}` : null;
 
     return (
-        <footer className="mt-auto bg-white border-t border-gray-200 text-gray-700">
+        <footer className="hidden sm:block mt-auto bg-white border-t border-gray-200 text-gray-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
                     <div>

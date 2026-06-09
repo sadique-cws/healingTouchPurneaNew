@@ -4,6 +4,7 @@ import axios from 'axios';
 import Header from '@/Components/Header';
 import PublicFooter from '@/Components/PublicFooter';
 
+
 export default function BookAppointment({ departments = [], doctors = [], preselected_slug }) {
     const [step, setStep] = useState(1);
     const [showBookingNotes, setShowBookingNotes] = useState(true);
@@ -87,6 +88,10 @@ export default function BookAppointment({ departments = [], doctors = [], presel
         setShowDoctorDetails(false);
         setExpandedDoctorSlug(null);
     };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [step, showBookingNotes]);
 
     useEffect(() => {
         if (data.doctor_slug && !selectedDoctor) {
@@ -304,7 +309,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     };
 
     return (
-        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-20 sm:pb-24 lg:pb-0 flex flex-col">
+        <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-32 sm:pb-24 lg:pb-0 flex flex-col">
             <Head title="अपॉइंटमेंट बुक करें | Healing Touch Hospital" />
             <Header />
 
@@ -808,9 +813,17 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.592 0L21.75 12M4.5 9.75v9A2.25 2.25 0 006.75 21h10.5a2.25 2.25 0 002.25-2.25v-9" />}>पूरा पता</FieldLabel>
                                 <input type="text" value={data.address} onChange={e => setData('address', e.target.value)} className={inputClass} placeholder="घर / रोड / गाँव" />
                             </div>
-                            <div>
-                                <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21s7.5-4.5 7.5-11.25a7.5 7.5 0 00-15 0C4.5 16.5 12 21 12 21zM12 12.75a3 3 0 100-6 3 3 0 000 6z" />}>शहर / लोकेशन</FieldLabel>
-                                <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className={inputClass} placeholder="शहर या स्थान" />
+                            <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+                                <div>
+                                    <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21s7.5-4.5 7.5-11.25a7.5 7.5 0 00-15 0C4.5 16.5 12 21 12 21zM12 12.75a3 3 0 100-6 3 3 0 000 6z" />}>शहर / लोकेशन</FieldLabel>
+                                    <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className={inputClass} placeholder="शहर या स्थान" />
+                                </div>
+                                <div>
+                                    <FieldLabel icon={
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    }>राज्य</FieldLabel>
+                                    <input type="text" value={data.state} onChange={e => setData('state', e.target.value)} className={inputClass} placeholder="राज्य" />
+                                </div>
                             </div>
                         </div>
                         <div className="hidden sm:flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-2xl gap-3">
@@ -818,7 +831,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <button disabled={!patientFormComplete} onClick={() => setStep(3)} className={`w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-xl border border-beige-600 font-semibold transition-colors ${disabledCtaClass}`}>बुकिंग देखें</button>
                         </div>
 
-                        {/* <div className="sm:hidden" /> */}
+                        <div className="sm:hidden h-16" />
                         <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
                             <button
                                 disabled={!patientFormComplete}
@@ -907,7 +920,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
                                 <div className="mt-2.5 rounded-lg border border-gray-100 bg-gray-50 p-2.5">
                                     <p className="text-[10px] font-black uppercase tracking-wide text-gray-400">Address</p>
-                                    <p className="mt-1 break-words text-sm font-bold text-gray-900">{data.address}, {data.city} - {data.pincode}</p>
+                                    <p className="mt-1 break-words text-sm font-bold text-gray-900">{data.address}, {data.city}, {data.state ? `${data.state} - ` : ''}{data.pincode}</p>
                                 </div>
                             </div>
                         </div>
@@ -982,7 +995,6 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                     </div>
                 )}
             </div>
-
             <PublicFooter />
         </div>
     );
