@@ -137,10 +137,6 @@ class PatientBookingController extends Controller
         return Inertia::render('PatientBooking/PrivacyPolicy', $this->getGlobalSettings());
     }
 
-    public function account(): \Inertia\Response
-    {
-        return Inertia::render('PatientBooking/Account', $this->getGlobalSettings());
-    }
 
     public function dashboard(Request $request)
     {
@@ -211,10 +207,7 @@ class PatientBookingController extends Controller
         ]));
     }
 
-    public function bookingHelp(): \Inertia\Response
-    {
-        return Inertia::render('PatientBooking/BookingHelp', $this->getGlobalSettings());
-    }
+
 
     public function manageAppointments(Request $request): \Inertia\Response
     {

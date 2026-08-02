@@ -93,7 +93,7 @@ export default function Login() {
                             </div>
                             <span className="text-xs font-black text-slate-500 uppercase tracking-widest group-hover:text-slate-800 transition-colors">Secure Session</span>
                         </label>
-                        <Link href={route('contact.page')} className="text-xs font-black text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors">Help?</Link>
+                        <a href="https://healingtouchpurnea.com/contact-us" className="text-xs font-black text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors">Help?</a>
                     </div>
 
                     <button 

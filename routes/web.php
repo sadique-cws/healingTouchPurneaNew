@@ -53,19 +53,7 @@ Route::get('/sitemap.xml', function () {
     return response()->file(public_path('sitemap.xml'));
 });
 
-Route::get('/', [PatientBookingController::class, 'index'])->name('userlandingpage');
-Route::get('/services', [PatientBookingController::class, 'services'])->name('services.page');
-Route::get('/our-doctors', [PatientBookingController::class, 'doctors'])->name('our.doctors');
-Route::get('/about-us', [PatientBookingController::class, 'about'])->name('about.page');
-Route::get('/contact-us', [PatientBookingController::class, 'contact'])->name('contact.page');
-Route::get('/careers', [PatientBookingController::class, 'careers'])->name('careers.page');
-Route::get('/career/{id}', [PatientBookingController::class, 'careerDetail'])->name('career.detail');
-Route::get('/gallery', [PatientBookingController::class, 'gallery'])->name('gallery.page');
-Route::get('/terms-conditions', [PatientBookingController::class, 'terms'])->name('terms.conditions');
-Route::get('/privacy-policy', [PatientBookingController::class, 'privacy'])->name('privacy.policy');
-Route::get('/account', [PatientBookingController::class, 'account'])->name('account.page');
-Route::get('/booking-help', [PatientBookingController::class, 'bookingHelp'])->name('booking.help');
-Route::get('/book-appointment/{slug?}', [PatientBookingController::class, 'book_appointment'])->name('book.appointment');
+Route::get('/', [PatientBookingController::class, 'book_appointment'])->name('home.booking');
 Route::post('/api/appointment/slots', [PatientBookingController::class, 'get_slots'])->name('api.appointment.slots');
 Route::post('/api/appointment/book', [PatientBookingController::class, 'store_appointment'])->name('api.appointment.book');
 Route::get('/manage-appointments', [PatientBookingController::class, 'manageAppointments'])->name('manage.appointments');
@@ -165,8 +153,6 @@ Route::prefix('reception')->name('reception.')->group(function () {
     });
 });
 
-Route::get('/doctor/{slug}', [PatientBookingController::class, 'doctorDetails'])
-    ->where('slug', '^(?!login$|dashboard$).+')
-    ->name('doctors.detail');
+// Removed doctor detail route as it is now in PHP
 
 require __DIR__.'/auth.php';

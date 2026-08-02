@@ -59,7 +59,7 @@ export default function DoctorLayout({ children }) {
                     <div className="px-4 pb-3">
                         <div className="rounded-xl border border-[#00685f]/10 bg-white/70 px-3 py-3">
                             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#00685f]/50">Mode to Doctor Panel</p>
-                            <Link href={route('userlandingpage')} className="mt-2 inline-flex text-xs font-semibold text-[#0d1c2e]/60 hover:text-[#00685f] transition-colors">Public Site</Link>
+                            <Link href={route('home.booking')} className="mt-2 inline-flex text-xs font-semibold text-[#0d1c2e]/60 hover:text-[#00685f] transition-colors">Public Site</Link>
                         </div>
                     </div>
 

@@ -1,8 +1,6 @@
 import { Link, Head, useForm } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Header from '@/Components/Header';
-import PublicFooter from '@/Components/PublicFooter';
 
 
 export default function BookAppointment({ departments = [], doctors = [], preselected_slug }) {
@@ -269,7 +267,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
     const slotGroups = groupSlots(availableSlots);
     const hasSelectableSlots = availableSlots.some((slot) => slot.bookable);
-    const inputClass = 'w-full rounded-md sm:rounded-xl border-gray-200 focus:border-beige-500 focus:ring-beige-500 py-2.5 sm:py-3 px-3 sm:px-4 bg-gray-50/70 text-sm sm:text-base placeholder:text-gray-400 placeholder:font-normal';
+    const inputClass = 'w-full rounded-md sm:rounded-md border-gray-200 focus:border-beige-500 focus:ring-beige-500 py-2.5 sm:py-3 px-3 sm:px-4 bg-gray-50/70 text-sm sm:text-base placeholder:text-gray-400 placeholder:font-normal';
     const labelClass = 'block text-[11px] sm:text-xs font-semibold text-gray-600 mb-1.5 sm:mb-2';
     const disabledCtaClass = 'disabled:bg-gray-300 disabled:text-gray-500 disabled:border-gray-300 disabled:shadow-none disabled:hover:bg-gray-300 disabled:cursor-not-allowed';
     const patientFormComplete = Boolean(
@@ -311,10 +309,24 @@ export default function BookAppointment({ departments = [], doctors = [], presel
     return (
         <div className="public-page min-h-screen bg-gray-50 font-sans text-gray-900 antialiased overflow-x-hidden pb-32 sm:pb-24 lg:pb-0 flex flex-col">
             <Head title="अपॉइंटमेंट बुक करें | Healing Touch Hospital" />
-            <Header />
+            
+            <header className="w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 py-3 fixed top-0 z-50 shadow-sm">
+                <div className="max-w-6xl mx-auto px-4 lg:px-8 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                        <img src="/healingTouchLogo.jpeg" alt="Logo" className="h-9 w-9 shrink-0 object-cover rounded-full" />
+                        <div className="leading-none">
+                            <div className="font-black text-lg text-gray-800 tracking-tight leading-none"><span className="text-beige-700">Healing</span> Touch</div>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Booking Portal</p>
+                        </div>
+                    </div>
+                    <a href="https://healingtouchpurnea.com" className="text-xs font-bold text-gray-600 hover:text-beige-700 bg-gray-100 hover:bg-beige-50 px-3 py-1.5 rounded-full transition-colors">
+                        Back to Website
+                    </a>
+                </div>
+            </header>
 
             <div className="max-w-6xl mx-auto w-full px-2.5 sm:px-6 lg:px-8 py-2.5 sm:py-8 mt-16">
-                <div className="mb-2.5 sm:mb-4 md:mb-6 bg-gradient-to-r from-beige-600 to-beige-800 rounded-lg sm:rounded-xl py-2.5 md:py-4 px-3 md:px-6 text-white border border-beige-700">
+                <div className="mb-2.5 sm:mb-4 md:mb-6 bg-gradient-to-r from-beige-600 to-beige-800 rounded-md sm:rounded-md py-2.5 md:py-4 px-3 md:px-6 text-white border border-beige-700">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                         <div>
                             <h1 className="text-base sm:text-lg md:text-xl font-bold">ऑनलाइन अपॉइंटमेंट बुकिंग</h1>
@@ -366,7 +378,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                 </div>
 
                 {showBookingNotes && (
-                    <div className="bg-white border border-gray-200 rounded-lg sm:rounded-xl p-3 sm:p-6 space-y-4">
+                    <div className="bg-white border border-gray-200 rounded-md sm:rounded-md p-3 sm:p-6 space-y-4">
                         <div>
                             <h2 className="text-base sm:text-xl font-bold text-gray-900">Healing Touch Hospital में अपॉइंटमेंट बुक करें</h2>
                             <h3 className="mt-2 text-sm sm:text-base font-semibold text-beige-700">सूचना</h3>
@@ -388,18 +400,19 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <button
                                 type="button"
                                 onClick={() => setShowBookingNotes(false)}
-                                className="hidden sm:inline-flex w-full sm:w-auto px-5 py-2.5 rounded-lg bg-beige-600 text-white font-semibold hover:bg-beige-700 justify-center"
+                                className="hidden sm:inline-flex w-full sm:w-auto px-5 py-2.5 rounded-md bg-beige-600 text-white font-semibold hover:bg-beige-700 justify-center"
                             >
                                 आगे बढ़ें
                             </button>
                         </div>
 
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed inset-x-0 z-50 px-3 bottom-[4.5rem]">
+                        <div className="sm:hidden fixed inset-x-0 bottom-0 z-50 p-3 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                            <div className="text-center text-[10px] text-gray-400 mb-2">&copy; {new Date().getFullYear()} Healing Touch Hospital</div>
                             <button
                                 type="button"
                                 onClick={() => setShowBookingNotes(false)}
-                                className="w-full px-6 py-3 bg-beige-600 text-white rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold"
+                                className="w-full px-6 py-3 bg-beige-600 text-white rounded-md border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold"
                             >
                                 आगे बढ़ें
                             </button>
@@ -411,9 +424,9 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                 {!showBookingNotes && step === 1 && (
                     <div className="space-y-2.5 sm:space-y-6">
                         {!isDoctorLocked && (
-                            <div className="bg-white p-3 sm:p-5 rounded-lg sm:rounded-xl border border-gray-200">
+                            <div className="bg-white p-3 sm:p-5 rounded-md sm:rounded-md border border-gray-200">
                                 <h2 className="text-sm sm:text-lg font-bold text-gray-800 mb-2.5 sm:mb-4 flex items-center gap-2">
-                                    <div className="p-1.5 sm:p-2 bg-beige-100 rounded-md sm:rounded-lg text-beige-600">
+                                    <div className="p-1.5 sm:p-2 bg-beige-100 rounded-md sm:rounded-md text-beige-600">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                                     </div>
                                     विभाग चुनें
@@ -428,14 +441,14 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="p-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
+                                    <div className="p-4 rounded-md border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
                                         No departments available right now.
                                     </div>
                                 )}
                             </div>
                         )}
 
-                        <div className="bg-white p-3 sm:p-5 rounded-lg sm:rounded-xl border border-gray-200">
+                        <div className="bg-white p-3 sm:p-5 rounded-md sm:rounded-md border border-gray-200">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 mb-3 sm:mb-6">
                                 <h2 className="text-base sm:text-lg font-bold text-gray-800">{doctorConfirmed && selectedDoctor ? 'चुना हुआ डॉक्टर' : 'डॉक्टर चुनें'}</h2>
                                 <div className="flex items-center gap-3">
@@ -444,7 +457,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </div>
 
                             {selectedDoctor && doctorConfirmed && (
-                                <div className="border border-beige-200 rounded-lg overflow-hidden bg-beige-50">
+                                <div className="border border-beige-200 rounded-md overflow-hidden bg-beige-50">
                                     <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-beige-100 bg-white">
                                         <h3 className="text-sm sm:text-base font-semibold text-gray-900">Selected Doctor</h3>
                                         <button
@@ -458,7 +471,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                                     <div className="p-3 sm:p-5">
                                         <div className="flex items-center gap-3 sm:gap-4">
-                                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden bg-white border border-beige-200 shrink-0">
+                                            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden bg-white border border-beige-200 shrink-0">
                                                 <img
                                                     src={selectedDoctor.image || '/images/default.jpg'}
                                                     className="w-full h-full object-cover"
@@ -487,7 +500,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                         </button>
 
                                         {showDoctorDetails && (
-                                            <div className="mt-3 rounded-lg border border-beige-100 bg-white p-3 sm:p-4">
+                                            <div className="mt-3 rounded-md border border-beige-100 bg-white p-3 sm:p-4">
                                                 <h4 className="text-xs sm:text-sm font-medium text-gray-500 mb-2 sm:mb-3">Doctor Information</h4>
                                                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                                     <div>
@@ -550,11 +563,11 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                         setSlotsMessage('');
                                                     }
                                                 }}
-                                                className={`relative min-h-[128px] sm:min-h-[156px] w-full rounded-xl border text-left transition-all cursor-pointer overflow-hidden ${isSelected ? 'ring-2 ring-beige-500 bg-beige-50 border-beige-300 shadow-sm' : 'bg-white hover:bg-gray-50 border-gray-200'}`}
+                                                className={`relative min-h-[128px] sm:min-h-[156px] w-full rounded-md border text-left transition-all cursor-pointer overflow-hidden ${isSelected ? 'ring-2 ring-beige-500 bg-beige-50 border-beige-300 shadow-sm' : 'bg-white hover:bg-gray-50 border-gray-200'}`}
                                             >
                                                 <div className="p-3 sm:p-4">
                                                     <div className="flex items-start gap-3 sm:gap-4">
-                                                        <img src={doc.image || '/images/default.jpg'} className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover border border-gray-200 bg-gray-100 shrink-0" alt="" />
+                                                        <img src={doc.image || '/images/default.jpg'} className="w-16 h-16 sm:w-20 sm:h-20 rounded-md object-cover border border-gray-200 bg-gray-100 shrink-0" alt="" />
                                                         <div className="min-w-0 flex-1 pr-8">
                                                             <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">Dr. {doc.user?.name}</h3>
                                                             <p className="mt-0.5 text-[11px] sm:text-xs text-beige-600 font-bold uppercase tracking-wide truncate">{doc.department?.name}</p>
@@ -582,7 +595,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                     </button>
 
                                                     {isExpanded && (
-                                                        <div className={`mt-3 grid grid-cols-2 gap-3 rounded-lg border p-3 text-xs ${isSelected ? 'border-beige-100 bg-white' : 'border-gray-100 bg-gray-50/70'}`}>
+                                                        <div className={`mt-3 grid grid-cols-2 gap-3 rounded-md border p-3 text-xs ${isSelected ? 'border-beige-100 bg-white' : 'border-gray-100 bg-gray-50/70'}`}>
                                                             <div>
                                                                 <p className="font-bold uppercase tracking-wide text-gray-400">Qualification</p>
                                                                 <p className="mt-1 font-semibold text-gray-800">{qualification}</p>
@@ -607,7 +620,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                     })}
                                 </div>
                             ) : !selectedDoctor && !doctorConfirmed ? (
-                                <div className="mt-4 p-4 rounded-lg border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
+                                <div className="mt-4 p-4 rounded-md border border-amber-200 bg-amber-50 text-amber-700 text-sm font-medium">
                                     {selectedDepartment
                                         ? 'इस विभाग में चुनी गई तारीख के लिए कोई डॉक्टर उपलब्ध नहीं है।'
                                         : 'चुनी गई तारीख के लिए कोई डॉक्टर उपलब्ध नहीं है।'}
@@ -616,7 +629,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         {data.doctor_slug && doctorConfirmed && (
-                            <div className="bg-white p-3 sm:p-5 rounded-lg sm:rounded-xl border border-gray-200">
+                            <div className="bg-white p-3 sm:p-5 rounded-md sm:rounded-md border border-gray-200">
                                 <div className="flex items-center justify-between mb-2.5 sm:mb-4">
                                     <h2 className="text-sm sm:text-lg font-bold text-gray-800 flex items-center gap-2">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-beige-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -637,7 +650,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
 
                                 {slotsMessage && (
-                                    <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium">
+                                    <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-red-50 border border-red-200 text-red-600 rounded-md sm:rounded-md text-xs sm:text-sm font-medium">
                                         {slotsMessage}
                                     </div>
                                 )}
@@ -651,7 +664,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                     </div>
                                 </div>
 
-                                <div className="bg-gray-50 rounded-lg sm:rounded-2xl border border-gray-100 p-3 sm:p-5">
+                                <div className="bg-gray-50 rounded-md sm:rounded-md border border-gray-100 p-3 sm:p-5">
                                     <div className="flex items-center gap-2 mb-3 sm:mb-4">
                                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-beige-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                         <h3 className="text-sm sm:text-lg font-semibold text-gray-800">अपॉइंटमेंट का समय चुनें</h3>
@@ -687,7 +700,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                                                         type="button"
                                                                         disabled={!slot.bookable}
                                                                         onClick={() => slot.bookable && setData('time', slot.slot)}
-                                                                        className={`py-2 sm:py-2.5 rounded-md sm:rounded-lg text-[11px] sm:text-sm font-semibold border transition-colors ${isActive ? 'bg-beige-600 text-white border-beige-600' : `${meta.button}`}`}
+                                                                        className={`py-2 sm:py-2.5 rounded-md sm:rounded-md text-[11px] sm:text-sm font-semibold border transition-colors ${isActive ? 'bg-beige-600 text-white border-beige-600' : `${meta.button}`}`}
                                                                     >
                                                                         {slot.slot}
                                                                     </button>
@@ -713,7 +726,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="py-8 sm:py-10 text-center rounded-lg sm:rounded-2xl border border-dashed border-red-200 bg-red-50">
+                                        <div className="py-8 sm:py-10 text-center rounded-md sm:rounded-md border border-dashed border-red-200 bg-red-50">
                                             <div className="text-sm sm:text-base text-red-500 font-semibold mb-1">इस डॉक्टर के लिए कल का समय उपलब्ध नहीं है।</div>
                                             <div className="text-xs sm:text-sm text-red-400">कृपया दूसरा डॉक्टर चुनें या बाद में कोशिश करें।</div>
                                         </div>
@@ -728,7 +741,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 अपनी बुकिंग स्थिति जांचें
                             </Link>
 
-                            <button disabled={stepOneDisabled} onClick={handleStepOneContinue} className={`w-full sm:w-auto px-6 py-3 bg-beige-600 text-white rounded-xl border border-beige-600 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}>
+                            <button disabled={stepOneDisabled} onClick={handleStepOneContinue} className={`w-full sm:w-auto px-6 py-3 bg-beige-600 text-white rounded-md border border-beige-600 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}>
                                 <span>{stepOneCtaLabel}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -737,11 +750,12 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
+                        <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 p-3 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                            <div className="text-center text-[10px] text-gray-400 mb-2">&copy; {new Date().getFullYear()} Healing Touch Hospital</div>
                             <button
                                 disabled={stepOneDisabled}
                                 onClick={handleStepOneContinue}
-                                className={`w-full px-6 py-3 bg-beige-600 text-white rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}
+                                className={`w-full px-6 py-3 bg-beige-600 text-white rounded-md border border-beige-600 shadow-lg shadow-beige-900/15 hover:bg-beige-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-beige-500 flex items-center justify-center font-semibold ${disabledCtaClass}`}
                             >
                                 <span>आगे बढ़ें</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -754,13 +768,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                 {/* Step 2: Patient Info */}
                 {!showBookingNotes && step === 2 && (
-                    <div className="bg-white p-3 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl border border-gray-200 mb-5">
+                    <div className="bg-white p-3 sm:p-6 md:p-8 rounded-md sm:rounded-md border border-gray-200 mb-5">
                         <div className="flex items-center justify-between mb-3 sm:mb-8 border-b border-gray-100 pb-3 sm:pb-5">
                             <div>
                                 <h2 className="text-base sm:text-xl font-bold text-gray-800">मरीज की जानकारी</h2>
                                 <p className="text-gray-500 text-[11px] sm:text-sm mt-0.5 sm:mt-1">कृपया सरल जानकारी भरें।</p>
                             </div>
-                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="text-beige-700 font-semibold text-xs sm:text-sm bg-beige-50 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-lg hover:bg-beige-100 transition-colors">← वापस</button>
+                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="text-beige-700 font-semibold text-xs sm:text-sm bg-beige-50 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-md sm:rounded-md hover:bg-beige-100 transition-colors">← वापस</button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-6">
                             <div>
@@ -783,7 +797,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </div>
                             <div>
                                 <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.5v15m7.5-7.5h-15" />}>लिंग</FieldLabel>
-                                <div className="rounded-lg border border-gray-200 bg-gray-100 p-1">
+                                <div className="rounded-md border border-gray-200 bg-gray-100 p-1">
                                     <div className="grid grid-cols-3 gap-1">
                                         {[
                                             ['male', 'पुरुष'],
@@ -804,7 +818,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             </div>
                             <div>
                                 <FieldLabel icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3M4.5 9.75h15M6.75 21h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v12A2.25 2.25 0 006.75 21z" />}>अपॉइंटमेंट तारीख</FieldLabel>
-                                <div className="py-2.5 sm:py-3 px-3 sm:px-4 bg-beige-50 rounded-md sm:rounded-xl text-beige-700 text-sm sm:text-base font-semibold border border-beige-100 flex justify-between items-center group">
+                                <div className="py-2.5 sm:py-3 px-3 sm:px-4 bg-beige-50 rounded-md sm:rounded-md text-beige-700 text-sm sm:text-base font-semibold border border-beige-100 flex justify-between items-center group">
                                     {formatDisplayDate(data.date)}
                                     <button onClick={() => setStep(1)} className="text-[10px] bg-white px-2 py-1 rounded-md border border-gray-200 opacity-0 opacity-100 transition-opacity">बदलें</button>
                                 </div>
@@ -826,17 +840,18 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
                             </div>
                         </div>
-                        <div className="hidden sm:flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-2xl gap-3">
-                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="w-full sm:w-auto px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 bg-white rounded-xl border border-gray-200 transition-colors">समय पर वापस जाएँ</button>
-                            <button disabled={!patientFormComplete} onClick={() => setStep(3)} className={`w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-xl border border-beige-600 font-semibold transition-colors ${disabledCtaClass}`}>बुकिंग देखें</button>
+                        <div className="hidden sm:flex flex-col sm:flex-row justify-between mt-8 sm:mt-10 bg-gray-50 p-3 sm:p-4 rounded-md gap-3">
+                            <button onClick={() => { setDoctorConfirmed(true); setStep(1); }} className="w-full sm:w-auto px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 bg-white rounded-md border border-gray-200 transition-colors">समय पर वापस जाएँ</button>
+                            <button disabled={!patientFormComplete} onClick={() => setStep(3)} className={`w-full sm:w-auto bg-beige-600 hover:bg-beige-700 text-white px-8 sm:px-10 py-3 rounded-md border border-beige-600 font-semibold transition-colors ${disabledCtaClass}`}>बुकिंग देखें</button>
                         </div>
 
                         <div className="sm:hidden h-16" />
-                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
+                        <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 p-3 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                            <div className="text-center text-[10px] text-gray-400 mb-2">&copy; {new Date().getFullYear()} Healing Touch Hospital</div>
                             <button
                                 disabled={!patientFormComplete}
                                 onClick={() => setStep(3)}
-                                className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold transition-colors ${disabledCtaClass}`}
+                                className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-md border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold transition-colors ${disabledCtaClass}`}
                             >
                                 बुकिंग देखें
                             </button>
@@ -846,10 +861,10 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                 {/* Step 3: Review - MATCHED TO SCREENSHOT */}
                 {!showBookingNotes && step === 3 && (
-                    <div className="bg-white rounded-lg sm:rounded-2xl border border-gray-100 overflow-hidden">
+                    <div className="bg-white rounded-md sm:rounded-md border border-gray-100 overflow-hidden">
                         <div className="p-3 sm:p-6 md:p-8 border-b border-beige-50 bg-beige-50/30">
                             <div className="flex items-start gap-2.5 sm:gap-4">
-                                <div className="p-2 sm:p-3 bg-white rounded-md sm:rounded-xl text-beige-600 border border-beige-100 shrink-0">
+                                <div className="p-2 sm:p-3 bg-white rounded-md sm:rounded-md text-beige-600 border border-beige-100 shrink-0">
                                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                                 </div>
                                 <div>
@@ -860,9 +875,9 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         <div className="space-y-3 p-3 sm:space-y-6 sm:p-6 md:p-8">
-                            <div className="rounded-xl border border-gray-200 bg-white p-3 sm:p-5">
+                            <div className="rounded-md border border-gray-200 bg-white p-3 sm:p-5">
                                 <div className="flex items-start gap-3 sm:gap-4">
-                                    <img src={selectedDoctor?.image || '/images/default.jpg'} className="h-14 w-14 rounded-lg border border-gray-200 object-cover sm:h-16 sm:w-16" alt="" />
+                                    <img src={selectedDoctor?.image || '/images/default.jpg'} className="h-14 w-14 rounded-md border border-gray-200 object-cover sm:h-16 sm:w-16" alt="" />
                                     <div className="min-w-0 flex-1">
                                         <p className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Doctor</p>
                                         <p className="mt-1 truncate text-base font-black text-gray-900 sm:text-lg">Dr. {selectedDoctor?.user?.name}</p>
@@ -871,18 +886,18 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
 
                                 <div className="mt-4 grid grid-cols-2 gap-2">
-                                    <div className="rounded-lg border border-beige-100 bg-beige-50 p-3">
+                                    <div className="rounded-md border border-beige-100 bg-beige-50 p-3">
                                         <p className="text-[10px] font-black uppercase tracking-wide text-beige-700">Date</p>
                                         <p className="mt-1 text-xs font-bold text-gray-900 sm:text-sm">{formatDisplayDate(data.date)}</p>
                                     </div>
-                                    <div className="rounded-lg border border-beige-100 bg-beige-50 p-3">
+                                    <div className="rounded-md border border-beige-100 bg-beige-50 p-3">
                                         <p className="text-[10px] font-black uppercase tracking-wide text-beige-700">Time</p>
                                         <p className="mt-1 text-sm font-black text-gray-900">{data.time}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="rounded-xl border border-gray-200 bg-gray-50 p-3 sm:p-5">
+                            <div className="rounded-md border border-gray-200 bg-gray-50 p-3 sm:p-5">
                                 <div className="flex items-center justify-between gap-4 border-b border-gray-200 pb-3">
                                     <span className="text-sm font-bold text-gray-600">Consultation Fee</span>
                                     <span className="text-base font-black text-gray-900">₹{selectedDoctor?.fee}</span>
@@ -900,7 +915,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                 </div>
                             </div>
 
-                            <div className="rounded-xl border border-gray-200 bg-white p-3 sm:p-5">
+                            <div className="rounded-md border border-gray-200 bg-white p-3 sm:p-5">
                                 <div className="mb-3 flex items-center justify-between">
                                     <h3 className="text-sm font-black text-gray-900">Patient Details</h3>
                                     <button onClick={() => setStep(2)} className="rounded-md bg-beige-50 px-2.5 py-1.5 text-xs font-bold text-beige-700">Edit</button>
@@ -912,13 +927,13 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                                         ['Age / Gender', `${data.age} Y / ${data.gender}`],
                                         ['Location', data.city],
                                     ].map(([label, value]) => (
-                                        <div key={label} className="rounded-lg border border-gray-100 bg-gray-50 p-2.5">
+                                        <div key={label} className="rounded-md border border-gray-100 bg-gray-50 p-2.5">
                                             <p className="text-[10px] font-black uppercase tracking-wide text-gray-400">{label}</p>
                                             <p className="mt-1 break-words text-sm font-bold capitalize text-gray-900">{value}</p>
                                         </div>
                                     ))}
                                 </div>
-                                <div className="mt-2.5 rounded-lg border border-gray-100 bg-gray-50 p-2.5">
+                                <div className="mt-2.5 rounded-md border border-gray-100 bg-gray-50 p-2.5">
                                     <p className="text-[10px] font-black uppercase tracking-wide text-gray-400">Address</p>
                                     <p className="mt-1 break-words text-sm font-bold text-gray-900">{data.address}, {data.city}, {data.state ? `${data.state} - ` : ''}{data.pincode}</p>
                                 </div>
@@ -926,11 +941,11 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                         </div>
 
                         <div className="hidden sm:flex p-4 sm:p-6 md:p-8 bg-gray-50/50 flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
-                            <button onClick={() => setStep(2)} className="w-full sm:w-auto px-5 sm:px-8 py-3 font-semibold text-gray-600 bg-white rounded-xl border border-gray-200 flex items-center justify-center gap-2">
+                            <button onClick={() => setStep(2)} className="w-full sm:w-auto px-5 sm:px-8 py-3 font-semibold text-gray-600 bg-white rounded-md border border-gray-200 flex items-center justify-center gap-2">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                                 Edit Details
                             </button>
-                            <button disabled={isSubmitting} onClick={submitBooking} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 disabled:opacity-60 text-white px-6 sm:px-10 py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+                            <button disabled={isSubmitting} onClick={submitBooking} className="w-full sm:w-auto bg-beige-600 hover:bg-beige-700 disabled:opacity-60 text-white px-6 sm:px-10 py-3 rounded-md font-semibold flex items-center justify-center gap-2">
                                 {isSubmitting ? 'कृपया प्रतीक्षा करें...' : 'अपॉइंटमेंट पक्का करें'}
                                 {!isSubmitting && <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>}
                             </button>
@@ -940,11 +955,12 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <button onClick={() => setStep(2)} className="text-sm font-semibold text-gray-600">← Edit Details</button>
                         </div>
                         <div className="sm:hidden h-10" />
-                        <div className="sm:hidden fixed bottom-[4.5rem] inset-x-0 z-50 px-3">
+                        <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 p-3 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                            <div className="text-center text-[10px] text-gray-400 mb-2">&copy; {new Date().getFullYear()} Healing Touch Hospital</div>
                             <button
                                 disabled={isSubmitting}
                                 onClick={submitBooking}
-                                className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-lg border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold ${disabledCtaClass}`}
+                                className={`w-full bg-beige-600 hover:bg-beige-700 text-white py-3 rounded-md border border-beige-600 shadow-lg shadow-beige-900/15 font-semibold ${disabledCtaClass}`}
                             >
                                 {isSubmitting ? 'कृपया प्रतीक्षा करें...' : 'अपॉइंटमेंट पक्का करें'}
                             </button>
@@ -957,7 +973,7 @@ export default function BookAppointment({ departments = [], doctors = [], presel
 
                 {/* Step 4: Success */}
                 {!showBookingNotes && step === 4 && (
-                    <div className="bg-white p-4 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl border border-gray-100 text-center max-w-xl mx-auto overflow-hidden relative">
+                    <div className="bg-white p-4 sm:p-6 md:p-8 rounded-md sm:rounded-md border border-gray-100 text-center max-w-xl mx-auto overflow-hidden relative">
                         {/* Decorative Background Ring */}
                         <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-beige-50 rounded-full -translate-y-1/2 translate-x-1/2 -z-0 opacity-50"></div>
 
@@ -968,17 +984,17 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5 leading-tight">Registration Complete!</h2>
                             <p className="text-xs sm:text-sm text-gray-500 mb-5 sm:mb-7 font-medium">Your appointment has been successfully scheduled.</p>
 
-                            <div className="bg-gray-50 border border-dashed border-beige-200 p-3 sm:p-5 rounded-lg sm:rounded-xl max-w-sm mx-auto mb-4 sm:mb-7">
+                            <div className="bg-gray-50 border border-dashed border-beige-200 p-3 sm:p-5 rounded-md sm:rounded-md max-w-sm mx-auto mb-4 sm:mb-7">
                                 <p className="text-[10px] text-beige-600 uppercase font-semibold tracking-[0.18em] mb-2">Your Appointment Number</p>
                                 <p className="text-2xl sm:text-4xl font-mono font-bold text-gray-900 whitespace-nowrap">{appointmentId}</p>
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                                <a href={receiptUrl || '#'} className="bg-beige-600 hover:bg-beige-700 text-white px-5 sm:px-8 py-3 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center gap-2" target="_blank" rel="noreferrer">
+                                <a href={receiptUrl || '#'} className="bg-beige-600 hover:bg-beige-700 text-white px-5 sm:px-8 py-3 rounded-md sm:rounded-md font-semibold flex items-center justify-center gap-2" target="_blank" rel="noreferrer">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                                     Download Receipt
                                 </a>
-                                <Link href="/" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 sm:px-8 py-3 rounded-lg sm:rounded-xl font-semibold flex items-center justify-center gap-2">
+                                <Link href="/" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 sm:px-8 py-3 rounded-md sm:rounded-md font-semibold flex items-center justify-center gap-2">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                                     Back to Home
                                 </Link>
@@ -995,7 +1011,9 @@ export default function BookAppointment({ departments = [], doctors = [], presel
                     </div>
                 )}
             </div>
-            <PublicFooter />
+            <footer className="hidden sm:block text-center py-6 text-xs text-gray-400 mt-auto">
+                &copy; {new Date().getFullYear()} Healing Touch Hospital. All rights reserved.
+            </footer>
         </div>
     );
 }

@@ -137,7 +137,7 @@ export default function ReceptionLayout({ children }) {
                     <div className="px-4 pb-4">
                         <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-center">
                             <p className="text-xs font-black uppercase tracking-widest text-slate-500 mb-2">Internal Area</p>
-                            <Link href={route('userlandingpage')} className="inline-flex w-full items-center justify-center text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl px-3 py-2.5 hover:text-amber-600 hover:border-amber-200 shadow-sm">
+                            <Link href={route('home.booking')} className="inline-flex w-full items-center justify-center text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl px-3 py-2.5 hover:text-amber-600 hover:border-amber-200 shadow-sm">
                                 Public Site
                             </Link>
                         </div>

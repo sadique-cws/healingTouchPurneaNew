@@ -101,7 +101,7 @@ export default function Login() {
                     
                     <div className="text-center pt-4">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                            Need help? <Link href={route('contact.page')} className="text-teal-600">Contact Administration</Link>
+                            Need help? <a href="https://healingtouchpurnea.com/contact-us" className="text-teal-600">Contact Administration</a>
                         </p>
                     </div>
                 </form>

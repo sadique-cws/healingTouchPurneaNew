@@ -1,6 +1,4 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import Header from '@/Components/Header';
-import PublicFooter from '@/Components/PublicFooter';
 
 export default function Dashboard({ stats, bookings = [], latestBooking, profile, hospital_name, address, contact_phone, contact_email }) {
     const { auth } = usePage().props;
@@ -18,7 +16,7 @@ export default function Dashboard({ stats, bookings = [], latestBooking, profile
     return (
         <div className="public-page min-h-screen bg-[#f5f7fb] text-gray-900 antialiased overflow-x-hidden pb-16 lg:pb-0 flex flex-col">
             <Head title="My Dashboard | Healing Touch Hospital" />
-            <Header />
+
 
             <main className="mx-auto w-full max-w-7xl flex-1 px-4 pt-28 sm:pt-32 pb-10">
                 <section className="rounded-3xl border border-gray-200 bg-white p-5 md:p-7 shadow-sm">
@@ -56,7 +54,7 @@ export default function Dashboard({ stats, bookings = [], latestBooking, profile
                                 <p className="mt-1 text-sm text-gray-600">Use the quick links below to jump to other panels if needed.</p>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                <Link href={route('userlandingpage')} className="rounded-xl bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-gray-700 border border-beige-100">Public Site</Link>
+                                <Link href={route('home.booking')} className="rounded-xl bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-gray-700 border border-beige-100">Public Site</Link>
                                 <Link href={route('admin.login')} className="rounded-xl bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-gray-700 border border-beige-100">Admin</Link>
                                 <Link href={route('doctor.login')} className="rounded-xl bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-gray-700 border border-beige-100">Doctor</Link>
                                 <Link href={route('reception.login')} className="rounded-xl bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-gray-700 border border-beige-100">Reception</Link>
@@ -116,7 +114,7 @@ export default function Dashboard({ stats, bookings = [], latestBooking, profile
                             <div className="mt-4 grid grid-cols-1 gap-2">
                                 <Link href={route('book.appointment')} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-800 border border-beige-100">Book Appointment</Link>
                                 <Link href={route('manage.appointments')} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-800 border border-beige-100">Manage Bookings</Link>
-                                <Link href={route('account.page')} className="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-gray-800 border border-beige-100">Account Center</Link>
+
                             </div>
                         </div>
                     </div>
@@ -128,7 +126,7 @@ export default function Dashboard({ stats, bookings = [], latestBooking, profile
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Panel Mode</p>
                             <p className="text-sm font-semibold text-gray-700">Patient Dashboard</p>
                         </div>
-                        <Link href={route('userlandingpage')} className="rounded-xl bg-beige-700 px-4 py-2.5 text-xs font-black uppercase tracking-[0.16em] text-white">Public Site</Link>
+                        <Link href={route('home.booking')} className="rounded-xl bg-beige-700 px-4 py-2.5 text-xs font-black uppercase tracking-[0.16em] text-white">Public Site</Link>
                     </div>
                 </section>
             </main>
